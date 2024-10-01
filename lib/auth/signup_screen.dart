@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tolet/auth/signup_infoFill.dart';
 import 'package:tolet/widgets/customized_button.dart';
+import 'package:email_otp/email_otp.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -10,131 +12,220 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _verifyEmailController = TextEditingController();
+  TextEditingController _otpController = TextEditingController();
+
+  bool _isOtpVerified = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _verifyEmailController.clear();
+  }
+
+  @override
+  void dispose() {
+    _verifyEmailController.clear();
+    super.dispose();
+  }
+
+  String? _emailValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    }
+    String pattern = r'^[^@]+@[^@]+\.[^@]+';
+    RegExp regExp = RegExp(pattern);
+    if (!regExp.hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 80,
-          ),
-          Center(child: Image.asset('assets/images/image 3.png')),
-          SizedBox(
-            height: 60,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Sign up',
-                  style: TextStyle(
-                      color: Color(0xff2660ac),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 35),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'VERIFY THROUGH EMAIL',
-                  style: TextStyle(
-                    color: Color(0xffc3c3c3),
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'yourmail@gmail.com',
-                    filled: true,
-                    fillColor: Color(0xfff2f3f3),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 80,
+              ),
+              Center(child: Image.asset('assets/images/image 3.png')),
+              SizedBox(
+                height: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'Sign up',
+                      style: TextStyle(
+                          color: Color(0xff2660ac),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 35),
+                    ),
                     SizedBox(
-                      width: 180,
-                      child: TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: "***",
-                          filled: true,
-                          fillColor: Color(0xfff2f3f3),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 12),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
-                          ),
+                      height: 10,
+                    ),
+                    Text(
+                      'VERIFY THROUGH EMAIL',
+                      style: TextStyle(
+                        color: Color(0xffc3c3c3),
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _verifyEmailController,
+                      validator: _emailValidator,
+                      decoration: InputDecoration(
+                        hintText: 'yourmail@gmail.com',
+                        filled: true,
+                        fillColor: Color(0xfff2f3f3),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
                     SizedBox(
-                      width: 10,
+                      height: 20,
                     ),
-                    CustomizedButton(
-                        title: 'Get Code',
-                        colorButton: Color(0xff2a82c8),
-                        height: 50,
-                        widht: 158,
-                        colorText: Colors.white,
-                        fontSize: 16),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 180,
+                          child: TextFormField(
+                            obscureText: true,
+                            controller: _otpController,
+                            decoration: InputDecoration(
+                              hintText: "***",
+                              filled: true,
+                              fillColor: Color(0xfff2f3f3),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 12),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              print('form is valid');
+                              EmailOTP.config(
+                                appName: 'ToLet',
+                                otpType: OTPType.numeric,
+                                expiry: 30000,
+                                emailTheme: EmailTheme.v1,
+                                appEmail: 'nagaanil16@gmail.com',
+                                otpLength: 6,
+                              );
+                              EmailOTP.sendOTP(
+                                  email: _verifyEmailController.text);
+                            }
+                          },
+                          child: CustomizedButton(
+                              title: 'Get Code',
+                              colorButton: Color(0xff2a82c8),
+                              height: 50,
+                              widht: 158,
+                              colorText: Colors.white,
+                              fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 80,
+                    ),
+                    Center(
+                      child: InkWell(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            print('form is valid');
+                            bool isVerified =
+                                EmailOTP.verifyOTP(otp: _otpController.text);
+                            if (isVerified) {
+                              Fluttertoast.showToast(
+                                msg: 'Verified',
+                                backgroundColor: Colors.green,
+                                toastLength: Toast.LENGTH_SHORT,
+                              );
+                              setState(() {
+                                _isOtpVerified = true;
+                              });
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: 'Wrong OTP',
+                                backgroundColor: Colors.red,
+                                toastLength: Toast.LENGTH_SHORT,
+                              );
+                              setState(() {
+                                _isOtpVerified = false;
+                              });
+                            }
+                          }
+                        },
+                        child: CustomizedButton(
+                            title: 'Verify',
+                            colorButton: Color(0xff2b82c8),
+                            height: 40,
+                            widht: 340,
+                            colorText: Colors.white,
+                            fontSize: 16),
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(
-                  height: 80,
-                ),
-                Center(
-                  child: CustomizedButton(
-                      title: 'Verify',
-                      colorButton: Color(0xff2b82c8),
-                      height: 40,
-                      widht: 340,
-                      colorText: Colors.white,
-                      fontSize: 16),
-                ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 140,
+              ),
+              InkWell(
+                onTap: //_isOtpVerified
+                    // ?
+                    () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SignupInfofill()));
+                },
+                // : null,
+                child: CustomizedButton(
+                    title: 'Next',
+                    colorButton: Color(0xff2b82c8),
+                    height: 44,
+                    widht: 340,
+                    colorText: Colors.white,
+                    fontSize: 16),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 140,
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignupInfofill()));
-            },
-            child: CustomizedButton(
-                title: 'Next',
-                colorButton: Color(0xff2b82c8),
-                height: 44,
-                widht: 340,
-                colorText: Colors.white,
-                fontSize: 16),
-          ),
-        ],
+        ),
       ),
     );
   }
