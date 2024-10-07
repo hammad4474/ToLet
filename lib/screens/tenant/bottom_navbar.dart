@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class CustomBottomNavigationBar extends StatelessWidget {
+class CustomtenantBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  CustomBottomNavigationBar({
+  CustomtenantBottomNavBar({
     required this.currentIndex,
     required this.onTap,
   });
@@ -22,8 +22,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           activeIcon: Image.asset(
             'assets/icons/homeblue.png', // Make sure the image path is correct
-             height: 24, // Adjust icon height
-             width: 24,  // Adjust icon width
+            height: 24, // Adjust icon height
+            width: 24,  // Adjust icon width
           ),
           icon: Image.asset(
             'assets/icons/home1.png', // Make sure the image path is correct
@@ -41,20 +41,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
               'assets/icons/request.png', // Make sure the image path is correct
               height: 24, // Adjust icon height
               width: 24,  // Adjust icon width
-            ), label: 'Requests'),
-        BottomNavigationBarItem(
-          activeIcon: Image.asset(
-            'assets/icons/add.png', // Make sure the image path is correct
-            height: 60, // Adjust icon height
-            width: 60,  // Adjust icon width
-          ),
-          icon: Image.asset(
-            'assets/icons/add.png', // Make sure the image path is correct
-            height: 60, // Adjust icon height
-            width: 60,  // Adjust icon width
-          ), // The "+" icon in the middle
-          label: '', // No label for the middle item
-        ),
+            ), label: 'Explore'),
+
         BottomNavigationBarItem(activeIcon: Image.asset(
           'assets/icons/activechat.png', // Make sure the image path is correct
           height: 24, // Adjust icon height
@@ -65,6 +53,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
               height: 24, // Adjust icon height
               width: 24,  // Adjust icon width
             ), label: 'Chat'),
+        BottomNavigationBarItem(
+          activeIcon: Image.asset(
+            'assets/icons/saved.png', // Make sure the image path is correct
+            height: 24, // Adjust icon height
+            width: 24,  // Adjust icon width
+          ),
+          icon: Image.asset(
+            'assets/icons/saved.png', // Make sure the image path is correct
+            height: 24, // Adjust icon height
+            width: 24,  // Adjust icon width
+          ), // The "+" icon in the middle
+          label: 'Saved', // No label for the middle item
+        ),
         BottomNavigationBarItem(activeIcon: Image.asset(
           'assets/icons/activeProfile.png', // Make sure the image path is correct
           height: 24, // Adjust icon height
