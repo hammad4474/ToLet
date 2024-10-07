@@ -21,7 +21,6 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('List new property'),
         centerTitle: true,
@@ -65,7 +64,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                 height: 150,
                 width: double.infinity,
                 color: Colors.grey[200],
-                child: Image.asset('assets/images/Location.png',fit: BoxFit.cover,),
+                child: Center(child: Icon(Icons.map, size: 50, color: Colors.grey)),
               ),
               SizedBox(height: 20),
               // BHK Selection
