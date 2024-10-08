@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tolet/auth/signup_screen.dart';
+import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/widgets/customized_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -205,7 +206,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (_formKey.currentState!.validate()) {
                       print('Form is valid');
                       _login();
-                      //Navigator.push(context, MaterialPageRoute(builder: (context) => ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
                     }
                   },
                   child: CustomizedButton(
