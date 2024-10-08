@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tolet/screens/tenant/bottom_navbar.dart';
 
 class DetailedChatScreen extends StatelessWidget {
   @override
@@ -128,6 +129,12 @@ class DetailedChatScreen extends StatelessWidget {
           ),
         ],
       ),
+    bottomNavigationBar: CustomtenantBottomNavBar(
+    currentIndex: 1, // Example currentIndex to highlight 'Requests'
+    onTap: (index) {
+    // Handle bottom navigation action
+    },
+    )
     );
   }
 }

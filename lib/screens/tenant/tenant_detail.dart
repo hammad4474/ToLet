@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/tenant/bottom_navbar.dart';
 
 
 class TenantDetailsScreen extends StatefulWidget {
@@ -205,7 +206,7 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: CustomtenantBottomNavBar(
         currentIndex: 1, // Example currentIndex to highlight 'Requests'
         onTap: (index) {
           // Handle bottom navigation action

@@ -1,22 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/tenant/bottom_navbar.dart';
 
-void main() {
-  runApp(TenantFinderApp());
-}
-
-class TenantFinderApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tenant Finder',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: TenantFinderScreen(),
-    );
-  }
-}
 
 class TenantFinderScreen extends StatefulWidget {
   @override
@@ -70,7 +55,7 @@ class _TenantFinderScreenState extends State<TenantFinderScreen> {
         ],
       ),
       body: _pages[_currentIndex], // Display the current page
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: CustomtenantBottomNavBar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped, // Update the selected index when tapped
       ),

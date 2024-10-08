@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/Message_screen.dart';
+import 'package:tolet/screens/tenant/bottom_navbar.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -64,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
             name: 'Regnar Lothbrok',
             message: 'How much does it cost?',
             time: '11/10/2021',
-            avatar: 'assets/images/Image.png', // Replace with actual avatar URL or asset
+            avatar: 'assets/images/Capture.png', // Replace with actual avatar URL or asset
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => DetailedChatScreen()));
             },
@@ -73,13 +74,19 @@ class _ChatScreenState extends State<ChatScreen> {
             name: 'Jack Sparrow',
             message: 'Sure, man!',
             time: '11/10/2021',
-            avatar: 'assets/images/Images.png', // Replace with actual avatar URL or asset
+            avatar: 'assets/images/Capture.png', // Replace with actual avatar URL or asset
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => DetailedChatScreen()));
             },
           ),
         ],
       ),
+    bottomNavigationBar: CustomtenantBottomNavBar(
+    currentIndex: 1, // Example currentIndex to highlight 'Requests'
+    onTap: (index) {
+    // Handle bottom navigation action
+    },
+    )
     );
   }
 }
