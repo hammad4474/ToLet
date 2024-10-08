@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {'name': 'Mumbai', 'image': 'assets/images/mumbai.png'},
     {'name': 'Pune', 'image': 'assets/images/pune.png'},
     {'name': 'Noida', 'image': 'assets/images/noida.png'},
-    {'name': 'Greater Noida','image': 'assets/images/Greaternoida.png'},
+    {'name': 'Greater Noida', 'image': 'assets/images/Greaternoida.png'},
     {'name': 'Delhi', 'image': 'assets/images/delhi.png'},
     {'name': 'Ghaziabad', 'image': 'assets/images/gaziabad.png'},
     {'name': 'Faridabad', 'image': 'assets/images/faridabad.png'},
@@ -38,11 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     // Add logic here for navigation or any other action
   }
+
   void _setSelectedCity(String city) {
     setState(() {
       _selectedLocation = city;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               // Location Selector
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 16.0),
@@ -72,13 +73,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   showDialog(
                     context: context,
                     barrierDismissible: true,
-                    barrierColor: Colors.black.withOpacity(0.5), // Transparent background with opacity
+                    barrierColor: Colors.black.withOpacity(
+                        0.5), // Transparent background with opacity
                     builder: (BuildContext context) => Center(
                       child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 450, maxHeight: 600), // Limit dialog width
+                        constraints: BoxConstraints(
+                            maxWidth: 450,
+                            maxHeight: 600), // Limit dialog width
                         child: CitySelectionDialog(
                           cities: cities,
-                          onCitySelected: _setSelectedCity, // Pass the callback function
+                          onCitySelected:
+                              _setSelectedCity, // Pass the callback function
                         ),
                       ),
                     ),
@@ -91,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icon(Icons.location_on, color: Colors.blue),
                       SizedBox(width: 5),
                       Text(
-                        _selectedLocation+', India',
+                        _selectedLocation + ', India',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -113,12 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Colors
-                        .black, // Optional: color for a subtle appearance
+                    color:
+                        Colors.black, // Optional: color for a subtle appearance
                   ),
                 ),
               ),
-
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -185,7 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-
               // Property ListView
               Expanded(
                 child: ListView(
@@ -195,7 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       imageUrl: 'assets/images/home0.png',
                       // Replace with actual image
                       title: 'Want to host your new place?',
-                      description: 'Post and manage rental listings & generate revenue from both long-term leases and daily rentals.',
+                      description:
+                          'Post and manage rental listings & generate revenue from both long-term leases and daily rentals.',
                       buttonText: 'List New Property',
                     ),
                     SizedBox(height: 10), // Space between cards
@@ -204,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       imageUrl: 'assets/images/home1.png',
                       // Replace with actual image
                       title: 'Earn Daily Income',
-                      description: 'Rent out your property for short-term stays and start earning daily. Manage bookings, track earnings, and maximize your revenue.',
+                      description:
+                          'Rent out your property for short-term stays and start earning daily. Manage bookings, track earnings, and maximize your revenue.',
                       buttonText: 'List New Property',
                     ),
                   ],
@@ -216,8 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
-        )
-    );
+        ));
   }
 
   Widget _buildPropertyCard({
@@ -226,16 +230,9 @@ class _HomeScreenState extends State<HomeScreen> {
     required String title,
     required String description,
     required String buttonText,
-
   }) {
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -282,8 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       description,
                       style: TextStyle(
                         color: Colors.white70,
-                        fontSize: screenWidth *
-                            0.025, // Adjust description font size
+                        fontSize:
+                            screenWidth * 0.025, // Adjust description font size
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.015),
@@ -294,8 +291,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         foregroundColor: Color(0xFF3E92CC),
                         backgroundColor: Colors.white, // Button background
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              20), // Rounded button
+                          borderRadius:
+                              BorderRadius.circular(20), // Rounded button
                         ),
                         padding: EdgeInsets.symmetric(
                           horizontal: screenWidth * 0.04,
@@ -316,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   topRight: Radius.circular(15),
                   bottomRight: Radius.circular(15),
                 ),
-                child: Image.network(
+                child: Image.asset(
                   imageUrl, // Replace with your image URL
                   fit: BoxFit.cover,
                   height: double.infinity,
@@ -330,5 +327,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }

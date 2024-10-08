@@ -3,6 +3,7 @@ import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/popup_screen.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/tenant/property_decorofcard.dart';
+import 'package:tolet/screens/tenant/property_listofcard.dart';
 
 class HometenantScreen extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class HometenantScreen extends StatefulWidget {
 
 class _HometenantScreenState extends State<HometenantScreen> {
   String _selectedLocation = 'Hyderabad';
-  int _selectedIndex = 0;  // Keep track of the selected index
+  int _selectedIndex = 0; // Keep track of the selected index
   final List<Map<String, String>> cities = [
     {'name': 'Bangalore', 'image': 'assets/images/bangalore.png'},
     {'name': 'Hyderabad', 'image': 'assets/images/Hyderabad.png'},
@@ -124,7 +125,8 @@ class _HometenantScreenState extends State<HometenantScreen> {
                   barrierColor: Colors.black.withOpacity(0.5),
                   builder: (BuildContext context) => Center(
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 450, maxHeight: 600),
+                      constraints:
+                          BoxConstraints(maxWidth: 450, maxHeight: 600),
                       child: CitySelectionDialog(
                         cities: cities,
                         onCitySelected: _setSelectedCity,
@@ -196,13 +198,17 @@ class _HometenantScreenState extends State<HometenantScreen> {
                         ),
                         // Horizontal ListView for properties
                         Container(
-                          height: 250, // Adjust height for horizontal list items
+                          height:
+                              250, // Adjust height for horizontal list items
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: section['properties'].length,
                             itemBuilder: (context, propIndex) {
-                              final propertyData = section['properties'][propIndex];
-                              return PropertyCard( property: propertyData,);
+                              final propertyData =
+                                  section['properties'][propIndex];
+                              final property = Property.fromMap(
+                                  propertyData); // Convert Map to Property
+                              return PropertyCard(property: property);
                             },
                           ),
                         ),
