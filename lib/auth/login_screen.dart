@@ -8,7 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tolet/auth/signup_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/owner/list_property.dart';
-import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
+// import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/user_profile.dart';
 import 'package:tolet/screens/welcome_screen.dart';

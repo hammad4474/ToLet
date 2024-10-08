@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
+// import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/welcome_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -10,7 +12,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 0;  // Keep track of the selected index
+  int _selectedIndex = 0; // Keep track of the selected index
 
   // Function to handle tap on navigation items
   void _onItemTapped(int index) {
@@ -37,7 +39,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('assets/images/Capture.png'), // Your profile image asset
+                    // backgroundImage: AssetImage(
+                    //     'assets/images/Capture.png'), // Your profile image asset
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -55,16 +58,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 5),
 
             // Menu Options with proper asset icons
-            buildListTile('assets/icons/frame.png', 'Personal details', isBold: true),
+            buildListTile('assets/icons/frame.png', 'Personal details',
+                isBold: true),
             SizedBox(height: 15),
-            buildListTile('assets/icons/setting-2.png', 'Settings', isBold: true),
+            buildListTile('assets/icons/setting-2.png', 'Settings',
+                isBold: true),
             SizedBox(height: 15),
-            buildListTile('assets/icons/card.png', 'Payment details',isBold: true),
+            buildListTile('assets/icons/card.png', 'Payment details',
+                isBold: true),
             SizedBox(height: 15),
-            buildListTile('assets/icons/message-question.png', 'FAQ', isBold: true),
+            buildListTile('assets/icons/message-question.png', 'FAQ',
+                isBold: true),
             SizedBox(height: 25),
             Divider(thickness: 1, color: Colors.grey),
-            buildListTile('assets/icons/toggle-off-circle.png', 'Switch to landlord',isBold: true),
+            buildListTile(
+                'assets/icons/toggle-off-circle.png', 'Switch to landlord',
+                isBold: true),
 
             SizedBox(height: 30),
 
@@ -76,22 +85,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color(0xffADD8E6), Color(0xff2b82c8)], // Light blue to dark blue
+                      colors: [
+                        Color(0xffADD8E6),
+                        Color(0xff2b82c8)
+                      ], // Light blue to dark blue
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.circular(8), // Match the button's rounded corners
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Log out functionality
+                    onPressed: () async {
+                      try {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WelcomeScreen()));
+                      } catch (e) {
+                        print("Error signing out: $e");
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent, // Transparent to show gradient
-                      shadowColor: Colors.transparent, // Remove any default shadow color
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // Rounded corners
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: Text(
@@ -137,7 +157,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       title: Text(
         title,
         style: TextStyle(
-          fontWeight: isBold ? FontWeight.bold : FontWeight.normal, // Apply bold if specified
+          fontWeight: isBold
+              ? FontWeight.bold
+              : FontWeight.normal, // Apply bold if specified
         ),
       ),
       trailing: Icon(Icons.arrow_forward_ios, size: 16),

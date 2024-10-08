@@ -233,8 +233,6 @@ class _HometenantScreenState extends State<HometenantScreen> {
                 ),
               ),
             ),
-
-
             // Property ListView
             Expanded(
               child: ListView.builder(
