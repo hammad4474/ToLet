@@ -75,9 +75,10 @@ class _CitySelectionDialogState extends State<CitySelectionDialog> {
                             width: 80,  // Fixed width for all images
                             height: 80,  // Fixed height for all images
                             child: FittedBox(
-                              fit: BoxFit.cover, // Ensure the image fills the container
+                              fit: BoxFit.fill, // Ensure the image fills the container
                               child: Image.asset(
                                 widget.cities[index]['image']!,
+                                fit: BoxFit.fill,
                                 width: 80, // Ensure image width is same
                                 height: 80, // Ensure image height is same
                               ),
