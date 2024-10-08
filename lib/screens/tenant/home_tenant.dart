@@ -40,47 +40,48 @@ class _HometenantScreenState extends State<HometenantScreen> {
         {
           "title": "Small cottage with great view of Bagmati",
           "city": "Hyderabad",
-          "price": "₹10,000 / month",
+          "price": "₹10,000",
           "isVerified": true,
           "rooms": "2 bedrooms",
           "area": "673 m²",
-          "imageUrl": "https://via.placeholder.com/150",
+          "imageUrl": "assets/images/home2.png",
         },
-        {
-          "title": "Luxury Apartment",
-          "city": "Hyderabad",
-          "price": "₹12,000 / month",
-          "isVerified": false,
-          "rooms": "3 bedrooms",
-          "area": "800 m²",
-          "imageUrl": "https://via.placeholder.com/150",
-        },
+         {
+           "title": "Luxury Apartment",
+           "city": "Hyderabad",
+           "price": "₹12,000",
+           "isVerified": false,
+           "rooms": "3 bedrooms",
+           "area": "800 m²",
+           "imageUrl": "assets/images/home1.png",
+         },
+
       ],
     },
-    {
-      "title": "Temporary Stay",
-      "item": "43 properties available",
-      "properties": [
-        {
-          "title": "Budget Room",
-          "city": "Noida",
-          "price": "₹6,000 / month",
-          "isVerified": true,
-          "rooms": "1 bedroom",
-          "area": "300 m²",
-          "imageUrl": "https://via.placeholder.com/150",
-        },
-        {
-          "title": "Luxury Condo",
-          "city": "Mumbai",
-          "price": "₹20,000 / month",
-          "isVerified": true,
-          "rooms": "4 bedrooms",
-          "area": "1000 m²",
-          "imageUrl": "https://via.placeholder.com/150",
-        },
-      ],
-    },
+     {
+       "title": "Temporary Stay",
+       "item": "43 properties available",
+       "properties": [
+         {
+           "title": "Budget Room",
+           "city": "Noida",
+           "price": "₹6,000",
+           "isVerified": true,
+           "rooms": "1 bedroom",
+           "area": "300 m²",
+           "imageUrl": "assets/images/home0.png",
+         },
+         {
+           "title": "Luxury Condo",
+           "city": "Mumbai",
+           "price": "₹20,000",
+           "isVerified": true,
+           "rooms": "4 bedrooms",
+           "area": "1000 m²",
+           "imageUrl": "assets/images/home0.png",
+         },
+       ],
+     },
   ];
 
   // Function to handle tap on navigation items
@@ -159,7 +160,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 16.0, top: 30.0),
               child: Text(
-                'Welcome to Owner',
+                'Welcome to Tenant',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -167,6 +168,72 @@ class _HometenantScreenState extends State<HometenantScreen> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Container(
+                height: 50, // Adjust height as needed
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  // Background color for the entire row
+                  borderRadius: BorderRadius.circular(
+                      30), // Rounded corners for the entire container
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+
+                    // Tenant Button (Inactive)
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors
+                              .transparent, // Background color for unselected button
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Owner',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              // Text color for unselected button
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          gradient: LinearGradient(
+                            colors: [Color(0xFF4DB6F3), Color(0xFF0288D1)],
+                            // Gradient for selected button
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Tenant',
+                            style: TextStyle(
+                              color: Colors.white,
+                              // Text color for highlighted button
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
 
             // Property ListView
             Expanded(
@@ -203,12 +270,26 @@ class _HometenantScreenState extends State<HometenantScreen> {
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: section['properties'].length,
+
                             itemBuilder: (context, propIndex) {
+
                               final propertyData =
                                   section['properties'][propIndex];
                               final property = Property.fromMap(
                                   propertyData); // Convert Map to Property
                               return PropertyCard(property: property);
+
+                              // final propertyData  = section['properties'][propIndex] ;
+                              // final Property teproperty= Property(
+                              //   title: propertyData['title'],
+                              //   city: propertyData['city'],
+                              //   price: propertyData['price'],
+                              //   isVerified: propertyData['isVerified'],
+                              //   rooms: propertyData['rooms'],
+                              //   area: propertyData['area'],
+                              //   imageUrl:propertyData['imageUrl'],
+                              // );
+                              // return PropertyCard( property: teproperty,);
                             },
                           ),
                         ),

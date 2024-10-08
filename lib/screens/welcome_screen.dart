@@ -16,7 +16,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
+      body: SingleChildScrollView(
+      child:Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
@@ -72,6 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
