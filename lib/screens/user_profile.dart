@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
+//import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 
 class ProfileScreen extends StatefulWidget {
