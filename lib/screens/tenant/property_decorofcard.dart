@@ -23,7 +23,7 @@ class PropertyCard extends StatelessWidget {
             child: Row(children: [
               // Left section (Text and Button with gradient background)
               Expanded(
-                flex: 4,
+                flex: 3,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
@@ -83,8 +83,7 @@ class PropertyCard extends StatelessWidget {
                       SizedBox(height: 8),
 
                       // Price and Verified Status
-                      Row(
-                        children: [
+
                           // Price
                           Text(
                             property.price + '/ month',
@@ -104,100 +103,35 @@ class PropertyCard extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ],
+
+                    ],
+                  ),
+                ),
+              ),
+
+              Expanded(
+                flex:1,
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                       Image.asset(
+                        'assets/icons/verified.png', // Make sure the image path is correct
+                        height: 30, // Adjust icon height
+                        width: 30, // Adjust icon width
+                      ),
+                      Spacer(),
+                      Image.asset(
+                        'assets/icons/saved.png', // Make sure the image path is correct
+                        height: 30, // Adjust icon height
+                        width: 30, // Adjust icon width
                       ),
                     ],
                   ),
                 ),
               ),
-              // Right section (Image)
 
-              // child:Column(
-              //  // crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: <Widget>[
-              //     // Property Image
-              //     ClipRRect(
-              //       borderRadius: BorderRadius.only(
-              //         topLeft: Radius.circular(10),
-              //         topRight: Radius.circular(10),
-              //       ),
-              //
-              //       child: Image.network(
-              //         property.imageUrl, // Replace with your image URL
-              //         height: 120,
-              //         width: 80,
-              //         fit: BoxFit.fitHeight,
-              //       ),
-              //     ),
-              //     Padding(
-              //       padding: const EdgeInsets.all(8.0),
-              //       child: Column(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           // Property Title
-              //           Text(
-              //           property.title,
-              //             style: TextStyle(
-              //               fontSize: 16,
-              //               fontWeight: FontWeight.bold,
-              //               color: Colors.black87,
-              //             ),
-              //           ),
-              //           SizedBox(height: 4),
-              //
-              //           // City
-              //           Text(
-              //             property.city,
-              //             style: TextStyle(
-              //               fontSize: 14,
-              //               color: Colors.grey,
-              //             ),
-              //           ),
-              //           SizedBox(height: 4),
-              //
-              //           // Property Details (Rooms, Area)
-              //           Row(
-              //             children: [
-              //               Icon(Icons.bed, size: 16, color: Colors.grey),
-              //               SizedBox(width: 4),
-              //               Text('${property.rooms}', style: TextStyle(color: Colors.grey)),
-              //               SizedBox(width: 8),
-              //               Icon(Icons.square_foot, size: 16, color: Colors.grey),
-              //               SizedBox(width: 4),
-              //               Text('${property.area}', style: TextStyle(color: Colors.grey)),
-              //             ],
-              //           ),
-              //           SizedBox(height: 8),
-              //
-              //           // Price and Verified Status
-              //           Row(
-              //             children: [
-              //               // Price
-              //               Text(
-              //             property.price+ '/ month',
-              //                 style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.bold,
-              //                   color: Colors.black87,
-              //                 ),
-              //               ),
-              //               Spacer(),
-              //               // Verified Badge
-              //               Text(
-              //                   property.isVerified ? " Verified" : "Not Verified",
-              //                 style: TextStyle(
-              //                   fontSize: 14,
-              //                   color: Colors.green,
-              //                   fontWeight: FontWeight.w500,
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
             ]),
           ),
         ),
