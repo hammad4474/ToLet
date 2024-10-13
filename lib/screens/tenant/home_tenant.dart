@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/popup_screen.dart';
+import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/screens/tenant/property_decorofcard.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
 
@@ -100,7 +102,27 @@ class _HometenantScreenState extends State<HometenantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: home_appBar(),
+      appBar:  HomeAppBar(
+        onSearchBarTapped: () {
+          // Navigate to SearchPropertyScreen when the search bar is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchPropertyScreen()
+            ),
+          );
+        },
+        onTuneIconPressed: () {
+          // Navigate to SearchPropertyScreen when the search bar is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FilterScreen()
+            ),
+          );
+        },
+
+      ),
       body: Container(
         color: Colors.white,
         child: Column(

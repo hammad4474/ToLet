@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
-class home_appBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize; // Required to set AppBar height
+  final VoidCallback onTuneIconPressed; // Callback for tune icon press
+  final VoidCallback onSearchBarTapped; // Callback for search bar tap
 
-  home_appBar({Key? key}) : preferredSize = const Size.fromHeight(70.0), super(key: key);
+  HomeAppBar({
+    Key? key,
+    required this.onTuneIconPressed, // Required callback for icon press
+    required this.onSearchBarTapped,  // Required callback for search bar tap
+  }) : preferredSize = const Size.fromHeight(70.0), super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,57 +22,52 @@ class home_appBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           // Logo
-
           SizedBox(width: 10),
           Image.asset(
             'assets/images/logo.png', // Replace with your actual logo asset
             height: 90,
             width: 70,
           ),
-
           SizedBox(width: 10),
 
-          // Search Bar with constraints and overflow handling
+          // Search Bar with tap detection
           Expanded(
-            child: Container(
-
-              height: 45,
-              constraints: BoxConstraints(maxWidth: 500), // Limit maximum width of search bar
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                backgroundBlendMode: BlendMode.color,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Icon(Icons.search, color: Colors.grey),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search address, city, location',
-                        border: InputBorder.none,
+            child: GestureDetector(
+              onTap: onSearchBarTapped, // Trigger callback when tapped
+              child: Container(
+                height: 45,
+                constraints: BoxConstraints(maxWidth: 500), // Limit max width of search bar
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Icon(Icons.search, color: Colors.grey),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Search address, city, location',
+                        style: TextStyle(color: Colors.grey), // Placeholder style
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
 
-          // Horizontal Tune Icon on the right side
-          // Custom Icon Button
+          // Tune Icon on the right
           IconButton(
             icon: Image.asset(
               'assets/icons/custum_tune_icon.png', // Replace with your actual custom icon asset
               height: 40,
               width: 40,
             ),
-            onPressed: () {
-              // Define what happens when you click the custom icon
-            },
+
+            onPressed: onTuneIconPressed, // Use the callback passed from parent
           ),
         ],
       ),

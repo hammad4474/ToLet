@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: home_appBar(),
+        // appBar: home_appBar(),
         body: Container(
           color: Colors.white, // Set your desired background color here
           child: Column(
