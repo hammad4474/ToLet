@@ -17,7 +17,7 @@ class _TenantFinderScreenState extends State<TenantFinderScreen> {
     RequestsScreen(), // Requests Page
     AddNewItemScreen(), // Add New Item Page
     ChatScreen(), // Chat Page
-    ProfileScreen(), // Profile Page
+   // ProfileScreen(), // Profile Page
   ];
 
   // Handle bottom navigation tap
@@ -244,11 +244,11 @@ class ChatScreen extends StatelessWidget {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Profile Page"),
-    );
-  }
-}
+// class ProfileScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Text("Profile Page"),
+//     );
+//   }
+// }

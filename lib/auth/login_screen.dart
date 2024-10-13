@@ -10,6 +10,8 @@ import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/owner/list_property.dart';
 // import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Add this import for Firestore
+
 import 'package:tolet/screens/user_profile.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:tolet/widgets/customized_button.dart';
@@ -32,10 +34,42 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await _auth.signInWithEmailAndPassword(
+        // Sign in with email and password
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
             email: _emailController.text, password: _passwordController.text);
 
-        Fluttertoast.showToast(msg: 'Logged in', backgroundColor: Colors.green);
+        // If login is successful, get the user's Firestore document
+        String uid = userCredential.user!.uid;
+
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users') // Replace 'users' with your collection name
+            .doc(uid)
+            .get();
+
+        // Check if user document exists
+        if (userDoc.exists) {
+          Map<String, dynamic> userData =
+              userDoc.data() as Map<String, dynamic>;
+          String userType = userData['userType'];
+
+          // Navigate based on the userType
+          if (userType == 'Tenant') {
+            // Navigate to Tenant screen
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HometenantScreen()));
+          } else if (userType == 'Landlord') {
+            // Navigate to Landlord screen
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          } else {
+            Fluttertoast.showToast(
+                msg: 'Unknown user role', backgroundColor: Colors.red);
+          }
+        } else {
+          Fluttertoast.showToast(
+              msg: 'User data not found in Firestore',
+              backgroundColor: Colors.red);
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           Fluttertoast.showToast(
