@@ -31,7 +31,7 @@ Widget buildDescriptionContent() {
               buildFacilityIcon('assets/icons/restaurant.png', 'Restaurant'),
             ],
           ),
-          SizedBox(height: 16),  // Spacing between the rows
+          SizedBox(height: 16), // Spacing between the rows
           // Second row with 4 icons
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -47,38 +47,44 @@ Widget buildDescriptionContent() {
     ],
   );
 }
+
 Widget buildFacilityIcon(String iconPath, String label) {
-  return Container(
-    width: 70,  // Adjust width of the container
-    height: 70,  // Adjust height to accommodate both icon and text
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10),  // Curved edges for the box
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.3),  // Shadow color
-          spreadRadius: 2,  // Spread of the shadow
-          blurRadius: 10,  // Blur radius of the shadow
-          offset: Offset(0, 3),  // Shadow position (x, y)
+  return SingleChildScrollView(
+    child: Container(
+      width: 70, // Adjust width of the container
+      height: 65, // Adjust height to accommodate both icon and text
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10), // Curved edges for the box
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3), // Shadow color
+            spreadRadius: 2, // Spread of the shadow
+            blurRadius: 10, // Blur radius of the shadow
+            offset: Offset(0, 3), // Shadow position (x, y)
+          ),
+        ],
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Aligns icon and text in the center
+          children: [
+            Image.asset(
+              iconPath, // Icon from asset
+              width: 32, // Adjust the size of the icon
+              height: 32,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: 8), // Space between the icon and text
+            Text(
+              label,
+              style: TextStyle(fontSize: 12), // Text size for the label
+              textAlign: TextAlign.center, // Align the text to the center
+            ),
+          ],
         ),
-      ],
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,  // Aligns icon and text in the center
-      children: [
-        Image.asset(
-          iconPath,  // Icon from asset
-          width: 32,  // Adjust the size of the icon
-          height: 32,
-          fit: BoxFit.contain,
-        ),
-        SizedBox(height: 8),  // Space between the icon and text
-        Text(
-          label,
-          style: TextStyle(fontSize: 12),  // Text size for the label
-          textAlign: TextAlign.center,  // Align the text to the center
-        ),
-      ],
+      ),
     ),
   );
 }
