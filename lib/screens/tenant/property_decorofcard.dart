@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tolet/screens/tenant/property_detailscreen.dart';
 import 'property_listofcard.dart';
 
 class PropertyCard extends StatelessWidget {
@@ -11,7 +12,18 @@ class PropertyCard extends StatelessWidget {
     {
       final screenHeight = MediaQuery.of(context).size.height;
       final screenWidth = MediaQuery.of(context).size.width;
-      return Container(
+      return
+        GestureDetector(
+          onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PropertyDetailsScreen(),
+          ),
+        );
+      },
+    child:
+        Container(
         width: 359, // Set fixed width for the card
         margin: EdgeInsets.symmetric(horizontal: 8.0),
         child: Card(
@@ -135,7 +147,8 @@ class PropertyCard extends StatelessWidget {
             ]),
           ),
         ),
-      );
+      ),
+        );
     }
   }
 }
