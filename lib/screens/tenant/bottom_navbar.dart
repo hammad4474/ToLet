@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tolet/screens/owner/chat_screen.dart';
+import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/user_profile.dart';
 
 class CustomtenantBottomNavBar extends StatelessWidget {
@@ -46,10 +48,16 @@ class CustomtenantBottomNavBar extends StatelessWidget {
             ),
             label: 'Explore'),
         BottomNavigationBarItem(
-            activeIcon: Image.asset(
-              'assets/icons/activechat.png', // Make sure the image path is correct
-              height: 24, // Adjust icon height
-              width: 24, // Adjust icon width
+            activeIcon: InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatScreen()));
+              },
+              child: Image.asset(
+                'assets/icons/activechat.png', // Make sure the image path is correct
+                height: 24, // Adjust icon height
+                width: 24, // Adjust icon width
+              ),
             ),
             icon: Image.asset(
               'assets/icons/chat.png', // Make sure the image path is correct

@@ -38,55 +38,75 @@ class _ChatScreenState extends State<ChatScreen> {
             message: 'Thanks for contacting me!',
             time: '15:23',
             unreadMessages: 2,
-            avatar: 'assets/images/dp.png', // Replace with actual avatar URL or asset
+            avatar:
+                'assets/images/dp.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailedChatScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailedChatScreen()));
             },
           ),
           ChatTile(
             name: 'Tom Cruise',
             message: 'Your payment was accepted.',
             time: 'Yesterday',
-            avatar: 'assets/Images/dp.png', // Replace with actual avatar URL or asset
+            avatar:
+                'assets/Images/delhi.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailedChatScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailedChatScreen()));
             },
           ),
           ChatTile(
             name: 'Thomas Selby',
             message: 'It was great experience!',
             time: '11/10/2021',
-            avatar: 'assets/Images/dp.png', // Replace with actual avatar URL or asset
+            avatar:
+                'assets/Images/dp.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailedChatScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailedChatScreen()));
             },
           ),
           ChatTile(
             name: 'Regnar Lothbrok',
             message: 'How much does it cost?',
             time: '11/10/2021',
-            avatar: 'assets/images/Capture.png', // Replace with actual avatar URL or asset
+            avatar:
+                'assets/images/Capture.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailedChatScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailedChatScreen()));
             },
           ),
           ChatTile(
             name: 'Jack Sparrow',
             message: 'Sure, man!',
             time: '11/10/2021',
-            avatar: 'assets/images/Capture.png', // Replace with actual avatar URL or asset
+            avatar:
+                'assets/images/delhi.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailedChatScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailedChatScreen()));
             },
           ),
         ],
       ),
-    bottomNavigationBar: CustomtenantBottomNavBar(
-    currentIndex: 1, // Example currentIndex to highlight 'Requests'
-    onTap: (index) {
-    // Handle bottom navigation action
-    },
-    )
+      // bottomNavigationBar: CustomtenantBottomNavBar(
+      // currentIndex: 1, // Example currentIndex to highlight 'Requests'
+      // onTap: (index) {
+      // // Handle bottom navigation action
+      // },s
+      // )
     );
   }
 }
@@ -116,7 +136,8 @@ class ChatTile extends StatelessWidget {
       onTap: onTap, // Handle tap with the provided function
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(avatar), // Replace with actual asset if necessary
+          backgroundImage:
+              AssetImage(avatar), // Replace with actual asset if necessary
           radius: 25,
         ),
         title: Text(name),

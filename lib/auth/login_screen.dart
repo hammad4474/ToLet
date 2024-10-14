@@ -54,12 +54,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // Navigate based on the userType
           if (userType == 'Tenant') {
-            // Navigate to Tenant screen
-            Navigator.push(context,
+            Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => HometenantScreen()));
           } else if (userType == 'Landlord') {
-            // Navigate to Landlord screen
-            Navigator.push(
+            Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => HomeScreen()));
           } else {
             Fluttertoast.showToast(
@@ -245,10 +243,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (_formKey.currentState!.validate()) {
                       print('Form is valid');
                       _login();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HometenantScreen()));
                     }
                   },
                   child: CustomizedButton(

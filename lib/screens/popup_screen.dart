@@ -3,7 +3,8 @@ import 'dart:async'; // For adding a delay
 
 class CitySelectionDialog extends StatefulWidget {
   final List<Map<String, String>> cities;
-  final Function(String) onCitySelected; // Callback function to pass selected city to parent
+  final Function(String)
+      onCitySelected; // Callback function to pass selected city to parent
 
   CitySelectionDialog({required this.cities, required this.onCitySelected});
 
@@ -33,7 +34,7 @@ class _CitySelectionDialogState extends State<CitySelectionDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xffd9d9d9),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
@@ -60,22 +61,26 @@ class _CitySelectionDialogState extends State<CitySelectionDialog> {
               ),
               itemCount: widget.cities.length,
               itemBuilder: (context, index) {
-                bool isSelected = _selectedIndex == index; // Check if the city is selected
+                bool isSelected =
+                    _selectedIndex == index; // Check if the city is selected
                 return GestureDetector(
                   onTap: () {
-                    _onCitySelected(index); // Call the method to handle selection
+                    _onCitySelected(
+                        index); // Call the method to handle selection
                   },
                   child: MouseRegion(
-                    cursor: SystemMouseCursors.click, // Change the cursor on hover
+                    cursor:
+                        SystemMouseCursors.click, // Change the cursor on hover
                     child: Column(
                       children: [
                         // CircleAvatar with BoxFit.cover to fit the image within the frame
                         ClipOval(
                           child: Container(
-                            width: 80,  // Fixed width for all images
-                            height: 80,  // Fixed height for all images
+                            width: 80, // Fixed width for all images
+                            height: 80, // Fixed height for all images
                             child: FittedBox(
-                              fit: BoxFit.fill, // Ensure the image fills the container
+                              fit: BoxFit
+                                  .fill, // Ensure the image fills the container
                               child: Image.asset(
                                 widget.cities[index]['image']!,
                                 fit: BoxFit.fill,
@@ -91,10 +96,18 @@ class _CitySelectionDialogState extends State<CitySelectionDialog> {
                           widget.cities[index]['name']!,
                           style: TextStyle(
                             fontSize: 12,
-                            color: isSelected ? Colors.blue : Colors.black, // Change color to blue if selected
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal, // Make it bold if selected
-                            decoration: isSelected ? TextDecoration.underline : TextDecoration.none, // Underline if selected
-                            decorationColor: Colors.blue, // Set underline color to blue
+                            color: isSelected
+                                ? Colors.blue
+                                : Colors
+                                    .black, // Change color to blue if selected
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal, // Make it bold if selected
+                            decoration: isSelected
+                                ? TextDecoration.underline
+                                : TextDecoration.none, // Underline if selected
+                            decorationColor:
+                                Colors.blue, // Set underline color to blue
                             decorationThickness: 2.0, // Make underline thicker
                           ),
                         ),

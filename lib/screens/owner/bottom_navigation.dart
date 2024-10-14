@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tolet/screens/owner/chat_screen.dart';
+import 'package:tolet/screens/owner/list_property.dart';
 import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/user_profile.dart';
@@ -48,10 +50,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
             ),
             label: 'Requests'),
         BottomNavigationBarItem(
-          activeIcon: Image.asset(
-            'assets/icons/add.png', // Make sure the image path is correct
-            height: 60, // Adjust icon height
-            width: 60, // Adjust icon width
+          activeIcon: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListPropertyScreen()));
+            },
+            child: Image.asset(
+              'assets/icons/add.png', // Make sure the image path is correct
+              height: 60, // Adjust icon height
+              width: 60, // Adjust icon width
+            ),
           ),
           icon: Image.asset(
             'assets/icons/add.png', // Make sure the image path is correct
@@ -66,10 +76,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
               height: 24, // Adjust icon height
               width: 24, // Adjust icon width
             ),
-            icon: Image.asset(
-              'assets/icons/chat.png', // Make sure the image path is correct
-              height: 24, // Adjust icon height
-              width: 24, // Adjust icon width
+            icon: InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatScreen()));
+              },
+              child: Image.asset(
+                'assets/icons/chat.png', // Make sure the image path is correct
+                height: 24, // Adjust icon height
+                width: 24, // Adjust icon width
+              ),
             ),
             label: 'Chat'),
         BottomNavigationBarItem(

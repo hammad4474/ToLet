@@ -69,17 +69,19 @@ class DetailedChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-              Container(
-              width: 30, // Width and height of the circle
-              height: 30,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.grey, width: 2), // Grey border
-                color: Colors.white, // White background
-              ),
-              child: Icon(Icons.add, color: Colors.grey, size: 20), // Plus icon inside the circle
-            ),
-
+                Container(
+                  width: 30, // Width and height of the circle
+                  height: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(color: Colors.grey, width: 2), // Grey border
+                    color: Colors.white, // White background
+                  ),
+                  child: Icon(Icons.add,
+                      color: Colors.grey,
+                      size: 20), // Plus icon inside the circle
+                ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Container(
@@ -92,8 +94,11 @@ class DetailedChatScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Icon(Icons.message, color: Colors.grey), // Message icon to the left
-                          SizedBox(width: 8), // Spacing between the icon and text field
+                          Icon(Icons.message,
+                              color: Colors.grey), // Message icon to the left
+                          SizedBox(
+                              width:
+                                  8), // Spacing between the icon and text field
                           Expanded(
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -111,7 +116,7 @@ class DetailedChatScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                   // Attachment icon
+                                  // Attachment icon
                                 ],
                               ),
                             ),
@@ -119,7 +124,6 @@ class DetailedChatScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
                   ),
                 ),
                 SizedBox(width: 8),
@@ -129,12 +133,12 @@ class DetailedChatScreen extends StatelessWidget {
           ),
         ],
       ),
-    bottomNavigationBar: CustomtenantBottomNavBar(
-    currentIndex: 1, // Example currentIndex to highlight 'Requests'
-    onTap: (index) {
-    // Handle bottom navigation action
-    },
-    )
+      // bottomNavigationBar: CustomtenantBottomNavBar(
+      // currentIndex: 1, // Example currentIndex to highlight 'Requests'
+      // onTap: (index) {
+      // // Handle bottom navigation action
+      // },
+      // )
     );
   }
 }
@@ -155,12 +159,13 @@ class MessageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0), // Adds 2 inches of space on both sides
+      padding: const EdgeInsets.symmetric(
+          horizontal: 30.0), // Adds 2 inches of space on both sides
       child: Align(
         alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
         child: Row(
           mainAxisAlignment:
-          isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+              isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             if (isSentByMe) ...[
               // Double tick above the time for sent messages
@@ -168,7 +173,8 @@ class MessageTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (isRead)
-                    Icon(Icons.done_all, color: Colors.blue, size: 16), // Double tick
+                    Icon(Icons.done_all,
+                        color: Colors.blue, size: 16), // Double tick
                   SizedBox(height: 2), // Small space between tick and time
                   Text(
                     time,
@@ -176,7 +182,8 @@ class MessageTile extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(width: 5), // Space between the time/tick and message bubble
+              SizedBox(
+                  width: 5), // Space between the time/tick and message bubble
             ],
             // Message bubble (either blue for sent or grey for received) with gradient and shadow
             Container(
@@ -204,15 +211,15 @@ class MessageTile extends StatelessWidget {
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                   bottomLeft:
-                  isSentByMe ? Radius.circular(20) : Radius.circular(0),
+                      isSentByMe ? Radius.circular(20) : Radius.circular(0),
                   bottomRight:
-                  isSentByMe ? Radius.circular(0) : Radius.circular(20),
+                      isSentByMe ? Radius.circular(0) : Radius.circular(20),
                 ),
               ),
               child: Text(
                 message,
-                style: TextStyle(
-                    color: isSentByMe ? Colors.white : Colors.black),
+                style:
+                    TextStyle(color: isSentByMe ? Colors.white : Colors.black),
               ),
             ),
             if (!isSentByMe) ...[

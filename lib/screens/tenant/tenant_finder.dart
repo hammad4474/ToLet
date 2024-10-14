@@ -16,7 +16,7 @@ class _TenantFinderScreenState extends State<TenantFinderScreen> {
     TenantFinderScreenContent(), // Home Page
     RequestsScreen(), // Requests Page
     AddNewItemScreen(), // Add New Item Page
-    ChatScreen(), // Chat Page
+   // ChatScreen(), // Chat Page
    // ProfileScreen(), // Profile Page
   ];
 
@@ -235,14 +235,14 @@ class AddNewItemScreen extends StatelessWidget {
   }
 }
 
-class ChatScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Chat Page"),
-    );
-  }
-}
+// class ChatScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Text("Chat Page"),
+//     );
+//   }
+// }
 
 // class ProfileScreen extends StatelessWidget {
 //   @override

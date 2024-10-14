@@ -96,25 +96,32 @@ Widget buildReviewTile(
 
       // Second row: Star rating + Helpful/Like/Dislike buttons
       Padding(
-        padding: const EdgeInsets.only(
-            left: 48.0, top: 4.0), // Align stars and feedback
+        padding: const EdgeInsets.only(left: 10.0, top: 4.0),
+        // Align stars and feedback
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            buildStarRating(rating), // Star rating widget
+            buildStarRating(rating),
+            SizedBox(
+              width: 25,
+            ), // Star rating widget
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Helpful?'),
+                Text(
+                  'Helpful?',
+                  style: TextStyle(fontSize: 16),
+                ),
                 TextButton.icon(
                   onPressed: () {}, // Like button
                   icon: Icon(Icons.thumb_up_alt_outlined,
-                      size: 10, color: Colors.black),
+                      size: 24, color: Colors.black),
                   label: Text(helpfulCount.toString()),
                 ),
                 TextButton.icon(
                   onPressed: () {}, // Dislike button
                   icon: Icon(Icons.thumb_down_alt_outlined,
-                      size: 10, color: Colors.black),
+                      size: 24, color: Colors.black),
                   label: Text(notHelpfulCount.toString()),
                 ),
               ],
@@ -170,8 +177,8 @@ Widget buildStarRating(int rating) {
           index < rating
               ? Icons.star
               : Icons.star_border, // Show stars based on rating
-          color: Colors.yellow,
-          size: 16,
+          color: const Color.fromARGB(255, 178, 164, 45),
+          size: 20,
         );
       }),
       SizedBox(width: 4), // Space between stars and rating text
