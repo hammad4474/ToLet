@@ -180,7 +180,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
 
             // Role Selector (Switchable)
             Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 30.0),
+              padding: const EdgeInsets.only(left: 16.0, top: 19.0),
               child: Text(
                 'Welcome to Tenant',
                 style: TextStyle(
@@ -193,33 +193,28 @@ class _HometenantScreenState extends State<HometenantScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Container(
-                height: 50, // Adjust height as needed
+                height: 50, // Height for the outer grey container
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  // Background color for the entire row
-                  borderRadius: BorderRadius.circular(
-                      30), // Rounded corners for the entire container
+                  color: Colors.grey[200], // Background color for the entire row
+                  borderRadius: BorderRadius.circular(30), // Rounded corners for the entire container
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-
-
-                    // Tenant Button (Inactive)
+                    // Owner Button (Inactive)
                     Expanded(
                       child: Container(
+                         // Slightly smaller height for the inactive button
+                        margin: const EdgeInsets.all(7.5), // Center the smaller button vertically
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors
-                              .transparent, // Background color for unselected button
+                          color: Colors.transparent, // Background color for unselected button
                         ),
                         child: Center(
                           child: Text(
                             'Owner',
                             style: TextStyle(
-                              color: Colors.grey,
-                              // Text color for unselected button
+                              color: Colors.grey, // Text color for unselected button
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -227,13 +222,16 @@ class _HometenantScreenState extends State<HometenantScreen> {
                         ),
                       ),
                     ),
+                    // Tenant Button (Active)
                     Expanded(
                       child: Container(
+                        //width: 100, // Set width as a percentage of the screen width
+                        //height: 38, // Smaller height for the blue container
+                        margin: const EdgeInsets.all( 7.5),  // Center the smaller button vertically
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(35),
                           gradient: LinearGradient(
-                            colors: [Color(0xFF4DB6F3), Color(0xFF0288D1)],
-                            // Gradient for selected button
+                            colors: [Color(0xFF4DB6F3), Color(0xFF0288D1)], // Gradient for selected button
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
@@ -242,9 +240,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                           child: Text(
                             'Tenant',
                             style: TextStyle(
-                              color: Colors.white,
-                              // Text color for highlighted button
-                              fontWeight: FontWeight.bold,
+                              color: Colors.white, // Text color for highlighted button
                               fontSize: 16,
                             ),
                           ),
@@ -252,6 +248,19 @@ class _HometenantScreenState extends State<HometenantScreen> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Center(
+                child: Text(
+                  'Access verified property listings. Connect with multiple property owners',
+                  style: TextStyle(
+                    color: Colors.grey, // Text color for unselected button
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -273,6 +282,9 @@ class _HometenantScreenState extends State<HometenantScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: Text(
@@ -283,10 +295,26 @@ class _HometenantScreenState extends State<HometenantScreen> {
                             ),
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            // Handle "See more" action
+                          },
+                          child: Text(
+                            'See all',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 14.0,
+                             // decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                         // Horizontal ListView for properties
                         Container(
                           height:
-                              250, // Adjust height for horizontal list items
+                              189, // Adjust height for horizontal list items
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: section['properties'].length,
@@ -298,18 +326,6 @@ class _HometenantScreenState extends State<HometenantScreen> {
                               final property = Property.fromMap(
                                   propertyData); // Convert Map to Property
                               return PropertyCard(property: property);
-
-                              // final propertyData  = section['properties'][propIndex] ;
-                              // final Property teproperty= Property(
-                              //   title: propertyData['title'],
-                              //   city: propertyData['city'],
-                              //   price: propertyData['price'],
-                              //   isVerified: propertyData['isVerified'],
-                              //   rooms: propertyData['rooms'],
-                              //   area: propertyData['area'],
-                              //   imageUrl:propertyData['imageUrl'],
-                              // );
-                              // return PropertyCard( property: teproperty,);
                             },
                           ),
                         ),

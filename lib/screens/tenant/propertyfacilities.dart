@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 
-class PropertyFacilities extends StatelessWidget {
+class PropertyFacilities extends StatefulWidget {
+  @override
+  _PropertyFacilitiesState createState() => _PropertyFacilitiesState();
+}
+
+class _PropertyFacilitiesState extends State<PropertyFacilities> {
+  // List of facility states (active or not)
+  Map<String, bool> facilities = {
+    'Furnished': false,
+    'WiFi': true,
+    'Kitchen': false,
+    'Self Check-in': false,
+    'Free parking': false,
+    'Air conditioner': true,
+    'Security': false,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,18 +50,25 @@ class PropertyFacilities extends StatelessWidget {
             ],
           ),
           SizedBox(height: 10),
-          Wrap(
-            spacing: 10.0, // Horizontal space between chips
-            runSpacing: 10.0, // Vertical space between rows
-            children: [
-              FacilityChip(label: 'Furnished', active: false),
-              FacilityChip(label: 'WiFi', active: true),
-              FacilityChip(label: 'Kitchen', active: false),
-              FacilityChip(label: 'Self Check-in', active: false),
-              FacilityChip(label: 'Free parking', active: false),
-              FacilityChip(label: 'Air conditioner', active: true),
-              FacilityChip(label: 'Security', active: false),
-            ],
+          GridView.count(
+            crossAxisCount: 3, // Number of columns in the grid
+            shrinkWrap: true,  // Ensures GridView doesn't expand infinitely
+            crossAxisSpacing: 10.0, // Horizontal spacing between grid items
+            mainAxisSpacing: 10.0, // Vertical spacing between grid items
+            children: facilities.keys.map((facility) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    // Toggle the active state of the selected facility
+                    facilities[facility] = !facilities[facility]!;
+                  });
+                },
+                child: FacilityChip(
+                  label: facility,
+                  active: facilities[facility]!,
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),
@@ -62,16 +85,30 @@ class FacilityChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      height: 50, // Adjust the height to match the desired look
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
-        color: active ? Colors.blue : Colors.grey[200],
-        borderRadius: BorderRadius.circular(20.0),
+        gradient: active
+            ? LinearGradient(
+          colors: [Colors.lightBlue, Colors.blue],
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+        )
+            : null,
+        color: active ? null : Colors.grey[200],
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: active
+            ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 5)]
+            : [],
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: active ? Colors.white : Colors.grey[600],
-          fontWeight: FontWeight.bold,
+      child: Center(
+        child: Text(
+          label,
+          style: TextStyle(
+            color: active ? Colors.white : Colors.grey[600],
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

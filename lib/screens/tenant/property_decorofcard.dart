@@ -9,12 +9,8 @@ class PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    {
-      final screenHeight = MediaQuery.of(context).size.height;
-      final screenWidth = MediaQuery.of(context).size.width;
-      return
-        GestureDetector(
-          onTap: () {
+    return GestureDetector(
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -22,18 +18,18 @@ class PropertyCard extends StatelessWidget {
           ),
         );
       },
-    child:
-        Container(
-        width: 359, // Set fixed width for the card
+      child: Container(
+        width: 359,
+        height: 189, // Fixed height for the card
         margin: EdgeInsets.symmetric(horizontal: 8.0),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Container(
-            height: screenHeight * 0.35,
-            child: Row(children: [
-              // Left section (Text and Button with gradient background)
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Left section (Image)
               Expanded(
                 flex: 3,
                 child: ClipRRect(
@@ -43,32 +39,36 @@ class PropertyCard extends StatelessWidget {
                   ),
                   child: Image.asset(
                     property.imageUrl, // Replace with your image URL
-                    fit: BoxFit.fill,
-                    height: double.infinity,
-                    width: screenWidth *
-                        0.45, // Adjust image width based on screen size
+                    fit: BoxFit.cover,
+                    height: 189, // Ensure the image takes up the full height of the card
+                    width: 108, // Adjust the image width
                   ),
                 ),
               ),
+              // Middle section (Property Details)
               Expanded(
                 flex: 6,
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
+                  height: 189, // Make sure the middle section also respects the card height
                   child: Column(
+                    mainAxisSize: MainAxisSize.max, // Ensure content fills the height
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Property Title
-                      Text(
+                    Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child:Text(
                         property.title,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 8),
-
-                      // City
+                    ),
+                      SizedBox(height: 4), // Reduced spacing
                       Text(
                         property.city,
                         style: TextStyle(
@@ -76,79 +76,67 @@ class PropertyCard extends StatelessWidget {
                           color: Colors.grey,
                         ),
                       ),
-                      SizedBox(height: 8),
-
-                      // Property Details (Rooms, Area)
+                      SizedBox(height: 4), // Reduced spacing
                       Row(
                         children: [
                           Icon(Icons.bed, size: 16, color: Colors.grey),
                           SizedBox(width: 4),
-                          Text('${property.rooms}',
-                              style: TextStyle(color: Colors.grey)),
+                          Text('${property.rooms}', style: TextStyle(color: Colors.grey)),
                           SizedBox(width: 8),
                           Icon(Icons.square_foot, size: 16, color: Colors.grey),
                           SizedBox(width: 4),
-                          Text('${property.area}',
-                              style: TextStyle(color: Colors.grey)),
+                          Text('${property.area}', style: TextStyle(color: Colors.grey)),
                         ],
                       ),
-                      SizedBox(height: 8),
-
-                      // Price and Verified Status
-
-                          // Price
-                          Text(
-                            property.price + '/ month',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          Spacer(),
-                          // Verified Badge
-                          Text(
-                            property.isVerified ? " Verified" : "Not Verified",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.green,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-
+                      SizedBox(height: 4), // Reduced spacing
+                      Text(
+                        '${property.price} / month',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Spacer(), // Push the 'Verified' text to the bottom
+                      Text(
+                        property.isVerified ? "Verified" : "Not Verified",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: property.isVerified ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-
+              // Right section (Icons)
               Expanded(
-                flex:1,
+                flex: 1,
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
+                  height: 189, // Make sure the right section also respects the card height
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Evenly space icons vertically
                     children: [
-                       Image.asset(
-                        'assets/icons/verified.png', // Make sure the image path is correct
-                        height: 30, // Adjust icon height
-                        width: 30, // Adjust icon width
-                      ),
-                      Spacer(),
                       Image.asset(
-                        'assets/icons/saved.png', // Make sure the image path is correct
-                        height: 30, // Adjust icon height
-                        width: 30, // Adjust icon width
+                        'assets/icons/verified.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                      Image.asset(
+                        'assets/icons/saved.png',
+                        height: 24,
+                        width: 24,
                       ),
                     ],
                   ),
                 ),
               ),
-
-            ]),
+            ],
           ),
         ),
       ),
-        );
-    }
+    );
   }
 }

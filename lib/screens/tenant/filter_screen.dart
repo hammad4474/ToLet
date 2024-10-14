@@ -8,11 +8,8 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  double _minPrice = 10000;
-  double _maxPrice = 30000;
   String _selectedPropertyType = 'House';
-  String _selecttimeduration = 'month';
-  List<String> _selectedFacilities = ['WiFi', 'Air conditioner'];
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +57,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
          Text('Property type', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         SizedBox(height: 8),
@@ -88,6 +86,7 @@ class _FilterScreenState extends State<FilterScreen> {
         });
       },
       child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5.0),
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         decoration: BoxDecoration(
           gradient: isSelected
@@ -101,7 +100,7 @@ class _FilterScreenState extends State<FilterScreen> {
           color: isSelected ? null : Colors.grey[200],
           borderRadius: BorderRadius.circular(20),
           boxShadow: isSelected
-              ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 1)]
+              ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 5)]
               : [],
         ),
         child: Text(

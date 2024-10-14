@@ -43,6 +43,7 @@ class _PriceRangeWidgetState extends State<PriceRangeWidget> {
       min: 5000,
       max: 50000,
       divisions: 10,
+      activeColor: Colors.blue,
       onChanged: (RangeValues values) {
         setState(() {
           _minPrice = values.start;
@@ -54,13 +55,25 @@ class _PriceRangeWidgetState extends State<PriceRangeWidget> {
 
   // Time period buttons
   Widget _buildTimePeriodSelector() {
-    return Row(
+    final propertyweeks = ['Daily', 'Weekly', 'Monthly', 'Annually',];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildTimePeriodButton('Daily'),
-        _buildTimePeriodButton('Weekly'),
-        _buildTimePeriodButton('Monthly'),
-        _buildTimePeriodButton('Annually'),
+        Text('Property type', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        SizedBox(height: 8),
+        Container(
+          height: 40,
+
+          // Set a fixed height for the ListView
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: propertyweeks.length,
+            itemBuilder: (context, index) {
+              return _buildTimePeriodButton(propertyweeks[index]);
+            },
+          ),
+        ),
       ],
     );
   }
@@ -76,6 +89,7 @@ class _PriceRangeWidgetState extends State<PriceRangeWidget> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 5.0),
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(
@@ -94,7 +108,7 @@ class _PriceRangeWidgetState extends State<PriceRangeWidget> {
           label,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isSelected ? FontWeight.normal : FontWeight.normal,
           ),
         ),
       ),
