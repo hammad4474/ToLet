@@ -48,42 +48,41 @@ class _HometenantScreenState extends State<HometenantScreen> {
           "area": "673 m²",
           "imageUrl": "assets/images/home2.png",
         },
-         {
-           "title": "Luxury Apartment",
-           "city": "Hyderabad",
-           "price": "₹12,000",
-           "isVerified": false,
-           "rooms": "3 bedrooms",
-           "area": "800 m²",
-           "imageUrl": "assets/images/home1.png",
-         },
-
+        {
+          "title": "Luxury Apartment",
+          "city": "Hyderabad",
+          "price": "₹12,000",
+          "isVerified": false,
+          "rooms": "3 bedrooms",
+          "area": "800 m²",
+          "imageUrl": "assets/images/home1.png",
+        },
       ],
     },
-     {
-       "title": "Temporary Stay",
-       "item": "43 properties available",
-       "properties": [
-         {
-           "title": "Budget Room",
-           "city": "Noida",
-           "price": "₹6,000",
-           "isVerified": true,
-           "rooms": "1 bedroom",
-           "area": "300 m²",
-           "imageUrl": "assets/images/home0.png",
-         },
-         {
-           "title": "Luxury Condo",
-           "city": "Mumbai",
-           "price": "₹20,000",
-           "isVerified": true,
-           "rooms": "4 bedrooms",
-           "area": "1000 m²",
-           "imageUrl": "assets/images/home0.png",
-         },
-       ],
-     },
+    {
+      "title": "Temporary Stay",
+      "item": "43 properties available",
+      "properties": [
+        {
+          "title": "Budget Room",
+          "city": "Noida",
+          "price": "₹6,000",
+          "isVerified": true,
+          "rooms": "1 bedroom",
+          "area": "300 m²",
+          "imageUrl": "assets/images/home0.png",
+        },
+        {
+          "title": "Luxury Condo",
+          "city": "Mumbai",
+          "price": "₹20,000",
+          "isVerified": true,
+          "rooms": "4 bedrooms",
+          "area": "1000 m²",
+          "imageUrl": "assets/images/home0.png",
+        },
+      ],
+    },
   ];
 
   // Function to handle tap on navigation items
@@ -102,26 +101,21 @@ class _HometenantScreenState extends State<HometenantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  HomeAppBar(
+      appBar: HomeAppBar(
         onSearchBarTapped: () {
           // Navigate to SearchPropertyScreen when the search bar is tapped
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => SearchPropertyScreen()
-            ),
+            MaterialPageRoute(builder: (context) => SearchPropertyScreen()),
           );
         },
         onTuneIconPressed: () {
           // Navigate to SearchPropertyScreen when the search bar is tapped
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => FilterScreen()
-            ),
+            MaterialPageRoute(builder: (context) => FilterScreen()),
           );
         },
-
       ),
       body: Container(
         color: Colors.white,
@@ -196,25 +190,30 @@ class _HometenantScreenState extends State<HometenantScreen> {
                 height: 50, // Height for the outer grey container
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200], // Background color for the entire row
-                  borderRadius: BorderRadius.circular(30), // Rounded corners for the entire container
+                  color:
+                      Colors.grey[200], // Background color for the entire row
+                  borderRadius: BorderRadius.circular(
+                      30), // Rounded corners for the entire container
                 ),
                 child: Row(
                   children: [
                     // Owner Button (Inactive)
                     Expanded(
                       child: Container(
-                         // Slightly smaller height for the inactive button
-                        margin: const EdgeInsets.all(7.5), // Center the smaller button vertically
+                        // Slightly smaller height for the inactive button
+                        margin: const EdgeInsets.all(
+                            7.5), // Center the smaller button vertically
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.transparent, // Background color for unselected button
+                          color: Colors
+                              .transparent, // Background color for unselected button
                         ),
                         child: Center(
                           child: Text(
                             'Owner',
                             style: TextStyle(
-                              color: Colors.grey, // Text color for unselected button
+                              color: Colors
+                                  .grey, // Text color for unselected button
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -227,11 +226,15 @@ class _HometenantScreenState extends State<HometenantScreen> {
                       child: Container(
                         //width: 100, // Set width as a percentage of the screen width
                         //height: 38, // Smaller height for the blue container
-                        margin: const EdgeInsets.all( 7.5),  // Center the smaller button vertically
+                        margin: const EdgeInsets.all(
+                            7.5), // Center the smaller button vertically
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(35),
                           gradient: LinearGradient(
-                            colors: [Color(0xFF4DB6F3), Color(0xFF0288D1)], // Gradient for selected button
+                            colors: [
+                              Color(0xFF4DB6F3),
+                              Color(0xFF0288D1)
+                            ], // Gradient for selected button
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
@@ -240,7 +243,8 @@ class _HometenantScreenState extends State<HometenantScreen> {
                           child: Text(
                             'Tenant',
                             style: TextStyle(
-                              color: Colors.white, // Text color for highlighted button
+                              color: Colors
+                                  .white, // Text color for highlighted button
                               fontSize: 16,
                             ),
                           ),
@@ -282,34 +286,35 @@ class _HometenantScreenState extends State<HometenantScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            section['item'],
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Text(
+                                section['item'],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // Handle "See more" action
-                          },
-                          child: Text(
-                            'See all',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 14.0,
-                             // decoration: TextDecoration.underline,
+                            GestureDetector(
+                              onTap: () {
+                                // Handle "See more" action
+                              },
+                              child: Text(
+                                'See all',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 14.0,
+                                  // decoration: TextDecoration.underline,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
 
                         // Horizontal ListView for properties
                         Container(
@@ -318,9 +323,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: section['properties'].length,
-
                             itemBuilder: (context, propIndex) {
-
                               final propertyData =
                                   section['properties'][propIndex];
                               final property = Property.fromMap(
