@@ -50,26 +50,51 @@ class _PropertyFacilitiesState extends State<PropertyFacilities> {
             ],
           ),
           SizedBox(height: 10),
-          GridView.count(
-            crossAxisCount: 3, // Number of columns in the grid
-            shrinkWrap: true,  // Ensures GridView doesn't expand infinitely
-            crossAxisSpacing: 10.0, // Horizontal spacing between grid items
-            mainAxisSpacing: 10.0, // Vertical spacing between grid items
-            children: facilities.keys.map((facility) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    // Toggle the active state of the selected facility
-                    facilities[facility] = !facilities[facility]!;
-                  });
-                },
-                child: FacilityChip(
-                  label: facility,
-                  active: facilities[facility]!,
-                ),
-              );
-            }).toList(),
+          Container(
+            child: Column(children: <Widget>[
+             Expanded (
+              flex:3,
+              child : Row(
+                children: facilities.keys.map((facility) {
+                   return GestureDetector(
+                     onTap: () {
+                       setState(() {
+                         // Toggle the active state of the selected facility
+                         facilities[facility] = !facilities[facility]!;
+                       });
+                     },
+                     child: FacilityChip(
+                       label: facility,
+                       active: facilities[facility]!,
+                     ),
+                   );
+                 }).toList(),
+              ),),
+
+            ],
+            ),
+
           ),
+          // GridView.count(
+          //   crossAxisCount: 3, // Number of columns in the grid
+          //   shrinkWrap: true,  // Ensures GridView doesn't expand infinitely
+          //   crossAxisSpacing: 10.0, // Horizontal spacing between grid items
+          //   mainAxisSpacing: 10.0,  // Vertical spacing between grid items
+          //   children: facilities.keys.map((facility) {
+          //     return GestureDetector(
+          //       onTap: () {
+          //         setState(() {
+          //           // Toggle the active state of the selected facility
+          //           facilities[facility] = !facilities[facility]!;
+          //         });
+          //       },
+          //       child: FacilityChip(
+          //         label: facility,
+          //         active: facilities[facility]!,
+          //       ),
+          //     );
+          //   }).toList(),
+          // ),
         ],
       ),
     );
@@ -85,8 +110,7 @@ class FacilityChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50, // Adjust the height to match the desired look
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Padding controls the internal spacing
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
         gradient: active
