@@ -1,19 +1,10 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tolet/auth/signup_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
-import 'package:tolet/screens/owner/list_property.dart';
-// import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Add this import for Firestore
-
-import 'package:tolet/screens/user_profile.dart';
-import 'package:tolet/screens/welcome_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tolet/widgets/customized_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -34,25 +25,21 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       try {
-        // Sign in with email and password
         UserCredential userCredential = await _auth.signInWithEmailAndPassword(
             email: _emailController.text, password: _passwordController.text);
 
-        // If login is successful, get the user's Firestore document
         String uid = userCredential.user!.uid;
 
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users') // Replace 'users' with your collection name
+            .collection('users')
             .doc(uid)
             .get();
 
-        // Check if user document exists
         if (userDoc.exists) {
           Map<String, dynamic> userData =
-              userDoc.data() as Map<String, dynamic>;
+          userDoc.data() as Map<String, dynamic>;
           String userType = userData['userType'];
 
-          // Navigate based on the userType
           if (userType == 'Tenant') {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => HometenantScreen()));
@@ -119,12 +106,14 @@ class _LoginScreenState extends State<LoginScreen> {
     if (value == null || value.isEmpty) {
       return 'Please enter password';
     }
-
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -134,16 +123,19 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 120,
+                height: screenHeight * 0.03,
               ),
               Center(
-                child: Image.asset('assets/images/Logo 1.png'),
+                child: Image.asset(
+                  'assets/images/Logo 1.png',
+                  width: screenWidth * 0.4, // Responsive image width
+                ),
               ),
               SizedBox(
-                height: 40,
+                height: screenHeight * 0.01,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -152,20 +144,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                           color: Color(0xff2660ac),
                           fontWeight: FontWeight.bold,
-                          fontSize: 35),
+                          fontSize: screenWidth * 0.07),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: screenHeight * 0.015,
                     ),
                     Text(
                       'YOUR EMAIL',
                       style: TextStyle(
                         color: Color(0xffc3c3c3),
-                        fontSize: 16,
+                        fontSize: screenWidth * 0.03,
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: screenHeight * 0.015,
                     ),
                     TextFormField(
                       controller: _emailController,
@@ -175,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -187,17 +179,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: screenHeight * 0.03,
                     ),
                     Text(
                       'PASSWORD',
                       style: TextStyle(
                         color: Color(0xffc3c3c3),
-                        fontSize: 16,
+                        fontSize: screenWidth * 0.03,
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: screenHeight * 0.015,
                     ),
                     TextFormField(
                       controller: _passwordController,
@@ -220,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -235,32 +227,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: screenHeight * 0.04,
               ),
               Center(
                 child: InkWell(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      print('Form is valid');
                       _login();
                     }
                   },
                   child: CustomizedButton(
-                      title: 'Login',
-                      colorButton: Color(0xff2a82c8),
-                      height: 50,
-                      widht: 300,
-                      colorText: Colors.white,
-                      fontSize: 18),
+                    title: 'Login',
+                    colorButton: Color(0xff2a82c8),
+                    height: screenHeight * 0.07,
+                    widht: screenWidth * 0.7,
+                    colorText: Colors.white,
+                    fontSize: screenWidth * 0.045,
+                  ),
                 ),
               ),
               SizedBox(
-                height: 140,
+                height: screenHeight * 0.15,
               ),
               Center(
                 child: Text(
-                  'Dont have an account?',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  'Don\'t have an account?',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.04),
                 ),
               ),
               Center(
@@ -272,12 +264,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             builder: (context) => SignupScreen()));
                   },
                   child: CustomizedButton(
-                      title: 'Create an Account',
-                      colorButton: Color(0xff6bc2f3),
-                      height: 50,
-                      widht: 300,
-                      colorText: Colors.white,
-                      fontSize: 18),
+                    title: 'Create an Account',
+                    colorButton: Color(0xff6bc2f3),
+                    height: screenHeight * 0.07,
+                    widht: screenWidth * 0.7,
+                    colorText: Colors.white,
+                    fontSize: screenWidth * 0.045,
+                  ),
                 ),
               )
             ],

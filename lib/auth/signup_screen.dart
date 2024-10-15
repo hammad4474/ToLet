@@ -21,7 +21,6 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   void initState() {
     super.initState();
-
     _verifyEmailController.clear();
   }
 
@@ -45,6 +44,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -53,36 +55,42 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: 80,
+                height: screenHeight * 0.1,
               ),
-              Center(child: Image.asset('assets/images/image 3.png')),
+              Center(
+                child: Image.asset(
+                  'assets/images/image 3.png',
+                  width: screenWidth * 0.5, // Adjust image size based on screen width
+                ),
+              ),
               SizedBox(
-                height: 60,
+                height: screenHeight * 0.04,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Sign up',
                       style: TextStyle(
-                          color: Color(0xff2660ac),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 35),
+                        color: Color(0xff2660ac),
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenWidth * 0.08, // Responsive font size
+                      ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: screenHeight * 0.01,
                     ),
                     Text(
                       'VERIFY THROUGH EMAIL',
                       style: TextStyle(
                         color: Color(0xffc3c3c3),
-                        fontSize: 16,
+                        fontSize: screenWidth * 0.045, // Responsive font size
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: screenHeight * 0.01,
                     ),
                     TextFormField(
                       controller: _verifyEmailController,
@@ -91,8 +99,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintText: 'yourmail@gmail.com',
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.02, horizontal: screenWidth * 0.03),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -104,12 +112,12 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: screenHeight * 0.02,
                     ),
                     Row(
                       children: [
                         SizedBox(
-                          width: 180,
+                          width: screenWidth * 0.4, // Responsive width
                           child: TextFormField(
                             obscureText: true,
                             controller: _otpController,
@@ -118,7 +126,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               filled: true,
                               fillColor: Color(0xfff2f3f3),
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 12),
+                                  vertical: screenHeight * 0.02, horizontal: screenWidth * 0.03),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide.none,
@@ -131,7 +139,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 10,
+                          width: screenWidth * 0.03,
                         ),
                         InkWell(
                           onTap: () {
@@ -145,30 +153,29 @@ class _SignupScreenState extends State<SignupScreen> {
                                 appEmail: 'nagaanil16@gmail.com',
                                 otpLength: 6,
                               );
-                              EmailOTP.sendOTP(
-                                  email: _verifyEmailController.text);
+                              EmailOTP.sendOTP(email: _verifyEmailController.text);
                             }
                           },
                           child: CustomizedButton(
-                              title: 'Get Code',
-                              colorButton: Color(0xff2a82c8),
-                              height: 50,
-                              widht: 158,
-                              colorText: Colors.white,
-                              fontSize: 16),
+                            title: 'Get Code',
+                            colorButton: Color(0xff2a82c8),
+                            height: screenHeight * 0.06, // Responsive height
+                            widht: screenWidth * 0.4, // Responsive width
+                            colorText: Colors.white,
+                            fontSize: screenWidth * 0.04, // Responsive font size
+                          ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: 80,
+                      height: screenHeight * 0.08,
                     ),
                     Center(
                       child: InkWell(
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             print('form is valid');
-                            bool isVerified =
-                                EmailOTP.verifyOTP(otp: _otpController.text);
+                            bool isVerified = EmailOTP.verifyOTP(otp: _otpController.text);
                             if (isVerified) {
                               Fluttertoast.showToast(
                                 msg: 'Verified',
@@ -191,37 +198,37 @@ class _SignupScreenState extends State<SignupScreen> {
                           }
                         },
                         child: CustomizedButton(
-                            title: 'Verify',
-                            colorButton: Color(0xff2b82c8),
-                            height: 40,
-                            widht: 340,
-                            colorText: Colors.white,
-                            fontSize: 16),
+                          title: 'Verify',
+                          colorButton: Color(0xff2b82c8),
+                          height: screenHeight * 0.06, // Responsive height
+                          widht: screenWidth * 0.85, // Responsive width
+                          colorText: Colors.white,
+                          fontSize: screenWidth * 0.045, // Responsive font size
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
               SizedBox(
-                height: 140,
+                height: screenHeight * 0.1,
               ),
               InkWell(
                 onTap: //_isOtpVerified
-                    // ?
+                // ?
                     () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SignupInfofill()));
+                      context, MaterialPageRoute(builder: (context) => SignupInfofill()));
                 },
                 // : null,
                 child: CustomizedButton(
-                    title: 'Next',
-                    colorButton: Color(0xff2b82c8),
-                    height: 44,
-                    widht: 340,
-                    colorText: Colors.white,
-                    fontSize: 16),
+                  title: 'Next',
+                  colorButton: Color(0xff2b82c8),
+                  height: screenHeight * 0.06, // Responsive height
+                  widht: screenWidth * 0.85, // Responsive width
+                  colorText: Colors.white,
+                  fontSize: screenWidth * 0.045, // Responsive font size
+                ),
               ),
             ],
           ),

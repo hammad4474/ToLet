@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +20,6 @@ class _SignupInfofillState extends State<SignupInfofill> {
   TextEditingController _cPasswordController = TextEditingController();
 
   String? selectedUserType;
-
   bool _isobsecureText = true;
   bool _isobsecureText1 = true;
   bool _isLoading = false;
@@ -90,9 +87,9 @@ class _SignupInfofillState extends State<SignupInfofill> {
     if (_formKey.currentState!.validate()) {
       try {
         UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text);
+        await _auth.createUserWithEmailAndPassword(
+            email: _emailController.text,
+            password: _passwordController.text);
 
         User? user = userCredential.user;
         if (user != null) {
@@ -115,115 +112,55 @@ class _SignupInfofillState extends State<SignupInfofill> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
           child: Column(
             children: [
-              SizedBox(
-                height: 120,
-              ),
+              SizedBox(height: screenHeight * 0.10),
               Center(
                 child: Text(
                   'Congratulations',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.06),
                 ),
               ),
               Center(
                 child: Text(
                   'on verifying the email belongs to you',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.04),
                 ),
               ),
-              SizedBox(
-                height: 40,
+              SizedBox(height: screenHeight * 0.04),
+              Align(
+                alignment: Alignment.centerLeft, // Aligns the text to the start of the column
+                child: Text(
+                  'Sign up',
+                  style: TextStyle(
+                    color: Color(0xff2660ac),
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenWidth * 0.08, // Adjusts font size based on screen width
+                  ),
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Sign up',
-                      style: TextStyle(
-                          color: Color(0xff2660ac),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 35),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 170,
-                          child: TextFormField(
-                            controller: _fnameController,
-                            validator: _nameValidator,
-                            //obscureText: true,
-                            decoration: InputDecoration(
-                              hintText: 'Firstname',
-                              filled: true,
-                              fillColor: Color(0xfff2f3f3),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 12),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          width: 170,
-                          child: TextFormField(
-                            controller: _lnameController,
-                            validator: _nameValidator,
-                            //obscureText: true,
-                            decoration: InputDecoration(
-                              hintText: 'Lastname',
-                              filled: true,
-                              fillColor: Color(0xfff2f3f3),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 12),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none,
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      validator: _emailValidator,
-                      controller: _emailController,
-                      //obscureText: true,
+
+              SizedBox(height: screenHeight * 0.02),
+              Row(
+                children: [
+                  Flexible(
+                    child: TextFormField(
+                      controller: _fnameController,
+                      validator: _nameValidator,
                       decoration: InputDecoration(
-                        hintText: 'yourmail@gmail.com',
+                        hintText: 'Firstname',
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -234,30 +171,17 @@ class _SignupInfofillState extends State<SignupInfofill> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _isobsecureText,
+                  ),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: TextFormField(
+                      controller: _lnameController,
+                      validator: _nameValidator,
                       decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isobsecureText = !_isobsecureText;
-                            });
-                          },
-                          icon: Icon(
-                            _isobsecureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                        ),
-                        hintText: 'Passcode',
+                        hintText: 'Lastname',
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -268,120 +192,162 @@ class _SignupInfofillState extends State<SignupInfofill> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              TextFormField(
+                validator: _emailValidator,
+                controller: _emailController,
+                decoration: InputDecoration(
+                  hintText: 'yourmail@gmail.com',
+                  filled: true,
+                  fillColor: Color(0xfff2f3f3),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: _isobsecureText,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isobsecureText = !_isobsecureText;
+                      });
+                    },
+                    icon: Icon(
+                      _isobsecureText ? Icons.visibility_off : Icons.visibility,
                     ),
-                    TextFormField(
-                      controller: _cPasswordController,
-                      validator: _passwordValidator,
-                      obscureText: _isobsecureText1,
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isobsecureText1 = !_isobsecureText1;
-                              });
-                            },
-                            icon: Icon(_isobsecureText1
-                                ? Icons.visibility_off
-                                : Icons.visibility)),
-                        hintText: 'Confirm passcode',
-                        filled: true,
-                        fillColor: Color(0xfff2f3f3),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'TYPE OF USER',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Color(0xffcbcbcb)),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    DropdownButtonFormField<String>(
-                      value: selectedUserType,
-                      items: ['Tenant', 'Landlord'].map((String category) {
-                        return DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
+                  ),
+                  hintText: 'Passcode',
+                  filled: true,
+                  fillColor: Color(0xfff2f3f3),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              TextFormField(
+                controller: _cPasswordController,
+                validator: _passwordValidator,
+                obscureText: _isobsecureText1,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                      onPressed: () {
                         setState(() {
-                          selectedUserType = newValue;
+                          _isobsecureText1 = !_isobsecureText1;
                         });
                       },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please choose your user type';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Choose your user type',
-                        filled: true,
-                        fillColor: Color(0xfff2f3f3),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Center(
-                      child: InkWell(
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            print('Form is valid');
-                            _signUp();
-                          }
-                        },
-                        child: CustomizedButton(
-                            title: 'Submit',
-                            colorButton: Color(0xff2a82c8),
-                            height: 44,
-                            widht: 400,
-                            colorText: Colors.white,
-                            fontSize: 18),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Center(
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              'Back to login',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            )))
-                  ],
+                      icon: Icon(
+                          _isobsecureText1 ? Icons.visibility_off : Icons.visibility)),
+                  hintText: 'Confirm passcode',
+                  filled: true,
+                  fillColor: Color(0xfff2f3f3),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              Align(
+                alignment: Alignment.centerLeft, // Aligns the text to the start of the row
+                child: Text(
+                  'TYPE OF USER',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenWidth * 0.04,
+                    color: Color(0xffcbcbcb),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: screenHeight * 0.02),
+              DropdownButtonFormField<String>(
+                value: selectedUserType,
+                items: ['Tenant', 'Landlord'].map((String category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedUserType = newValue;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please choose your user type';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  hintText: 'Choose your user type',
+                  filled: true,
+                  fillColor: Color(0xfff2f3f3),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.04),
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      print('Form is valid');
+                      _signUp();
+                    }
+                  },
+                  child: CustomizedButton(
+                      title: 'Submit',
+                      colorButton: Color(0xff2a82c8),
+                      height: 44,
+                      widht: screenWidth * 0.8,
+                      colorText: Colors.white,
+                      fontSize: screenWidth * 0.05),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.03),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Back to login',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: screenWidth * 0.04),
+                  ),
                 ),
               ),
             ],
