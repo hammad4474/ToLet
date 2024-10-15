@@ -8,6 +8,12 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,12 +107,10 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      // bottomNavigationBar: CustomtenantBottomNavBar(
-      // currentIndex: 1, // Example currentIndex to highlight 'Requests'
-      // onTap: (index) {
-      // // Handle bottom navigation action
-      // },s
-      // )
+      bottomNavigationBar: CustomtenantBottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }

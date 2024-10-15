@@ -2,31 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 
-
 class TenantFinderScreen extends StatefulWidget {
   @override
   State<TenantFinderScreen> createState() => _TenantFinderScreenState();
 }
 
 class _TenantFinderScreenState extends State<TenantFinderScreen> {
-  int _currentIndex = 0; // Keep track of the selected index
-
-  // List of pages for each BottomNavigationBar item
-  final List<Widget> _pages = [
-    TenantFinderScreenContent(), // Home Page
-    RequestsScreen(), // Requests Page
-    AddNewItemScreen(), // Add New Item Page
-   // ChatScreen(), // Chat Page
-   // ProfileScreen(), // Profile Page
-  ];
-
-  // Handle bottom navigation tap
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,11 +35,13 @@ class _TenantFinderScreenState extends State<TenantFinderScreen> {
           ),
         ],
       ),
-      body: _pages[_currentIndex], // Display the current page
+      body: TenantFinderScreenContent(),
       bottomNavigationBar: CustomtenantBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped, // Update the selected index when tapped
-      ),
+       currentIndex: 1, // Example currentIndex to highlight 'Requests'
+       onTap: (index) {
+      // // Handle bottom navigation action
+      },
+      )// Include content widget
     );
   }
 }
@@ -151,7 +134,7 @@ class TenantCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: NetworkImage(avatarUrl), // Avatar image
+                  backgroundImage: AssetImage(avatarUrl), // Use AssetImage for local asset
                 ),
                 SizedBox(width: 16), // Space between avatar and name
                 Expanded(
@@ -172,11 +155,12 @@ class TenantCard extends StatelessWidget {
             ),
             SizedBox(height: 12), // Space between the row and the below content
             // Property type and location
-                Text(
-                  'Looking for, $propertyType',
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
-            SizedBox(height: 4),Row(
+            Text(
+              'Looking for, $propertyType',
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            SizedBox(height: 4),
+            Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
@@ -193,7 +177,7 @@ class TenantCard extends StatelessWidget {
                   width: 80,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.blue, // Use primary instead of backgroundColor
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -215,40 +199,3 @@ class TenantCard extends StatelessWidget {
     );
   }
 }
-
-// Placeholder pages for other screens
-class RequestsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Requests Page"),
-    );
-  }
-}
-
-class AddNewItemScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Add New Item Page"),
-    );
-  }
-}
-
-// class ChatScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text("Chat Page"),
-//     );
-//   }
-// }
-
-// class ProfileScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text("Profile Page"),
-//     );
-//   }
-// }
