@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
-  final Size preferredSize; // Required to set AppBar height
-  final VoidCallback onTuneIconPressed; // Callback for tune icon press
-  final VoidCallback onSearchBarTapped; // Callback for search bar tap
+  final Size preferredSize;
+  final VoidCallback onTuneIconPressed;
+  final VoidCallback onSearchBarTapped;
 
   HomeAppBar({
     Key? key,
-    required this.onTuneIconPressed, // Required callback for icon press
-    required this.onSearchBarTapped,  // Required callback for search bar tap
-  }) : preferredSize = const Size.fromHeight(70.0), super(key: key);
+    required this.onTuneIconPressed,
+    required this.onSearchBarTapped,
+  })  : preferredSize = const Size.fromHeight(70.0),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               onTap: onSearchBarTapped, // Trigger callback when tapped
               child: Container(
                 height: 45,
-                constraints: BoxConstraints(maxWidth: 500), // Limit max width of search bar
+                constraints: BoxConstraints(
+                    maxWidth: 500), // Limit max width of search bar
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
@@ -50,7 +52,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Expanded(
                       child: Text(
                         'Search address, city, location',
-                        style: TextStyle(color: Colors.grey), // Placeholder style
+                        style:
+                            TextStyle(color: Colors.grey), // Placeholder style
                       ),
                     ),
                   ],

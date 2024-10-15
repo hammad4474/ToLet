@@ -6,6 +6,7 @@ class PropertyFacilities extends StatefulWidget {
 }
 
 class _PropertyFacilitiesState extends State<PropertyFacilities> {
+
   // List of facility states (active or not)
   Map<String, bool> facilities = {
     'Furnished': false,
@@ -50,25 +51,31 @@ class _PropertyFacilitiesState extends State<PropertyFacilities> {
             ],
           ),
           SizedBox(height: 10),
-          GridView.count(
-            crossAxisCount: 3, // Number of columns in the grid
-            shrinkWrap: true,  // Ensures GridView doesn't expand infinitely
-            crossAxisSpacing: 10.0, // Horizontal spacing between grid items
-            mainAxisSpacing: 10.0, // Vertical spacing between grid items
-            children: facilities.keys.map((facility) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    // Toggle the active state of the selected facility
-                    facilities[facility] = !facilities[facility]!;
-                  });
-                },
-                child: FacilityChip(
-                  label: facility,
-                  active: facilities[facility]!,
+          Container(
+            child: Column(
+              children: [
+                Wrap(
+                  spacing: 8.0, // Horizontal space between chips
+                  runSpacing: 8.0, // Vertical space between lines
+                  children: facilities.keys.map((facility) {
+                    return Flexible(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            // Toggle the active state of the selected facility
+                            facilities[facility] = !facilities[facility]!;
+                          });
+                        },
+                        child: FacilityChip(
+                          label: facility,
+                          active: facilities[facility]!,
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
-              );
-            }).toList(),
+              ],
+            ),
           ),
         ],
       ),
@@ -84,30 +91,31 @@ class FacilityChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50, // Adjust the height to match the desired look
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-      decoration: BoxDecoration(
-        gradient: active
-            ? LinearGradient(
-          colors: [Colors.lightBlue, Colors.blue],
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-        )
-            : null,
-        color: active ? null : Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: active
-            ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 5)]
-            : [],
-      ),
-      child: Center(
-        child: Text(
-          label,
-          style: TextStyle(
-            color: active ? Colors.white : Colors.grey[600],
-            fontWeight: FontWeight.bold,
+    return IntrinsicWidth(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10), // Adjust padding as needed
+        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+        decoration: BoxDecoration(
+          gradient: active
+              ? LinearGradient(
+            colors: [Colors.lightBlue, Colors.blue],
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          )
+              : null,
+          color: active ? null : Colors.grey[200],
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: active
+              ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 5)]
+              : [],
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: active ? Colors.white : Colors.grey[600],
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:tolet/screens/tenant/filter_screen.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tolet/screens/tenant/listview.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
@@ -71,7 +72,33 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Search Property')),
+      appBar: AppBar(
+        backgroundColor: Colors.white, // This should keep the color fixed
+        elevation: 0, // Removes shadow
+        toolbarHeight: 70, // Fixed height
+        title: const Text('Search Property' , style: TextStyle(color: Colors.black),),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // This will pop the current screen and return to the previous one
+          },
+        ),
+        actions: [
+          // IconButton(
+          //   icon: const Icon(Icons.search, color: Colors.black),
+          //   onPressed: () {},
+          // ),
+          IconButton(
+            icon: const Icon(Icons.filter_list, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FilterScreen()),
+              );
+            },
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           // GoogleMap(

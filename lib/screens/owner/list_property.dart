@@ -1,10 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 
@@ -23,6 +27,59 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   String propertyTitle = '';
   String price = '';
 
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      bool? confirm = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Confirm Image Selection'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.file(File(image.path)),
+                SizedBox(height: 10),
+                Text('Do you want to confirm this image?'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Confirm'),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (confirm == true) {
+        setState(() {
+          _selectedImage = File(image.path);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image confirmed and selected.')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image selection canceled.')),
+        );
+      }
+    }
+  }
+
   Set<String> selectedFacilities = {};
 
   void _onSelect(String bhk) {
@@ -34,19 +91,17 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   void toggleSelection(String facility) {
     setState(() {
       if (selectedFacilities.contains(facility)) {
-        selectedFacilities.remove(facility); // Unselect if already selected
+        selectedFacilities.remove(facility);
       } else {
-        selectedFacilities.add(facility); // Select if not selected
+        selectedFacilities.add(facility);
       }
     });
   }
 
-  // Function to handle tap on navigation items
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    // Add logic here for navigation or any other action
   }
 
   Future<void> savePropertyData() async {
@@ -60,9 +115,11 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
     if (propertyTitle.isEmpty ||
         price.isEmpty ||
         selectedBHK.isEmpty ||
-        selectedFacilities.isEmpty) {
+        selectedFacilities.isEmpty ||
+        _selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill all the fields')),
+        SnackBar(
+            content: Text('Please fill all the fields and select an image')),
       );
       return;
     }
@@ -70,23 +127,40 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        // Add the property details to the user's 'properties' subcollection
+        String fileName =
+            'properties/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
+        Reference firebaseStorageRef =
+            FirebaseStorage.instance.ref().child(fileName);
+
+        TaskSnapshot uploadTask =
+            await firebaseStorageRef.putFile(_selectedImage!);
+        String downloadURL = await uploadTask.ref.getDownloadURL();
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
-            .collection(
-                'properties') // Subcollection within the user's document
+            .collection('properties')
             .add({
           'propertyTitle': propertyTitle,
           'bhk': selectedBHK,
           'facilities': selectedFacilities.toList(),
           'price': price,
+          'imageURL': downloadURL,
           'createdAt': FieldValue.serverTimestamp(),
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Property details saved successfully!')),
+          SnackBar(
+              content: Text('Property details and image saved successfully!')),
         );
+
+        setState(() {
+          propertyTitle = '';
+          price = '';
+          selectedBHK = '';
+          selectedFacilities.clear();
+          _selectedImage = null;
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('User is not logged in')),
@@ -117,7 +191,9 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
               color: Colors.black,
               size: 35,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           actions: [
             IconButton(
@@ -377,7 +453,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                 // Upload photos
                 GestureDetector(
                   onTap: () {
-                    // Functionality for uploading pictures
+                    _pickImage();
                   },
                   child: Container(
                     width: double.infinity,
