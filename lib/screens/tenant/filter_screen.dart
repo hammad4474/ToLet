@@ -8,45 +8,67 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  String _selectedPropertyType = 'House';
+  String _selectedPropertyType = 'House'; // Default selected property type
 
+  double _minPrice = 10000;
+  double _maxPrice = 30000;
+  String _selectedTimePeriod = 'Monthly';
+
+
+  Map<String, bool> facilities = {
+    'Furnished': false,
+    'WiFi': false,
+    'Kitchen': false,
+    'Self Check-in': false,
+    'Free parking': false,
+    'Air conditioner': false,
+    'Security': false,
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hyderabad'),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black), onPressed: () {}),
-        actions: [
-          IconButton(icon: Icon(Icons.search, color: Colors.black), onPressed: () {}),
-          IconButton(icon: Icon(Icons.filter_list, color: Colors.black), onPressed: () {}),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildPropertyTypeSection(),
-              SizedBox(height: 16),
-              PriceRangeWidget(),
-              SizedBox(height: 16),
-              PropertyFacilities(),
-              SizedBox(height: 30),
-
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: _buildActionButtons(),
-              ),
-
-            ],
-          ),
+        backgroundColor: Colors.white, // Keeps the color fixed
+        elevation: 0, // Removes shadow
+        toolbarHeight: 70, // Fixed height
+        title: const Text('Filter', style: TextStyle(color: Colors.black)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
         ),
+      ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildPropertyTypeSection(),
+
+
+                const SizedBox(height: 16),
+                PriceRangeWidget(),
+                const SizedBox(height: 16),
+                PropertyFacilities(),
+                const SizedBox(height: 100), // Add spacing at the bottom for the action buttons
+              ],
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              color: Colors.white, // Background color for the button section
+              child: _buildActionButtons(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -57,13 +79,11 @@ class _FilterScreenState extends State<FilterScreen> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-         Text('Property type', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        SizedBox(height: 8),
+        const Text('Property type', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const SizedBox(height: 8),
         Container(
           height: 40,
-          // Set a fixed height for the ListView
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: propertyTypes.length,
@@ -82,21 +102,20 @@ class _FilterScreenState extends State<FilterScreen> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedPropertyType = type;
+          _selectedPropertyType = type; // Update the selected property type
         });
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 5.0),
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         decoration: BoxDecoration(
           gradient: isSelected
-              ? LinearGradient(
+              ? const LinearGradient(
             colors: [Colors.lightBlue, Colors.blue],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           )
               : null,
-
           color: isSelected ? null : Colors.grey[200],
           borderRadius: BorderRadius.circular(20),
           boxShadow: isSelected
@@ -107,42 +126,40 @@ class _FilterScreenState extends State<FilterScreen> {
           type,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black,
-            fontWeight: isSelected ? FontWeight.normal : FontWeight.normal,
+            fontWeight: FontWeight.normal,
           ),
         ),
       ),
     );
   }
 
-
   // Action Buttons
-
-    Widget _buildActionButtons() {
-
+  Widget _buildActionButtons() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Ensures the text and button are spaced
-      crossAxisAlignment: CrossAxisAlignment.start,
-
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         TextButton.icon(
           onPressed: () {
-            // Handle reset action
+            setState(() {
+              // Reset all values to default
+              _selectedPropertyType = 'House'; // Reset to default value (or whatever you choose)
+              // Reset other states here if necessary
+            });
           },
-          icon: Icon(Icons.refresh),
-          label: Text('Reset all'),
+          icon: const Icon(Icons.refresh),
+          label: const Text('Reset all'),
         ),
         ElevatedButton(
           onPressed: () {
             // Handle show results action
           },
-          child: Text('Show results'),
+          child: const Text('Show results'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
           ),
         ),
       ],
     );
   }
-
 }

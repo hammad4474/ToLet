@@ -113,7 +113,11 @@ class _HometenantScreenState extends State<HometenantScreen> {
           // Navigate to SearchPropertyScreen when the search bar is tapped
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FilterScreen()),
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                body: FilterScreen(),
+              ),
+            ),
           );
         },
       ),
