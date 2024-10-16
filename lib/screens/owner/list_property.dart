@@ -21,7 +21,7 @@ class ListPropertyScreen extends StatefulWidget {
 }
 
 class _ListPropertyScreenState extends State<ListPropertyScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   String selectedBHK = '';
   bool isChecked = false;

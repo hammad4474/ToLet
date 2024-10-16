@@ -11,7 +11,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 0; // Keep track of the selected index
+  int _selectedIndex = 4; // Keep track of the selected index
 
   // Function to handle tap on navigation items
   void _onItemTapped(int index) {

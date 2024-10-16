@@ -8,7 +8,7 @@ class tenantChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<tenantChatScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
