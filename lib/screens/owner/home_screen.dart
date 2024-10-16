@@ -131,13 +131,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.all( 12.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Container(
                     height: 50, // Height for the outer grey container
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color:
-                      Colors.grey[200], // Background color for the entire row
+                      color: Colors
+                          .grey[200], // Background color for the entire row
                       borderRadius: BorderRadius.circular(
                           30), // Rounded corners for the entire container
                     ),
@@ -197,7 +197,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         // Tenant Button (Active)
-
                       ],
                     ),
                   ),

@@ -11,6 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/tenant/property_listofcard.dart';
 
 class ListPropertyScreen extends StatefulWidget {
   const ListPropertyScreen({Key? key}) : super(key: key);
@@ -154,6 +155,15 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
               content: Text('Property details and image saved successfully!')),
         );
 
+        await FirebaseFirestore.instance.collection('propertiesAll').add({
+          'propertyTitle': propertyTitle,
+          'bhk': selectedBHK,
+          'facilities': selectedFacilities.toList(),
+          'price': price,
+          'imageURL': downloadURL,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
         setState(() {
           propertyTitle = '';
           price = '';
@@ -161,6 +171,8 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           selectedFacilities.clear();
           _selectedImage = null;
         });
+
+        print('PropertyAll added successfully');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('User is not logged in')),

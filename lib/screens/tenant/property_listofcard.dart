@@ -1,53 +1,41 @@
-import 'package:flutter/material.dart';
-
 class Property {
-  final String title;
-  final String city;
+  final String bhk;
   final String price;
-  final bool isVerified;
-  final String rooms;
-  final String area;
-  final String imageUrl;
+  final String imageURL;
+  final List<String> facilities;
+  final String propertyTitle;
+  bool isVerified;
 
   Property({
-    required this.title,
-    required this.city,
+    required this.bhk,
     required this.price,
-    required this.isVerified,
-    required this.rooms,
-    required this.area,
-    required this.imageUrl,
+    required this.imageURL,
+    required this.facilities,
+    required this.propertyTitle,
+    this.isVerified = true, // Default value of isVerified is true
   });
 
-  // Method to convert from Map to Property
-  factory Property.fromMap(Map<String, dynamic> data) {
+  // Factory constructor to create a Property object from a Firestore document
+  factory Property.fromMap(Map<String, dynamic> map) {
     return Property(
-      title: data['title'],
-      city: data['city'],
-      price: data['price'],
-      isVerified: data['isVerified'],
-      rooms: data['rooms'],
-      area: data['area'],
-      imageUrl: data['imageUrl'],
+      bhk: map['bhk'] ?? 'Unknown BHK', // Default to 'Unknown BHK' if missing
+      price: map['price'] ?? '0', // Default to '0' if price is missing
+      imageURL: map['imageURL'] ?? '', // Default to an empty string if missing
+      facilities: List<String>.from(map['facilities'] ?? []), // Handle null facilities
+      propertyTitle: map['propertyTitle'] ?? 'Unknown Property', // Default to 'Unknown Property'
+      isVerified: map['isVerified'] ?? true, // Default to true if not present
     );
   }
-}
-// class Property {
-//   final String title;
-//   final String city;
-//   final String price;
-//   final bool isVerified;
-//   final String rooms;
-//   final String area;
-//   final String imageUrl;
 
-//   Property({
-//     required this.title,
-//     required this.city,
-//     required this.price,
-//     required this.isVerified,
-//     required this.rooms,
-//     required this.area,
-//     required this.imageUrl,
-//   });
-// }
+  // Convert Property object to Firestore map (if needed for saving properties)
+  Map<String, dynamic> toMap() {
+    return {
+      'bhk': bhk,
+      'price': price,
+      'imageURL': imageURL,
+      'facilities': facilities,
+      'propertyTitle': propertyTitle,
+      'isVerified': isVerified, // Include isVerified in Firestore map
+    };
+  }
+}

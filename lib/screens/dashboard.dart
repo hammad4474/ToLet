@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
-import 'package:tolet/screens/owner/chat_screen.dart';  // Import your other screens
+import 'package:tolet/screens/owner/chat_screen.dart'; // Import your other screens
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/complain.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';  // CustomtenantBottomNavBar file
+import 'package:tolet/screens/tenant/bottom_navbar.dart'; // CustomtenantBottomNavBar file
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -30,14 +30,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.arrow_back,color: Colors.black),
+              icon: Icon(Icons.arrow_back, color: Colors.black),
             ),
             Text(
               'Dashboard',
               style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.menu,color: Colors.black)),
+            IconButton(
+                onPressed: () {}, icon: Icon(Icons.menu, color: Colors.black)),
           ],
         ),
       ),
@@ -62,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   _buildDashboardCard(
                     gradient: LinearGradient(
-                      colors: [Colors.green.shade600, Colors.green.shade200],
+                      colors: [Color(0xff50bca3), Color(0xff4bb59c)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -71,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   _buildDashboardCard(
                     gradient: LinearGradient(
-                      colors: [Colors.red.shade600, Colors.red.shade200],
+                      colors: [Color(0xffeb7a65), Color(0xffdf6048)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -88,12 +89,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildActionCard(
-                    assetPath: 'assets/icons/earn.png', // Path to your asset image
+                    assetPath:
+                        'assets/icons/earn.png', // Path to your asset image
                     title: 'Payment Received',
                     subtitle: '\$25,001',
                   ),
                   _buildActionCard(
-                    assetPath: 'assets/icons/payment.png', // Path to your asset image
+                    assetPath:
+                        'assets/icons/payment.png', // Path to your asset image
                     title: 'Earn Daily Income',
                   ),
                 ],
@@ -137,6 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             title,
             style: TextStyle(
               fontSize: 16,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -222,7 +226,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // Complaints List Widget
 
-
   // Individual Complaint Item Widget
   Widget _buildComplaintItem(String tenant, String complaint, Color severity) {
     return Card(
@@ -238,4 +241,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
-

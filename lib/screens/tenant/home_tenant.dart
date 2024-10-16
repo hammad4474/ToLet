@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/popup_screen.dart';
@@ -17,7 +20,10 @@ class HometenantScreen extends StatefulWidget {
 
 class _HometenantScreenState extends State<HometenantScreen> {
   String _selectedLocation = 'Hyderabad';
-  int _selectedIndex = 0; // Keep track of the selected index
+  late Future<List<Map<String, dynamic>>> userProperties;
+
+  int _selectedIndex = 0;
+  List<Property> _properties = [];
   final List<Map<String, String>> cities = [
     {'name': 'Bangalore', 'image': 'assets/images/bangalore.png'},
     {'name': 'Hyderabad', 'image': 'assets/images/Hyderabad.png'},
@@ -33,59 +39,6 @@ class _HometenantScreenState extends State<HometenantScreen> {
     {'name': 'Ahmedabad', 'image': 'assets/images/ahmedabad.png'},
   ];
 
-  // Define your property data here
-  final List<Map<String, dynamic>> data = [
-    {
-      "title": "Near your location",
-      "item": "43 properties available",
-      "properties": [
-        {
-          "title": "Small cottage with great view of Bagmati",
-          "city": "Hyderabad",
-          "price": "₹10,000",
-          "isVerified": true,
-          "rooms": "2 bedrooms",
-          "area": "673 m²",
-          "imageUrl": "assets/images/home2.png",
-        },
-        {
-          "title": "Luxury Apartment",
-          "city": "Hyderabad",
-          "price": "₹12,000",
-          "isVerified": false,
-          "rooms": "3 bedrooms",
-          "area": "800 m²",
-          "imageUrl": "assets/images/home1.png",
-        },
-      ],
-    },
-    {
-      "title": "Temporary Stay",
-      "item": "43 properties available",
-      "properties": [
-        {
-          "title": "Budget Room",
-          "city": "Noida",
-          "price": "₹6,000",
-          "isVerified": true,
-          "rooms": "1 bedroom",
-          "area": "300 m²",
-          "imageUrl": "assets/images/home0.png",
-        },
-        {
-          "title": "Luxury Condo",
-          "city": "Mumbai",
-          "price": "₹20,000",
-          "isVerified": true,
-          "rooms": "4 bedrooms",
-          "area": "1000 m²",
-          "imageUrl": "assets/images/home0.png",
-        },
-      ],
-    },
-  ];
-
-  // Function to handle tap on navigation items
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -99,18 +52,46 @@ class _HometenantScreenState extends State<HometenantScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    userProperties = fetchAllProperties();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchAllProperties() async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection(
+              'propertiesAll') // Assuming properties are under 'propertiesAll'
+          .get();
+
+      List<Map<String, dynamic>> properties = snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+
+      print('Fetched properties count: ${properties.length}');
+
+      setState(() {
+        _properties = properties.map((data) => Property.fromMap(data)).toList();
+      });
+
+      return properties; // Return the list of properties
+    } catch (e) {
+      print('Error fetching properties: $e');
+      return [];
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeAppBar(
         onSearchBarTapped: () {
-          // Navigate to SearchPropertyScreen when the search bar is tapped
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => SearchPropertyScreen()),
           );
         },
         onTuneIconPressed: () {
-          // Navigate to SearchPropertyScreen when the search bar is tapped
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -126,7 +107,6 @@ class _HometenantScreenState extends State<HometenantScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Location Selector
             Padding(
               padding: const EdgeInsets.only(left: 16.0, top: 16.0),
               child: Text(
@@ -176,7 +156,6 @@ class _HometenantScreenState extends State<HometenantScreen> {
               ),
             ),
 
-            // Role Selector (Switchable)
             Padding(
               padding: const EdgeInsets.only(left: 16.0, top: 19.0),
               child: Text(
@@ -191,13 +170,11 @@ class _HometenantScreenState extends State<HometenantScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Container(
-                height: 50, // Height for the outer grey container
+                height: 50,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color:
-                      Colors.grey[200], // Background color for the entire row
-                  borderRadius: BorderRadius.circular(
-                      30), // Rounded corners for the entire container
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(30),
                 ),
                 child: Row(
                   children: [
@@ -274,73 +251,130 @@ class _HometenantScreenState extends State<HometenantScreen> {
             ),
             // Property ListView
             Expanded(
-              child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  final section = data[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          section['title'],
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 4.0),
-                              child: Text(
-                                section['item'],
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Handle "See more" action
-                              },
-                              child: Text(
-                                'See all',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 14.0,
-                                  // decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+              child: _properties.isNotEmpty
+                  ? SingleChildScrollView(
+                      child: FutureBuilder<List<Map<String, dynamic>>>(
+                        future: userProperties,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error fetching properties.'));
+                          } else if (snapshot.hasData &&
+                              snapshot.data!.isNotEmpty) {
+                            List<Map<String, dynamic>> properties =
+                                snapshot.data!;
 
-                        // Horizontal ListView for properties
-                        Container(
-                          height:
-                              189, // Adjust height for horizontal list items
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: section['properties'].length,
-                            itemBuilder: (context, propIndex) {
-                              final propertyData =
-                                  section['properties'][propIndex];
-                              final property = Property.fromMap(
-                                  propertyData); // Convert Map to Property
-                              return PropertyCard(property: property);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                            return SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Text(
+                                      'Near your location',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '43 properties near you',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Color(0xff747b7d)),
+                                        ),
+                                        TextButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              'see all',
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 250,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: properties.length,
+                                      itemBuilder: (context, index) {
+                                        final property = properties[index];
+                                        return buildPropertyCard(
+                                            property, true);
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Text(
+                                      'Temporary stay',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '43 properties near you',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Color(0xff747b7d)),
+                                        ),
+                                        TextButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              'see all',
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 250,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: properties.length,
+                                      itemBuilder: (context, index) {
+                                        final property = properties[index];
+                                        return buildPropertyCard(
+                                            property, false);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Center(child: Text('No properties found.'));
+                          }
+                        },
+                      ),
+                    )
+                  : Center(
+                      child:
+                          CircularProgressIndicator()), // Show loader while fetching
             ),
           ],
         ),
@@ -351,4 +385,123 @@ class _HometenantScreenState extends State<HometenantScreen> {
       ),
     );
   }
+}
+
+Widget buildPropertyCard(Map<String, dynamic> property, bool isVerified) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Card(
+      elevation: 3,
+      shadowColor: Colors.black,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        height: 200,
+        width: 410,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            property['imageURL'] != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15)),
+                    child: Image.network(
+                      property['imageURL'],
+                      fit: BoxFit.cover,
+                      height: 250,
+                      width: 110,
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15)),
+                    child: Image.asset(
+                      'assets/icons/wifi.png',
+                      height: 250,
+                    ),
+                  ),
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20),
+                Text(
+                  property['propertyTitle'] ?? 'No Title',
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 10),
+                Text(property['location'] ?? 'Unknown Location',
+                    style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.bed,
+                      color: Color(0xff7d7f88),
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      '${property['bhk']}',
+                      style: TextStyle(color: Color(0xff7d7f88)),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.house,
+                      color: Color(0xff7d7f88),
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      '${property['area'] ?? 'Unknown Area'} m²',
+                      style: TextStyle(color: Color(0xff7d7f88)),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Text(
+                      '${property['price']}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    Text(
+                      ' / month',
+                      style: TextStyle(color: Color(0xff7d7f88)),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text(
+                  isVerified ? 'Verified' : 'Not Verified',
+                  style: TextStyle(
+                      color: isVerified ? Colors.green : Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+            SizedBox(width: 20),
+            Column(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Icon(
+                  isVerified ? Icons.verified_user : Icons.not_interested_sharp,
+                  color: isVerified ? Colors.green : Colors.red,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

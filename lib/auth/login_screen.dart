@@ -30,14 +30,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
         String uid = userCredential.user!.uid;
 
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+        DocumentSnapshot userDoc =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (userDoc.exists) {
           Map<String, dynamic> userData =
-          userDoc.data() as Map<String, dynamic>;
+              userDoc.data() as Map<String, dynamic>;
           String userType = userData['userType'];
 
           if (userType == 'Tenant') {
@@ -123,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: screenHeight * 0.03,
+                height: screenHeight * 0.06,
               ),
               Center(
                 child: Image.asset(
@@ -167,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
                         contentPadding:
-                        EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -212,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
                         contentPadding:
-                        EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -252,7 +250,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: Text(
                   'Don\'t have an account?',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.04),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * 0.04),
                 ),
               ),
               Center(
