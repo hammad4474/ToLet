@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
-import 'package:tolet/screens/tenant/tenant_finder.dart';
+//import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/user_profile.dart';
 
 class CustomtenantBottomNavBar extends StatelessWidget {

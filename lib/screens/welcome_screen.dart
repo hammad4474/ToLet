@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:tolet/auth/login_screen.dart';
 import 'package:tolet/widgets/customized_button.dart';
@@ -14,74 +12,88 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+      body:SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 300,
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    //height: double.infinity,
-                    child: Image.asset(
-                        fit: BoxFit.cover, 'assets/images/img2.png'),
+            // Top part with image and title
+            Column(
+              children: [
+                // House image
+                SizedBox(
+                  height: screenHeight * 0.45,
+                  width:double.infinity,// House image height is around 25% of screen height
+                  child: Image.asset(
+                    'assets/images/img2.png', // Replace this with the top house image path
+                    fit: BoxFit.fill,
+                    width:MediaQuery.of(context).size.width,
                   ),
-                  Positioned(
-                      child: Image.asset('assets/images/Illustration.png')),
-                  Positioned(
-                    top: 130,
-                    left: 20,
-                    child: Image.asset(
-                      fit: BoxFit.cover,
-                      'assets/images/img.png',
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Image.asset('assets/images/txt1.png'),
-            SizedBox(
-              height: 30,
-            ),
-            Image.asset('assets/images/Logo 1.png'),
-            SizedBox(
-              height: 40,
-            ),
-            Center(
-              child: Text(
+                ),
+                 // Space between image and text
+                Text(
+                  "Welcome to",
                   style: TextStyle(
-                    color: Color(0xff7b809e),
+                    fontSize: screenWidth * 0.04, // Responsive font size
+                    fontWeight: FontWeight.normal,
+                    color: Colors.blueAccent,
                   ),
-                  textAlign: TextAlign.center,
-                  'Connects property owners to tenants directly,\n enabling daily rental income and easy property\n management, while offering tenants affordable,\n verified rentals without brokers'),
+                ),
+                 // Small space after "Welcome to" text
+                Image.asset(
+                  'assets/images/logo.png',
+                  height:100,// Replace this with the logo image path
+                  width:100, // Logo width
+                ),
+              ],
             ),
             SizedBox(
-              height: 80,
+              height: screenHeight * 0.05, // Space after the button
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
-              },
-              child: CustomizedButton(
-                colorButton: Color(0xff2b82c8),
-                colorText: Colors.white,
-                fontSize: 25,
-                height: 55,
-                title: 'Get started',
-                widht: 300,
+            // Middle content: description text
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Padding for description text
+              child: Text(
+                'Connects property owners to tenants directly,\n enabling daily rental income and easy property\n management, while offering tenants affordable,\n verified rentals without brokers',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.03, // Responsive text size
+                  color: Color(0xff7b809e),
+                ),
+                textAlign: TextAlign.center,
               ),
+            ),
+            SizedBox(
+              height: screenHeight * 0.05, // Space after the button
+            ),
+            // Bottom part with "Get Started" button
+            Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                  },
+                  child: CustomizedButton(
+                    colorButton: Color(0xff2b82c8),
+                    colorText: Colors.white,
+                    fontSize: screenWidth * 0.05, // Responsive button text size
+                    height: screenHeight * 0.07, // Responsive button height
+                    title: 'Get started',
+                    widht: screenWidth * 0.60, // Responsive button width
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.05, // Space after the button
+                ),
+              ],
             ),
           ],
         ),
       ),
-    );
+      );
   }
 }
