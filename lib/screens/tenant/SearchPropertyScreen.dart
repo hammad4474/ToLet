@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/tenant/filter_screen.dart';
+
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tolet/screens/tenant/listview.dart';
+import 'package:tolet/screens/tenant/property_detailscreen.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
 
 class SearchPropertyScreen extends StatefulWidget {
@@ -22,6 +24,7 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
       "price": "₹10,000",
       "isVerified": true,
       "rooms": "2 bedrooms",
+      "rating": "2.3",
       "area": "673 m²",
       "lat": 17.3850,
       "long": 78.4867,
@@ -33,6 +36,7 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
       "price": "₹12,000",
       "isVerified": false,
       "rooms": "3 bedrooms",
+      "rating": "5.6",
       "area": "800 m²",
       "lat": 17.4220,
       "long": 78.4570,
@@ -60,27 +64,34 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
   //   }
   // }
 
-  void _showPropertyDetails(Map<String, dynamic> property) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PropertyDetailScreen(property: property),
-      ),
-    );
-  }
+  // void _showPropertyDetails(Map<String, dynamic> property) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => PropertyDetailScreen(property: property),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white, // This should keep the color fixed
-        elevation: 0, // Removes shadow
-        toolbarHeight: 70, // Fixed height
-        title: const Text('Search Property' , style: TextStyle(color: Colors.black),),
+        backgroundColor: Colors.white,
+        // This should keep the color fixed
+        elevation: 0,
+        // Removes shadow
+        toolbarHeight: 70,
+        // Fixed height
+        title: const Text(
+          'Search Property',
+          style: TextStyle(color: Colors.black),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // This will pop the current screen and return to the previous one
+            Navigator.pop(
+                context); // This will pop the current screen and return to the previous one
           },
         ),
         actions: [
@@ -115,10 +126,9 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
           Image.asset(
             'assets/images/static_map.png', // Use your static map image here
             fit: BoxFit.fill,
-
           ),
           DraggableScrollableSheet(
-            initialChildSize: 0.5, // Increase initial height to 50%
+            initialChildSize: 0.6, // Increase initial height to 50%
             minChildSize: 0.5,
             maxChildSize: 0.9, // Increase max height to 90%
             builder: (context, scrollController) {
@@ -131,29 +141,48 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header with "Showing 72 results" text
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        "Showing 72 results",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, top: 30),
+                          child: Text(
+                            "Showing 72 results",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
+                        const Spacer(),
+                        Image.asset(
+                          'assets/icons/ic_sort.png',
+                          height: 16, // Set the desired size
+                          width: 16,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          "Sort",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                      ],
                     ),
+                    // Header with "Showing 72 results" text
+
                     Expanded(
                       child: ListView.builder(
                         controller: scrollController,
                         itemCount: properties.length,
                         itemBuilder: (context, index) {
                           final propertyData = properties[index];
-                          final property = Property.fromMap(
-                              propertyData);
+                          final property = Property.fromMap(propertyData);
                           return SearchPropertyCard(property: propertyData);
                           // return PropertyCard(property: property);
-
                         },
                       ),
                     ),
@@ -168,12 +197,11 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
   }
 }
 
-
-
 class SearchPropertyCard extends StatelessWidget {
   final Map<String, dynamic> property;
 
-  const SearchPropertyCard({Key? key, required this.property}) : super(key: key);
+  const SearchPropertyCard({Key? key, required this.property})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -184,13 +212,12 @@ class SearchPropertyCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PropertyDetailScreen(property: property),
+            builder: (context) => PropertyDetailsScreen(),
           ),
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -207,21 +234,41 @@ class SearchPropertyCard extends StatelessWidget {
             // Left Section: Image
             Container(
               width: screenWidth * 0.3,
-              height: 100,
+              height: 189,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.zero,
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.zero),
                 image: DecorationImage(
                   image: AssetImage(property['imageUrl']),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 24),
             // Right Section: Details
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/icons/rating.png',
+                        height: 16, // Set the desired size
+                        width: 16,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${property['rating']}',
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+
                   // Property Title
                   Text(
                     property['title'],
@@ -231,7 +278,7 @@ class SearchPropertyCard extends StatelessWidget {
                       color: Colors.black87,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 10),
 
                   // City
                   Text(
@@ -241,19 +288,27 @@ class SearchPropertyCard extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
 
                   // Property Details (Rooms, Area)
                   Row(
                     children: [
-                      Icon(Icons.bed, size: 16, color: Colors.grey),
+                      Image.asset(
+                        'assets/icons/ic_bed.png',
+                        height: 16, // Set the desired size
+                        width: 16,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         '${property['rooms']}',
                         style: const TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(width: 8),
-                      Icon(Icons.square_foot, size: 16, color: Colors.grey),
+                      Image.asset(
+                        'assets/icons/ic_area.png',
+                        height: 16, // Set the desired size
+                        width: 16,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         '${property['area']}',
@@ -276,21 +331,12 @@ class SearchPropertyCard extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      // Verified Badge
-                      Icon(
-                        property['isVerified'] ? Icons.verified : Icons.cancel,
-                        color: property['isVerified'] ? Colors.green : Colors.red,
-                        size: 16,
+                      Image.asset(
+                        'assets/icons/ic_heart.png',
+                        height: 16, // Set the desired size
+                        width: 16,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        property['isVerified'] ? " Verified" : "Not Verified",
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      const SizedBox(width: 20),
                     ],
                   ),
                 ],
@@ -378,40 +424,40 @@ class SearchPropertyCard extends StatelessWidget {
 //   }
 // }
 
-class PropertyDetailScreen extends StatelessWidget {
-  final Map<String, dynamic> property;
-
-  const PropertyDetailScreen({Key? key, required this.property})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(property['title'])),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              property['imageUrl'],
-              width: double.infinity,
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(height: 16),
-            Text(
-              property['title'],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(property['city'], style: TextStyle(fontSize: 18)),
-            Text(property['price'], style: TextStyle(fontSize: 18)),
-            Text(property['rooms'], style: TextStyle(fontSize: 18)),
-            Text(property['area'], style: TextStyle(fontSize: 18)),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// class PropertyDetailScreen extends StatelessWidget {
+//   final Map<String, dynamic> property;
+//
+//   const PropertyDetailScreen({Key? key, required this.property})
+//       : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text(property['title'])),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Image.asset(
+//               property['imageUrl'],
+//               width: double.infinity,
+//               height: 200,
+//               fit: BoxFit.cover,
+//             ),
+//             SizedBox(height: 16),
+//             Text(
+//               property['title'],
+//               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//             ),
+//             SizedBox(height: 8),
+//             Text(property['city'], style: TextStyle(fontSize: 18)),
+//             Text(property['price'], style: TextStyle(fontSize: 18)),
+//             Text(property['rooms'], style: TextStyle(fontSize: 18)),
+//             Text(property['area'], style: TextStyle(fontSize: 18)),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
