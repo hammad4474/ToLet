@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // Role Selector (Switchable)
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 30.0),
+                  padding: const EdgeInsets.only(left: 16.0, top: 16.0),
                   // Adjust padding as needed
                   child: Text(
                     'Welcome to Owner',
@@ -131,27 +131,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.all( 12.0),
                   child: Container(
-                    height: 50, // Adjust height as needed
+                    height: 50, // Height for the outer grey container
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      // Background color for the entire row
+                      color:
+                      Colors.grey[200], // Background color for the entire row
                       borderRadius: BorderRadius.circular(
                           30), // Rounded corners for the entire container
                     ),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Owner Button (Active with gradient)
                         Expanded(
                           child: Container(
+                            //width: 100, // Set width as a percentage of the screen width
+                            //height: 38, // Smaller height for the blue container
+                            margin: const EdgeInsets.all(
+                                7.5), // Center the smaller button vertically
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(35),
                               gradient: LinearGradient(
-                                colors: [Color(0xFF4DB6F3), Color(0xFF0288D1)],
-                                // Gradient for selected button
+                                colors: [
+                                  Color(0xFF4DB6F3),
+                                  Color(0xFF0288D1)
+                                ], // Gradient for selected button
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
@@ -160,18 +164,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 'Owner',
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  // Text color for highlighted button
-                                  fontWeight: FontWeight.bold,
+                                  color: Colors
+                                      .white, // Text color for highlighted button
                                   fontSize: 16,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        // Tenant Button (Inactive)
+                        // Owner Button (Inactive)
                         Expanded(
                           child: Container(
+                            // Slightly smaller height for the inactive button
+                            margin: const EdgeInsets.all(
+                                7.5), // Center the smaller button vertically
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: Colors
@@ -181,8 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 'Tenant',
                                 style: TextStyle(
-                                  color: Colors.grey,
-                                  // Text color for unselected button
+                                  color: Colors
+                                      .grey, // Text color for unselected button
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
@@ -190,11 +196,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
+                        // Tenant Button (Active)
+
                       ],
                     ),
                   ),
                 ),
-
                 // Property ListView
                 Expanded(
                   child: ListView(

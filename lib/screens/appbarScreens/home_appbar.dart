@@ -40,7 +40,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 constraints: BoxConstraints(
                     maxWidth: 500), // Limit max width of search bar
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Row(

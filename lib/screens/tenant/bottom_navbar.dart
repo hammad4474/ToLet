@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
+import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 //import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/user_profile.dart';
 
@@ -31,15 +32,19 @@ class CustomtenantBottomNavBar extends StatelessWidget {
                     builder: (context) => HometenantScreen()));
             break;
           case 1:
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
           // Navigate to the Explore screen
           // Replace with the correct screen if available
             break;
           case 2:
           // Navigate to the Chat screen
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ChatScreen()));
+                context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
             break;
           case 3:
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
           // Navigate to the Saved screen
           // Replace with the correct screen if available
             break;

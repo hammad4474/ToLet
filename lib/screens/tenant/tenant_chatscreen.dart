@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tolet/screens/owner/Message_screen.dart';
-import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenant_messageScreen.dart';
 
-class ChatScreen extends StatefulWidget {
+class tenantChatScreen extends StatefulWidget {
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<tenantChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<tenantChatScreen> {
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -45,12 +45,12 @@ class _ChatScreenState extends State<ChatScreen> {
             time: '15:23',
             unreadMessages: 2,
             avatar:
-                'assets/images/dp.png', // Replace with actual avatar URL or asset
+            'assets/images/dp.png', // Replace with actual avatar URL or asset
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailedChatScreen()));
+                      builder: (context) => tenantmessagescreen()));
             },
           ),
           ChatTile(
@@ -58,12 +58,12 @@ class _ChatScreenState extends State<ChatScreen> {
             message: 'Your payment was accepted.',
             time: 'Yesterday',
             avatar:
-                'assets/Images/delhi.png', // Replace with actual avatar URL or asset
+            'assets/Images/delhi.png', // Replace with actual avatar URL or asset
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailedChatScreen()));
+                      builder: (context) => tenantmessagescreen()));
             },
           ),
           ChatTile(
@@ -71,12 +71,12 @@ class _ChatScreenState extends State<ChatScreen> {
             message: 'It was great experience!',
             time: '11/10/2021',
             avatar:
-                'assets/Images/dp.png', // Replace with actual avatar URL or asset
+            'assets/Images/dp.png', // Replace with actual avatar URL or asset
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailedChatScreen()));
+                      builder: (context) => tenantmessagescreen()));
             },
           ),
           ChatTile(
@@ -84,12 +84,12 @@ class _ChatScreenState extends State<ChatScreen> {
             message: 'How much does it cost?',
             time: '11/10/2021',
             avatar:
-                'assets/images/Capture.png', // Replace with actual avatar URL or asset
+            'assets/images/Capture.png', // Replace with actual avatar URL or asset
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailedChatScreen()));
+                      builder: (context) => tenantmessagescreen()));
             },
           ),
           ChatTile(
@@ -97,17 +97,17 @@ class _ChatScreenState extends State<ChatScreen> {
             message: 'Sure, man!',
             time: '11/10/2021',
             avatar:
-                'assets/images/delhi.png', // Replace with actual avatar URL or asset
+            'assets/images/delhi.png', // Replace with actual avatar URL or asset
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailedChatScreen()));
+                      builder: (context) => tenantmessagescreen()));
             },
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: CustomtenantBottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
@@ -141,7 +141,7 @@ class ChatTile extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundImage:
-              AssetImage(avatar), // Replace with actual asset if necessary
+          AssetImage(avatar), // Replace with actual asset if necessary
           radius: 25,
         ),
         title: Text(name),

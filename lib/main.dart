@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/welcome_screen.dart';
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
           appBarTheme: AppBarTheme(color: Colors.white),
           primaryColor: Colors.white),
       // home: FilterScreen(),
-      home: FilterScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
