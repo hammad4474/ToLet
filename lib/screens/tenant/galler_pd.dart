@@ -27,7 +27,7 @@ Widget buildGalleryContent() {
       ),
       SizedBox(height: 8), // Space between text and the grid
       Container(
-        height: 250,
+        height: 900,
         child: GridView.count(
           shrinkWrap: true,
           crossAxisCount: 3,

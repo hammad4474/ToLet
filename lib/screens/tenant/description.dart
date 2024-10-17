@@ -1,50 +1,52 @@
 import 'package:flutter/material.dart';
 
 Widget buildDescriptionContent() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            'Home Facilities',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            'See all facilities',
-            style: TextStyle(color: Colors.blue, fontSize: 16),
-          ),
-        ],
-      ),
-      SizedBox(height: 16),
-      // Facilities icons in two rows
-      Column(
-        children: [
-          // First row with 4 icons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildFacilityIcon('assets/icons/car.png', 'Car Parking'),
-              buildFacilityIcon('assets/icons/swim.png', 'Swimming'),
-              buildFacilityIcon('assets/icons/gym.png', 'Gym & Fit'),
-              buildFacilityIcon('assets/icons/restaurant.png', 'Restaurant'),
-            ],
-          ),
-          SizedBox(height: 16), // Spacing between the rows
-          // Second row with 4 icons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildFacilityIcon('assets/icons/wifi.png', 'Wi-Fi'),
-              buildFacilityIcon('assets/icons/pets.png', 'Pet Center'),
-              buildFacilityIcon('assets/icons/running.png', 'Sports Club'),
-              buildFacilityIcon('assets/icons/laundry.png', 'Laundry'),
-            ],
-          ),
-        ],
-      ),
-    ],
+  return SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              'Home Facilities',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'See all facilities',
+              style: TextStyle(color: Colors.blue, fontSize: 16),
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        // Facilities icons in two rows
+        Column(
+          children: [
+            // First row with 4 icons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buildFacilityIcon('assets/icons/car.png', 'Car Parking'),
+                buildFacilityIcon('assets/icons/swim.png', 'Swimming'),
+                buildFacilityIcon('assets/icons/gym.png', 'Gym & Fit'),
+                buildFacilityIcon('assets/icons/restaurant.png', 'Restaurant'),
+              ],
+            ),
+            SizedBox(height: 16), // Spacing between the rows
+            // Second row with 4 icons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buildFacilityIcon('assets/icons/wifi.png', 'Wi-Fi'),
+                buildFacilityIcon('assets/icons/pets.png', 'Pet Center'),
+                buildFacilityIcon('assets/icons/running.png', 'Sports Club'),
+                buildFacilityIcon('assets/icons/laundry.png', 'Laundry'),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
   );
 }
 

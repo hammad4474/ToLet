@@ -21,10 +21,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
         leading: Container(
           width: 20, // Width for the back button
           height: 20, // Height for the back button
-
           child: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Colors.white, size: 18), // Black back icon
+            icon: Icon(Icons.arrow_back, color: Colors.white, size: 18),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -36,8 +34,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               // Action for share icon tap
             },
             child: Container(
-              width: 40, // Match the width of the leading icon
-              height: 40, // Match the height of the leading icon
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
@@ -45,8 +43,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               child: Center(
                 child: Image.asset(
                   'assets/icons/share.png',
-                  width: 24, // Size of the share icon
-                  height: 24, // Size of the share icon
+                  width: 24,
+                  height: 24,
                 ),
               ),
             ),
@@ -70,10 +68,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       child: PageView(
                         children: [
                           Image.asset('assets/images/pd.png', fit: BoxFit.cover),
-                          Image.network('https://via.placeholder.com/400',
-                              fit: BoxFit.cover),
-                          Image.network('https://via.placeholder.com/400',
-                              fit: BoxFit.cover),
+                          Image.network('https://via.placeholder.com/400', fit: BoxFit.cover),
+                          Image.network('https://via.placeholder.com/400', fit: BoxFit.cover),
                         ],
                       ),
                     ),
@@ -84,54 +80,43 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Cylindrical Video Button
                       Center(
                         child: Container(
-                          width: MediaQuery.of(context).size.width *
-                              0.9, // 90% of the screen width for padding on the sides
-                          padding: EdgeInsets.all(
-                              3), // Padding for the bold gradient border
+                          width: screenWidth * 0.9,
+                          padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                50), // Cylinder shape with bold blue border
+                            borderRadius: BorderRadius.circular(50),
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                Color(0xFF06A6DD), // #06A6DD
-                                Color(0xFF1C66AD), // #1C66AD
+                                Color(0xFF06A6DD),
+                                Color(0xFF1C66AD),
                               ],
                             ),
                           ),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // White background inside the border
-                              borderRadius: BorderRadius.circular(
-                                  50), // Keep the inner container cylindrical
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50),
                             ),
                             child: ElevatedButton(
                               onPressed: () {
                                 // Action for video button
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors
-                                    .white, // Button background should be white
-                                shadowColor:
-                                    Colors.transparent, // Remove button shadow
+                                backgroundColor: Colors.white,
+                                shadowColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      50), // Cylindrical shape
+                                  borderRadius: BorderRadius.circular(50),
                                 ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 12), // Padding inside the button
+                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                               ),
                               child: Center(
                                 child: Text(
                                   'Watch Intro Video',
                                   style: TextStyle(
-                                    color: Color(0xFF1C66AD), // Blue text
+                                    color: Color(0xFF1C66AD),
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -141,36 +126,28 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                           ),
                         ),
                       ),
-
-                      SizedBox(height: 16), // Spacing below the video button
-
-                      // Property name, heart icon
+                      SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Small cottage in Hyderabad',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Icon(Icons.favorite_border),
                         ],
                       ),
                       Text(
                         'view of begmati',
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 8),
-
-                      // Rating and Room count
                       Row(
                         children: [
                           Row(
                             children: [
                               Icon(Icons.star, color: Colors.orange, size: 16),
-                              SizedBox(
-                                  width: 5), // Small space between icon and text
+                              SizedBox(width: 5),
                               Text('4.1 (66 reviews)'),
                             ],
                           ),
@@ -178,29 +155,23 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                           Row(
                             children: [
                               Image.asset(
-                                'assets/icons/bed.png', // Load image from assets
-                                width:
-                                    24, // Set width of the image (adjust as needed)
-                                height: 24, // Set height of the image
+                                'assets/icons/bed.png',
+                                width: 24,
+                                height: 24,
                               ),
-                              SizedBox(width: 8), // Space between icon and text
-                              Text('2 Room',
-                                  style: TextStyle(
-                                      fontSize: 16)), // Text next to the image
+                              SizedBox(width: 8),
+                              Text('2 Room', style: TextStyle(fontSize: 16)),
                             ],
                           ),
                         ],
                       ),
                       SizedBox(height: 8),
-
-                      // Location and Property size
                       Row(
                         children: [
                           Row(
                             children: [
                               Icon(Icons.location_on, color: Colors.grey),
-                              SizedBox(
-                                  width: 4), // Small space between icon and text
+                              SizedBox(width: 4),
                               Text('Kapan, Jorpati'),
                             ],
                           ),
@@ -208,26 +179,21 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                           Row(
                             children: [
                               Image.asset(
-                                'assets/icons/home.png', // Load image from assets
+                                'assets/icons/home.png',
                                 width: 24,
                                 height: 24,
                               ),
                               SizedBox(width: 8),
-                              Text('874 m²',
-                                  style: TextStyle(
-                                      fontSize: 16)), // Text next to the image
+                              Text('874 m²', style: TextStyle(fontSize: 16)),
                             ],
                           ),
                         ],
                       ),
                       SizedBox(height: 16),
-
-                      // Owner info with avatar and call button
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/delhi.png'),
+                            backgroundImage: AssetImage('assets/images/delhi.png'),
                             radius: 24,
                           ),
                           SizedBox(width: 8),
@@ -236,8 +202,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             children: [
                               Text(
                                 'Anil',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               Text('Property owner'),
                             ],
@@ -245,25 +210,19 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                           Spacer(),
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // Background color (you can customize)
-                              shape: BoxShape
-                                  .rectangle, // Ensures the container is a square
-                              borderRadius:
-                                  BorderRadius.circular(10), // Rounded corners
+                              color: Colors.white,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey
-                                      .withOpacity(0.5), // Shadow color
-                                  spreadRadius: 2, // How wide the shadow spreads
-                                  blurRadius: 5, // Blur radius of the shadow
-                                  offset:
-                                      Offset(0, 3), // Offset of the shadow (x, y)
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
                                 ),
                               ],
                             ),
-                            width:
-                                40, // Define the width and height to create a square shape
+                            width: 40,
                             height: 40,
                             child: IconButton(
                               icon: Icon(Icons.phone, color: Colors.grey),
@@ -275,97 +234,15 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                         ],
                       ),
                       SizedBox(height: 16),
-
-                      // Tabs for Description, Gallery, Review
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedTabIndex = 0;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Description',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: selectedTabIndex == 0
-                                        ? Colors.blue
-                                        : Colors.black,
-                                  ),
-                                ),
-                                if (selectedTabIndex == 0)
-                                  Container(
-                                    height: 2,
-                                    width: 60,
-                                    color: Colors.blue,
-                                  )
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedTabIndex = 1;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Gallery',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: selectedTabIndex == 1
-                                        ? Colors.blue
-                                        : Colors.black,
-                                  ),
-                                ),
-                                if (selectedTabIndex == 1)
-                                  Container(
-                                    height: 2,
-                                    width: 60,
-                                    color: Colors.blue,
-                                  )
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedTabIndex = 2;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Review',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: selectedTabIndex == 2
-                                        ? Colors.blue
-                                        : Colors.black,
-                                  ),
-                                ),
-                                if (selectedTabIndex == 2)
-                                  Container(
-                                    height: 2,
-                                    width: 60,
-                                    color: Colors.blue,
-                                  )
-                              ],
-                            ),
-                          ),
+                          buildTab('Description', 0),
+                          buildTab('Gallery', 1),
+                          buildTab('Review', 2),
                         ],
                       ),
                       SizedBox(height: 16),
-
-                      // Content based on selected tab
                       if (selectedTabIndex == 0) buildDescriptionContent(),
                       if (selectedTabIndex == 1) buildGalleryContent(),
                       if (selectedTabIndex == 2) buildReviewContent(),
@@ -375,83 +252,97 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               ],
             ),
           ),
-
-          // Bottom fixed rent and call button section
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.all(16),
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment
-                    .spaceBetween, // Ensures the text and button are spaced
-                crossAxisAlignment: CrossAxisAlignment
-                    .start, // Aligns the columns at the start of the row
+        ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment
-                        .start, // Aligns text to the left inside the column
-                    children: [
-                      Text(
-                        '₹10,000 / month',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                          height:
-                              4), // Small space between rent and payment estimation
-                      Text(
-                        'Payment estimation',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
+                  Text(
+                    '₹10,000 / month',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  SizedBox(height: 5),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF06A6DD), // #06A6DD
-                          Color(0xFF1C66AD), // #1C66AD
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(
-                          30), // Make it fully rounded (cylindrical)
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Call button functionality here
-                      },
-                      // Icon color set to white
-                      label: Text(
-                        'Call',
-                        style: TextStyle(
-                            color: Colors.white), // Text color set to white
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors
-                            .transparent, // Button background transparent to show gradient
-                        shadowColor:
-                            Colors.transparent, // Remove default shadow
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 45, vertical: 20), // Adjust padding
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(30), // Cylindrical shape
-                        ),
-                      ),
-                    ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Payment estimation',
+                    style: TextStyle(fontSize: 15),
                   ),
                 ],
               ),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFF06A6DD),
+                      Color(0xFF1C66AD),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    // Call button functionality here
+                  },
+                  label: Text(
+                    'Call',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  icon: Icon(Icons.phone, color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTab(String title, int index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedTabIndex = index;
+        });
+      },
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: selectedTabIndex == index ? Colors.blue : Colors.black,
             ),
           ),
+          if (selectedTabIndex == index)
+            Container(
+              height: 2,
+              width: 60,
+              color: Colors.blue,
+            )
         ],
       ),
     );
   }
+
 }
