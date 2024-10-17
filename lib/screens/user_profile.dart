@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:tolet/screens/owner/tenant_bottomnavigation.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/welcome_screen.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     gradient: LinearGradient(
                       colors: [
                         Color(0xffADD8E6),
-                        Color(0xff2b82c8)
+                        Color(constcolor.App_blue_color)
                       ], // Light blue to dark blue
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,

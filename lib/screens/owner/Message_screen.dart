@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class DetailedChatScreen extends StatelessWidget {
   @override
@@ -127,7 +128,7 @@ class DetailedChatScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 8),
-                Icon(Icons.send, color: Colors.blue),
+                Icon(Icons.send, color: Color(constcolor.App_blue_color)),
               ],
             ),
           ),

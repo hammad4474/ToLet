@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class ComplaintsSection extends StatefulWidget {
   @override
@@ -144,7 +145,7 @@ class _ComplaintsSectionState extends State<ComplaintsSection> {
               height: 35,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,  // Rectangle for square shape
-                color: _currentPage == index + 1 ? Colors.blue : Colors.grey[200],
+                color: _currentPage == index + 1 ? Color(constcolor.App_blue_color) : Colors.grey[200],
                 borderRadius: BorderRadius.circular(4), // Small border radius for square corners
                 boxShadow: [
                   BoxShadow(

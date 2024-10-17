@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 
 class TenantDetailsScreen extends StatefulWidget {
@@ -178,7 +179,7 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     gradient: LinearGradient(
-                      colors: [Colors.lightBlueAccent, Colors.blue], // Light blue to dark blue gradient
+                      colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)], // Light blue to dark blue gradient
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),

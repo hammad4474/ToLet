@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class TenantFinderScreen extends StatefulWidget {
   @override
@@ -177,7 +178,7 @@ class TenantCard extends StatelessWidget {
                   width: 80,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // Use primary instead of backgroundColor
+                      backgroundColor: Color(constcolor.App_blue_color), // Use primary instead of backgroundColor
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

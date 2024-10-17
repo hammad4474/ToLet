@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/auth/login_screen.dart';
+import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -40,7 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: TextStyle(
                     fontSize: screenWidth * 0.04, // Responsive font size
                     fontWeight: FontWeight.normal,
-                    color: Colors.blueAccent,
+                    color: Color(constcolor.App_lightblue_color),
                   ),
                 ),
                  // Small space after "Welcome to" text
@@ -78,7 +79,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
                   child: CustomizedButton(
-                    colorButton: Color(0xff2b82c8),
+                    colorButton: Color(constcolor.App_blue_color),
                     colorText: Colors.white,
                     fontSize: screenWidth * 0.05, // Responsive button text size
                     height: screenHeight * 0.07, // Responsive button height

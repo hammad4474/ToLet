@@ -9,6 +9,7 @@ import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/screens/tenant/property_decorofcard.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class HometenantScreen extends StatefulWidget {
   @override
@@ -140,7 +141,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    Icon(Icons.location_on, color: Colors.blue),
+                    Icon(Icons.location_on, color: Color(constcolor.App_blue_color)),
                     SizedBox(width: 5),
                     Text(
                       _selectedLocation + ', India',
@@ -213,8 +214,8 @@ class _HometenantScreenState extends State<HometenantScreen> {
                           borderRadius: BorderRadius.circular(35),
                           gradient: LinearGradient(
                             colors: [
-                              Color(0xFF4DB6F3),
-                              Color(0xFF0288D1)
+                              Color(constcolor.App_lightblue_color),
+                              Color(constcolor.App_blue_color)
                             ], // Gradient for selected button
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -300,7 +301,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                             child: Text(
                                               'see all',
                                               style:
-                                                  TextStyle(color: Colors.blue),
+                                                  TextStyle(color: Color(constcolor.App_blue_color)),
                                             )),
                                       ],
                                     ),
@@ -346,7 +347,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                             child: Text(
                                               'see all',
                                               style:
-                                                  TextStyle(color: Colors.blue),
+                                                  TextStyle(color: Color(constcolor.App_blue_color)),
                                             )),
                                       ],
                                     ),

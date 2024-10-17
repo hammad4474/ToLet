@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tolet/auth/signup_infoFill.dart';
+import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 import 'package:email_otp/email_otp.dart';
 
@@ -74,7 +75,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     Text(
                       'Sign up',
                       style: TextStyle(
-                        color: Color(0xff2660ac),
+                        color: Color(constcolor.App_blue_color),
                         fontWeight: FontWeight.bold,
                         fontSize: screenWidth * 0.08, // Responsive font size
                       ),
@@ -158,7 +159,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           child: CustomizedButton(
                             title: 'Get Code',
-                            colorButton: Color(0xff2a82c8),
+                            colorButton: Color(constcolor.App_blue_color),
                             height: screenHeight * 0.06, // Responsive height
                             widht: screenWidth * 0.4, // Responsive width
                             colorText: Colors.white,
@@ -199,7 +200,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                         child: CustomizedButton(
                           title: 'Verify',
-                          colorButton: Color(0xff2b82c8),
+                          colorButton: Color(constcolor.App_blue_color),
                           height: screenHeight * 0.06, // Responsive height
                           widht: screenWidth * 0.85, // Responsive width
                           colorText: Colors.white,
@@ -223,7 +224,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 // : null,
                 child: CustomizedButton(
                   title: 'Next',
-                  colorButton: Color(0xff2b82c8),
+                  colorButton: Color(constcolor.App_blue_color),
                   height: screenHeight * 0.06, // Responsive height
                   widht: screenWidth * 0.85, // Responsive width
                   colorText: Colors.white,

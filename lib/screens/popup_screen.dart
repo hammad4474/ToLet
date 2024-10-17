@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // For adding a delay
+import 'dart:async';
+
+import 'package:tolet/widgets/constcolor.dart'; // For adding a delay
 
 class CitySelectionDialog extends StatefulWidget {
   final List<Map<String, String>> cities;
@@ -99,10 +101,10 @@ class _CitySelectionDialogState extends State<CitySelectionDialog> {
                           widget.cities[index]['name']!,
                           style: TextStyle(
                             fontSize: screenWidth * 0.03, // Dynamic font size based on width
-                            color: isSelected ? Colors.blue : Colors.black, // Change color if selected
+                            color: isSelected ? Color(constcolor.App_blue_color) : Colors.black, // Change color if selected
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal, // Bold if selected
                             decoration: isSelected ? TextDecoration.underline : TextDecoration.none, // Underline if selected
-                            decorationColor: Colors.blue, // Set underline color to blue
+                            decorationColor: Color(constcolor.App_blue_color), // Set underline color to blue
                             decorationThickness: 2.0, // Make underline thicker
                           ),
                         ),

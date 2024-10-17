@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class tenantmessagescreen extends StatelessWidget {
   @override
@@ -127,7 +128,7 @@ class tenantmessagescreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 8),
-                Icon(Icons.send, color: Colors.blue),
+                Icon(Icons.send, color: Color(constcolor.App_blue_color)),
               ],
             ),
           ),
@@ -174,7 +175,7 @@ class MessageTile extends StatelessWidget {
                 children: [
                   if (isRead)
                     Icon(Icons.done_all,
-                        color: Colors.blue, size: 16), // Double tick
+                        color: Color(constcolor.App_blue_color), size: 16), // Double tick
                   SizedBox(height: 2), // Small space between tick and time
                   Text(
                     time,
@@ -193,7 +194,7 @@ class MessageTile extends StatelessWidget {
                 // Apply gradient
                 gradient: LinearGradient(
                   colors: isSentByMe
-                      ? [Colors.blue[300]!, Colors.blue[700]!]
+                      ? [Color(constcolor.App_lightblue_color)!, Color(constcolor.App_blue_color)!]
                       : [Colors.white!, Colors.grey[300]!],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,

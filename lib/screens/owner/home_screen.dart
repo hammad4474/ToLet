@@ -5,6 +5,7 @@ import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/owner/list_property.dart';
 import 'package:tolet/screens/owner/properties_panel.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 import '../popup_screen.dart';
 
@@ -153,8 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(35),
                               gradient: LinearGradient(
                                 colors: [
-                                  Color(0xFF4DB6F3),
-                                  Color(0xFF0288D1)
+                                  Color(constcolor.App_lightblue_color),
+                                  Color(constcolor.App_blue_color)
                                 ], // Gradient for selected button
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -283,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       bottomLeft: Radius.circular(15),
                     ),
                     gradient: LinearGradient(
-                      colors: [Color(0xFF3E92CC), Color(0xFF3B73B9)],
+                      colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
                       // Blue gradient
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -316,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ElevatedButton(
                         onPressed: onTap,
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Color(0xFF3E92CC),
+                          foregroundColor: Color(constcolor.App_blue_color),
                           backgroundColor: Colors.white, // Button background
                           shape: RoundedRectangleBorder(
                             borderRadius:

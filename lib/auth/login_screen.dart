@@ -5,6 +5,7 @@ import 'package:tolet/auth/signup_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -140,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Sign in',
                       style: TextStyle(
-                          color: Color(0xff2660ac),
+                          color:Color(constcolor.App_blue_color),
                           fontWeight: FontWeight.bold,
                           fontSize: screenWidth * 0.07),
                     ),
@@ -236,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: CustomizedButton(
                     title: 'Login',
-                    colorButton: Color(0xff2a82c8),
+                    colorButton: Color(constcolor.App_blue_color),
                     height: screenHeight * 0.07,
                     widht: screenWidth * 0.7,
                     colorText: Colors.white,
@@ -265,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: CustomizedButton(
                     title: 'Create an Account',
-                    colorButton: Color(0xff6bc2f3),
+                    colorButton: Color(constcolor.App_lightblue_color),
                     height: screenHeight * 0.07,
                     widht: screenWidth * 0.7,
                     colorText: Colors.white,

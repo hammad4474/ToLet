@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class FilterScreen extends StatefulWidget {
   @override
@@ -142,7 +143,7 @@ class _FilterScreenState extends State<FilterScreen> {
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
-            colors: [Colors.lightBlue, Colors.blue],
+            colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           )
@@ -196,7 +197,7 @@ class _FilterScreenState extends State<FilterScreen> {
       min: 0,
       max: 50000,
       divisions: 10,
-      activeColor: Colors.blue,
+      activeColor: Color(constcolor.App_blue_color),
       onChanged: (RangeValues values) {
         setState(() {
           _minPrice = values.start;
@@ -245,7 +246,7 @@ class _FilterScreenState extends State<FilterScreen> {
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(
-            colors: [Colors.lightBlue, Colors.blue],
+            colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           )
@@ -387,7 +388,7 @@ class FacilityChip extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: active
               ? LinearGradient(
-            colors: [Colors.lightBlue, Colors.blue],
+            colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           )

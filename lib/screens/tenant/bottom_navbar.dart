@@ -4,6 +4,7 @@ import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 //import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/user_profile.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class CustomtenantBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -18,7 +19,7 @@ class CustomtenantBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.white, // Set the background color
-      selectedItemColor: Colors.blue, // Set selected item color
+      selectedItemColor: Color(constcolor.App_blue_color), // Set selected item color
       unselectedItemColor: Colors.grey, // Set unselected item color
       type: BottomNavigationBarType.fixed, // Ensure all items are fixed
       currentIndex: currentIndex, // Track the current selected index

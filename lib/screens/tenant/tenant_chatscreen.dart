@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/tenant/tenant_messageScreen.dart';
+import 'package:tolet/widgets/constcolor.dart';
 
 class tenantChatScreen extends StatefulWidget {
   @override
@@ -153,7 +154,7 @@ class ChatTile extends StatelessWidget {
             if (unreadMessages > 0)
               CircleAvatar(
                 radius: 10,
-                backgroundColor: Colors.blue,
+                backgroundColor: Color(constcolor.App_blue_color),
                 child: Text(
                   unreadMessages.toString(),
                   style: TextStyle(color: Colors.white, fontSize: 12),

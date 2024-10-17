@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 
 class SignupInfofill extends StatefulWidget {
@@ -142,7 +143,7 @@ class _SignupInfofillState extends State<SignupInfofill> {
                 child: Text(
                   'Sign up',
                   style: TextStyle(
-                    color: Color(0xff2660ac),
+                    color: Color(constcolor.App_blue_color),
                     fontWeight: FontWeight.bold,
                     fontSize: screenWidth * 0.08, // Adjusts font size based on screen width
                   ),
@@ -330,7 +331,7 @@ class _SignupInfofillState extends State<SignupInfofill> {
                   },
                   child: CustomizedButton(
                       title: 'Submit',
-                      colorButton: Color(0xff2a82c8),
+                      colorButton: Color(constcolor.App_blue_color),
                       height: 44,
                       widht: screenWidth * 0.8,
                       colorText: Colors.white,
