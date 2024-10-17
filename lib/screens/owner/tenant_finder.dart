@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/tenant_detail.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
@@ -19,7 +20,7 @@ class _TenantFinderScreenState extends State<TenantFinderScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            // Handle back action
+            Navigator.pop(context); // Go back to the previous screen
           },
         ),
         title: Text(
@@ -37,7 +38,7 @@ class _TenantFinderScreenState extends State<TenantFinderScreen> {
         ],
       ),
       body: TenantFinderScreenContent(),
-      bottomNavigationBar: CustomtenantBottomNavBar(
+      bottomNavigationBar: CustomBottomNavigationBar(
        currentIndex: 1, // Example currentIndex to highlight 'Requests'
        onTap: (index) {
       // // Handle bottom navigation action
@@ -119,84 +120,94 @@ class TenantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 16.0),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      color: Color(0xFFE4F7FF),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align contents to the left
-          children: [
-            // Row for avatar, name, and time
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TenantDetailsScreen(),
+            ),
+          );
+        }, // Corrected closing of onTap
+        child: Card(
+          margin: EdgeInsets.only(bottom: 16.0),
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          color: Color(0xFFE4F7FF),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // Align contents to the left
               children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundImage: AssetImage(avatarUrl), // Use AssetImage for local asset
-                ),
-                SizedBox(width: 16), // Space between avatar and name
-                Expanded(
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 20, // Increase font size if necessary
+                // Row for avatar, name, and time
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundImage: AssetImage(avatarUrl), // Use AssetImage for local asset
                     ),
-                  ),
-                ),
-                Text(
-                  time,
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ],
-            ),
-            SizedBox(height: 12), // Space between the row and the below content
-            // Property type and location
-            Text(
-              'Looking for, $propertyType',
-              style: TextStyle(color: Colors.grey[700]),
-            ),
-            SizedBox(height: 4),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'in $location',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-                Spacer(), // This will push the button to the end of the row
-                Container(
-                  height: 30,
-                  width: 80,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(constcolor.App_blue_color), // Use primary instead of backgroundColor
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                    SizedBox(width: 16), // Space between avatar and name
+                    Expanded(
+                      child: Text(
+                        name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 20, // Increase font size if necessary
+                        ),
                       ),
                     ),
-                    onPressed: () {
-                      // Handle view action
-                    },
-                    child: Text(
-                      'View',
-                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    Text(
+                      time,
+                      style: TextStyle(color: Colors.grey),
                     ),
-                  ),
+                  ],
+                ),
+                SizedBox(height: 12), // Space between the row and the below content
+                // Property type and location
+                Text(
+                  'Looking for, $propertyType',
+                  style: TextStyle(color: Colors.grey[700]),
+                ),
+                SizedBox(height: 4),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'in $location',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Spacer(), // This will push the button to the end of the row
+                    Container(
+                      height: 30,
+                      width: 80,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(constcolor.App_blue_color), // Fixed color usage
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        onPressed: () {
+                          // Handle view action
+                        },
+                        child: Text(
+                          'View',
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 }

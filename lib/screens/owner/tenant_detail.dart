@@ -20,7 +20,7 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            // Handle back action
+            Navigator.pop(context); // Go back to the previous screen
           },
         ),
         title: Text(

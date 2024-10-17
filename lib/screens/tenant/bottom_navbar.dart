@@ -3,7 +3,7 @@ import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 //import 'package:tolet/screens/tenant/tenant_finder.dart';
-import 'package:tolet/screens/user_profile.dart';
+import 'package:tolet/screens/tenant/user_profile.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class CustomtenantBottomNavBar extends StatelessWidget {

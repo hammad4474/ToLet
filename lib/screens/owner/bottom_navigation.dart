@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/owner/list_property.dart';
-import 'package:tolet/screens/tenant/tenant_finder.dart';
-import 'package:tolet/screens/user_profile.dart';
+import 'package:tolet/screens/owner/owner_profile.dart';
+import 'package:tolet/screens/owner/tenant_finder.dart';
+import 'package:tolet/screens/tenant/user_profile.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
@@ -54,7 +55,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ProfileScreen()));
+                    builder: (context) => OwnerProfileScreen()));
             break;
         }
         onTap(index); // Call the onTap function to update the currentIndex

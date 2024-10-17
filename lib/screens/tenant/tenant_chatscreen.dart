@@ -21,6 +21,13 @@ class _ChatScreenState extends State<tenantChatScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        toolbarHeight: 70,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
+        ),
         title: Container(
           height: 40.0,
           decoration: BoxDecoration(
