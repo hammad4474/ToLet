@@ -2,7 +2,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -243,27 +242,21 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                 SizedBox(height: 20),
 
                 SizedBox(
-                  width: 400,
+                  width: double.infinity,
                   child: TextField(
                     controller: TextEditingController(text: propertyTitle),
-                    onChanged: (value) {
-                      propertyTitle = value;
-                    },
+                    onChanged: (value) => propertyTitle = value,
                     decoration: InputDecoration(
                       labelText: 'Property title',
-
                       labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
-                      fillColor:
-                          Color(0xfff2f3f3), // Set the grey background color
+                      fillColor: Color(0xfff2f3f3), // Set the grey background color
                       border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(3.0), // Adjust the curve
+                        borderRadius: BorderRadius.circular(3.0), // Adjust the curve
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color:
-                              Colors.transparent, // Remove border when inactive
+                          color: Colors.transparent, // Remove border when inactive
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -382,7 +375,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                 SizedBox(height: 10),
                 // Rent input
                 SizedBox(
-                  width: 400,
+                  width: double.infinity, // Take the full width of the screen
                   child: TextField(
                     controller: TextEditingController(text: price),
                     onChanged: (value) {
@@ -392,16 +385,13 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                       labelText: '600/ per day',
                       labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
-                      fillColor:
-                          Color(0xfff2f3f3), // Set the grey background color
+                      fillColor: Color(0xfff2f3f3), // Set the grey background color
                       border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(3.0), // Adjust the curve
+                        borderRadius: BorderRadius.circular(3.0), // Adjust the curve
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color:
-                              Colors.transparent, // Remove border when inactive
+                          color: Colors.transparent, // Remove border when inactive
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -411,6 +401,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                     ),
                   ),
                 ),
+
                 SizedBox(height: 20),
                 // Facilities Grid
                 Text(

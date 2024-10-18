@@ -57,6 +57,8 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          backgroundColor: Colors.white, // Set AppBar background color
+          iconTheme: IconThemeData(color: Colors.black), // Set icon color to black
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -66,13 +68,13 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
               ),
               Text(
                 'Properties',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
               ),
               IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
             ],
           ),
         ),
+
         body: SingleChildScrollView(
           child: FutureBuilder<List<Map<String, dynamic>>>(
             future: userProperties,
@@ -91,20 +93,43 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
                       SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          'Property Panel',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // "Property Panel" Text with styling
+                            Text(
+                              'Property Panel',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 28, // Larger font for more impact
+                                color: Colors.black, // Stronger contrast
+                                letterSpacing: 1.5, // Adds spacing between letters for elegance
+                              ),
+                            ),
+
+                            // Spacing between title and description
+                            SizedBox(height: 8),
+
+                            // "Just add the property..." Text with improved styling
+                            Text(
+                              'Easily list your property for a global audience!',
+                              style: TextStyle(
+                                fontSize: 16, // Slightly larger for better readability
+                                color: Colors.grey[600], // Softer grey for a modern look
+                                height: 1.5, // Line height for improved readability
+                              ),
+                            ),
+
+                            // Optional: Add a subtle divider for a sleek separation
+                            SizedBox(height: 16), // Space before the next section
+                            Divider(
+                              thickness: 1.5,
+                              color: Colors.grey[300],
+                            ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          'Just add the property\nto list on worldwide market!',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xff747b7d)),
-                        ),
-                      ),
+
                       SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -133,9 +158,10 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
                           itemCount: properties.length,
                           itemBuilder: (context, index) {
                             final property = properties[index];
-                            return buildPropertyCard(property, true);
+                            return buildPropertyCard(context, property, true, false); // Add context and onTip
                           },
                         ),
+
                       ),
                       SizedBox(height: 20),
                       Padding(
@@ -154,9 +180,10 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
                           itemCount: properties.length,
                           itemBuilder: (context, index) {
                             final property = properties[index];
-                            return buildPropertyCard(property, false);
+                            return buildPropertyCard(context, property, false, false); // Add context and onTip
                           },
                         ),
+
                       ),
                     ],
                   ),
@@ -174,7 +201,16 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
   }
 }
 
-Widget buildPropertyCard(Map<String, dynamic> property, bool isVerified) {
+Widget buildPropertyCard(
+    BuildContext context, Map<String, dynamic> property, bool isVerified, bool onTip) {
+  double screenWidth = MediaQuery.of(context).size.width;
+
+  // Define dimensions based on screen width
+  double cardWidth = screenWidth > 450 ? screenWidth * 0.9 : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
+  double cardHeight = 250; // Fixed height for consistency
+  double imageWidth = 108; // Fixed image width
+  double iconSize = 24.0; // Standard icon size
+
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Card(
@@ -186,7 +222,7 @@ Widget buildPropertyCard(Map<String, dynamic> property, bool isVerified) {
           borderRadius: BorderRadius.circular(15),
         ),
         height: 200,
-        width: 410,
+        width: 450,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
