@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/auth/login_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
@@ -18,7 +19,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body:SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -28,14 +29,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 // House image
                 SizedBox(
                   height: screenHeight * 0.45,
-                  width:double.infinity,// House image height is around 25% of screen height
+                  width: double
+                      .infinity, // House image height is around 25% of screen height
                   child: Image.asset(
                     'assets/images/img2.png', // Replace this with the top house image path
                     fit: BoxFit.fill,
-                    width:MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width,
                   ),
                 ),
-                 // Space between image and text
+                // Space between image and text
                 Text(
                   "Welcome to",
                   style: TextStyle(
@@ -44,11 +46,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     color: Color(constcolor.App_lightblue_color),
                   ),
                 ),
-                 // Small space after "Welcome to" text
+                // Small space after "Welcome to" text
                 Image.asset(
                   'assets/images/logo.png',
-                  height:100,// Replace this with the logo image path
-                  width:100, // Logo width
+                  height: 100, // Replace this with the logo image path
+                  width: 100, // Logo width
                 ),
               ],
             ),
@@ -57,7 +59,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             // Middle content: description text
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Padding for description text
+              padding: EdgeInsets.symmetric(
+                  horizontal:
+                      screenWidth * 0.05), // Padding for description text
               child: Text(
                 'Connects property owners to tenants directly,\n enabling daily rental income and easy property\n management, while offering tenants affordable,\n verified rentals without brokers',
                 style: TextStyle(
@@ -75,8 +79,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                    Get.to(() => LoginScreen(), transition: Transition.fadeIn);
                   },
                   child: CustomizedButton(
                     colorButton: Color(constcolor.App_blue_color),
@@ -95,6 +98,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ],
         ),
       ),
-      );
+    );
   }
 }

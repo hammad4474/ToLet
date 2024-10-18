@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/owner/dashboard.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
@@ -24,11 +25,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(
-          useMaterial3: false,
-          appBarTheme: AppBarTheme(color: Colors.white),
-          primaryColor: Colors.white),
+        useMaterial3: false,
+        appBarTheme: AppBarTheme(color: Colors.white),
+        primaryColor: Color(0xff1c2746),
+      ),
       // home: FilterScreen(),
       home: WelcomeScreen(),
     );

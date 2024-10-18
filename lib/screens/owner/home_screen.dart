@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/owner/list_property.dart';
@@ -208,10 +209,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       _buildPropertyCard(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ListPropertyScreen()));
+                          Get.to(() => ListPropertyScreen(),
+                              transition: Transition.fade);
                         },
                         context: context,
                         imageUrl: 'assets/images/home0.png',
@@ -224,10 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 10), // Space between cards
                       _buildPropertyCard(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PropertiesPanel()));
+                          Get.to(() => PropertiesPanel(),
+                              transition: Transition.fade);
                         },
                         context: context,
                         imageUrl: 'assets/images/home1.png',
@@ -284,7 +281,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       bottomLeft: Radius.circular(15),
                     ),
                     gradient: LinearGradient(
-                      colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
+                      colors: [
+                        Color(constcolor.App_lightblue_color),
+                        Color(constcolor.App_blue_color)
+                      ],
                       // Blue gradient
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,

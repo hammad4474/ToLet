@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/popup_screen.dart';
 import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
@@ -88,20 +89,10 @@ class _HometenantScreenState extends State<HometenantScreen> {
     return Scaffold(
       appBar: HomeAppBar(
         onSearchBarTapped: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SearchPropertyScreen()),
-          );
+          Get.to(() => SearchPropertyScreen(), transition: Transition.fade);
         },
         onTuneIconPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Scaffold(
-                body: FilterScreen(),
-              ),
-            ),
-          );
+          Get.to(() => FilterScreen(), transition: Transition.zoom);
         },
       ),
       body: Container(
@@ -398,22 +389,35 @@ Widget buildPropertyCard(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PropertyDetailsScreen(
-              title: property['propertyTitle'] ?? 'No Title',
-              location: property['location'] ?? 'Unknown Location',
-              price: property['price'] ?? 'Unknown Price',
-              area: property['area'] ?? 'Unknown Area',
-              bhk: property['bhk'] ?? 'Unknown BHK',
-              imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
-              isVerified: isVerified,
-              owner: property['owner'],
-              propertyId: property['id'] ?? 'Unknown id',
-            ),
-          ),
-        );
+        Get.to(
+            () => PropertyDetailsScreen(
+                  title: property['propertyTitle'] ?? 'No Title',
+                  location: property['location'] ?? 'Unknown Location',
+                  price: property['price'] ?? 'Unknown Price',
+                  area: property['area'] ?? 'Unknown Area',
+                  bhk: property['bhk'] ?? 'Unknown BHK',
+                  imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
+                  isVerified: isVerified,
+                  owner: property['owner'],
+                  propertyId: property['id'] ?? 'Unknown id',
+                ),
+            transition: Transition.fade);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => PropertyDetailsScreen(
+        //       title: property['propertyTitle'] ?? 'No Title',
+        //       location: property['location'] ?? 'Unknown Location',
+        //       price: property['price'] ?? 'Unknown Price',
+        //       area: property['area'] ?? 'Unknown Area',
+        //       bhk: property['bhk'] ?? 'Unknown BHK',
+        //       imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
+        //       isVerified: isVerified,
+        //       owner: property['owner'],
+        //       propertyId: property['id'] ?? 'Unknown id',
+        //     ),
+        //   ),
+        // );
       },
       child: Card(
         elevation: 3,

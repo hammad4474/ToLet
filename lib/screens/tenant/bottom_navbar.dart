@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
@@ -19,42 +20,39 @@ class CustomtenantBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.white, // Set the background color
-      selectedItemColor: Color(constcolor.App_blue_color), // Set selected item color
+      selectedItemColor:
+          Color(constcolor.App_blue_color), // Set selected item color
       unselectedItemColor: Colors.grey, // Set unselected item color
       type: BottomNavigationBarType.fixed, // Ensure all items are fixed
       currentIndex: currentIndex, // Track the current selected index
       onTap: (index) {
         switch (index) {
           case 0:
-          // Navigate to the Home screen
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HometenantScreen()));
+            // Navigate to the Home screen
+            Get.to(() => HometenantScreen(), transition: Transition.fade);
+
             break;
           case 1:
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
-          // Navigate to the Explore screen
-          // Replace with the correct screen if available
+            // Navigate to the Explore screen
+            // Replace with the correct screen if available
             break;
           case 2:
-          // Navigate to the Chat screen
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
+            // Navigate to the Chat screen
+            Get.to(() => tenantChatScreen(), transition: Transition.fade);
+
             break;
           case 3:
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
-          // Navigate to the Saved screen
-          // Replace with the correct screen if available
+            // Navigate to the Saved screen
+            // Replace with the correct screen if available
             break;
           case 4:
-          // Navigate to the Profile screen
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProfileScreen()));
+            // Navigate to the Profile screen
+            Get.to(() => ProfileScreen(), transition: Transition.fade);
+
             break;
         }
         onTap(index); // Call the onTap function to update the currentIndex

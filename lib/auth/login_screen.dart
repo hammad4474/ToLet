@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:tolet/auth/signup_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
@@ -40,11 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
           String userType = userData['userType'];
 
           if (userType == 'Tenant') {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => HometenantScreen()));
+            Get.to(() => HometenantScreen(), transition: Transition.fade);
           } else if (userType == 'Landlord') {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Get.to(() => HomeScreen(), transition: Transition.fade);
           } else {
             Fluttertoast.showToast(
                 msg: 'Unknown user role', backgroundColor: Colors.red);
@@ -141,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Sign in',
                       style: TextStyle(
-                          color:Color(constcolor.App_blue_color),
+                          color: Color(constcolor.App_blue_color),
                           fontWeight: FontWeight.bold,
                           fontSize: screenWidth * 0.07),
                     ),
@@ -259,10 +258,11 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SignupScreen()));
+                    Get.to(() => SignupScreen(), transition: Transition.fade);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => SignupScreen()));
                   },
                   child: CustomizedButton(
                     title: 'Create an Account',

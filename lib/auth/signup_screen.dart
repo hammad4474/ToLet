@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:tolet/auth/signup_infoFill.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
@@ -61,7 +62,8 @@ class _SignupScreenState extends State<SignupScreen> {
               Center(
                 child: Image.asset(
                   'assets/images/image 3.png',
-                  width: screenWidth * 0.5, // Adjust image size based on screen width
+                  width: screenWidth *
+                      0.5, // Adjust image size based on screen width
                 ),
               ),
               SizedBox(
@@ -101,7 +103,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
                         contentPadding: EdgeInsets.symmetric(
-                            vertical: screenHeight * 0.02, horizontal: screenWidth * 0.03),
+                            vertical: screenHeight * 0.02,
+                            horizontal: screenWidth * 0.03),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -127,7 +130,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               filled: true,
                               fillColor: Color(0xfff2f3f3),
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: screenHeight * 0.02, horizontal: screenWidth * 0.03),
+                                  vertical: screenHeight * 0.02,
+                                  horizontal: screenWidth * 0.03),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide.none,
@@ -154,7 +158,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 appEmail: 'nagaanil16@gmail.com',
                                 otpLength: 6,
                               );
-                              EmailOTP.sendOTP(email: _verifyEmailController.text);
+                              EmailOTP.sendOTP(
+                                  email: _verifyEmailController.text);
                             }
                           },
                           child: CustomizedButton(
@@ -163,7 +168,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: screenHeight * 0.06, // Responsive height
                             widht: screenWidth * 0.4, // Responsive width
                             colorText: Colors.white,
-                            fontSize: screenWidth * 0.04, // Responsive font size
+                            fontSize:
+                                screenWidth * 0.04, // Responsive font size
                           ),
                         ),
                       ],
@@ -176,7 +182,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             print('form is valid');
-                            bool isVerified = EmailOTP.verifyOTP(otp: _otpController.text);
+                            bool isVerified =
+                                EmailOTP.verifyOTP(otp: _otpController.text);
                             if (isVerified) {
                               Fluttertoast.showToast(
                                 msg: 'Verified',
@@ -216,10 +223,9 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               InkWell(
                 onTap: //_isOtpVerified
-                // ?
+                    // ?
                     () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => SignupInfofill()));
+                  Get.to(() => SignupInfofill(), transition: Transition.fade);
                 },
                 // : null,
                 child: CustomizedButton(

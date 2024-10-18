@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/owner/list_property.dart';
@@ -29,30 +30,30 @@ class CustomBottomNavigationBar extends StatelessWidget {
         switch (index) {
           case 0:
             // Navigate to the Home screen
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Get.to(() => HomeScreen(), transition: Transition.fade);
+
             break;
           case 1:
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Get.to(() => HomeScreen(), transition: Transition.fade);
+
             // Navigate to the Explore screen
             // Replace with the correct screen if available
             break;
           case 2:
             // Navigate to the Chat screen
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ListPropertyScreen()));
+            Get.to(() => ListPropertyScreen(), transition: Transition.fade);
+
             break;
           case 3:
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ChatScreen()));
+            Get.to(() => ChatScreen(), transition: Transition.fade);
+
             // Navigate to the Saved screen
             // Replace with the correct screen if available
             break;
           case 4:
             // Navigate to the Profile screen
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()));
+            Get.to(() => ProfileScreen(), transition: Transition.fade);
+
             break;
         }
         onTap(index); // Call the onTap function to update the currentIndex
