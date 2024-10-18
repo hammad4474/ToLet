@@ -448,7 +448,7 @@ Widget buildPropertyCard(
                 ),
               ),
               // Property details
-              SizedBox(height: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
