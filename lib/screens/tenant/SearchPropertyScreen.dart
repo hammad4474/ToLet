@@ -212,7 +212,18 @@ class SearchPropertyCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PropertyDetailsScreen(),
+            builder: (context) => PropertyDetailsScreen(
+              area: '',
+              bhk: '',
+              imageURL: '',
+              isVerified: false,
+              location: '',
+              price: '',
+              title: '',
+              owner: '',
+              propertyId: '',
+              //  propertyId: '',
+            ),
           ),
         );
       },

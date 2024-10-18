@@ -8,11 +8,11 @@ import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/screens/tenant/property_decorofcard.dart';
+import 'package:tolet/screens/tenant/property_detailscreen.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class HometenantScreen extends StatefulWidget {
-  @override
   const HometenantScreen({super.key});
 
   @override
@@ -60,13 +60,14 @@ class _HometenantScreenState extends State<HometenantScreen> {
 
   Future<List<Map<String, dynamic>>> fetchAllProperties() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection(
-              'propertiesAll') // Assuming properties are under 'propertiesAll'
-          .get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('propertiesAll').get();
 
       List<Map<String, dynamic>> properties = snapshot.docs.map((doc) {
-        return doc.data() as Map<String, dynamic>;
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+
+        return data;
       }).toList();
 
       print('Fetched properties count: ${properties.length}');
@@ -75,7 +76,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
         _properties = properties.map((data) => Property.fromMap(data)).toList();
       });
 
-      return properties; // Return the list of properties
+      return properties;
     } catch (e) {
       print('Error fetching properties: $e');
       return [];
@@ -141,7 +142,8 @@ class _HometenantScreenState extends State<HometenantScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    Icon(Icons.location_on, color: Color(constcolor.App_blue_color)),
+                    Icon(Icons.location_on,
+                        color: Color(constcolor.App_blue_color)),
                     SizedBox(width: 5),
                     Text(
                       _selectedLocation + ', India',
@@ -300,8 +302,9 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                             onPressed: () {},
                                             child: Text(
                                               'see all',
-                                              style:
-                                                  TextStyle(color: Color(constcolor.App_blue_color)),
+                                              style: TextStyle(
+                                                  color: Color(constcolor
+                                                      .App_blue_color)),
                                             )),
                                       ],
                                     ),
@@ -314,7 +317,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                       itemBuilder: (context, index) {
                                         final property = properties[index];
                                         return buildPropertyCard(
-                                            property, true);
+                                            context, property, true);
                                       },
                                     ),
                                   ),
@@ -346,8 +349,9 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                             onPressed: () {},
                                             child: Text(
                                               'see all',
-                                              style:
-                                                  TextStyle(color: Color(constcolor.App_blue_color)),
+                                              style: TextStyle(
+                                                  color: Color(constcolor
+                                                      .App_blue_color)),
                                             )),
                                       ],
                                     ),
@@ -360,7 +364,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                       itemBuilder: (context, index) {
                                         final property = properties[index];
                                         return buildPropertyCard(
-                                            property, false);
+                                            context, property, false);
                                       },
                                     ),
                                   ),
@@ -388,119 +392,136 @@ class _HometenantScreenState extends State<HometenantScreen> {
   }
 }
 
-Widget buildPropertyCard(Map<String, dynamic> property, bool isVerified) {
+Widget buildPropertyCard(
+    BuildContext context, Map<String, dynamic> property, bool isVerified) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
-    child: Card(
-      elevation: 3,
-      shadowColor: Colors.black,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        height: 200,
-        width: 410,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            property['imageURL'] != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomLeft: Radius.circular(15)),
-                    child: Image.network(
-                      property['imageURL'],
-                      fit: BoxFit.cover,
-                      height: 250,
-                      width: 110,
+    child: GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PropertyDetailsScreen(
+              title: property['propertyTitle'] ?? 'No Title',
+              location: property['location'] ?? 'Unknown Location',
+              price: property['price'] ?? 'Unknown Price',
+              area: property['area'] ?? 'Unknown Area',
+              bhk: property['bhk'] ?? 'Unknown BHK',
+              imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
+              isVerified: isVerified,
+              owner: property['owner'],
+              propertyId: property['id'] ?? 'Unknown id',
+            ),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 3,
+        shadowColor: Colors.black,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          height: 200,
+          width: 410,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              property['imageURL'] != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15)),
+                      child: Image.network(
+                        property['imageURL'],
+                        fit: BoxFit.cover,
+                        height: 250,
+                        width: 110,
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15)),
+                      child: Image.asset(
+                        'assets/icons/wifi.png',
+                        height: 250,
+                      ),
                     ),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomLeft: Radius.circular(15)),
-                    child: Image.asset(
-                      'assets/icons/wifi.png',
-                      height: 250,
-                    ),
+              SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    property['propertyTitle'] ?? 'No Title',
+                    style: TextStyle(fontSize: 18),
                   ),
-            SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
-                Text(
-                  property['propertyTitle'] ?? 'No Title',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 10),
-                Text(property['location'] ?? 'Unknown Location',
-                    style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.bed,
-                      color: Color(0xff7d7f88),
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      '${property['bhk']}',
-                      style: TextStyle(color: Color(0xff7d7f88)),
-                    ),
-                    SizedBox(width: 10),
-                    Icon(
-                      Icons.house,
-                      color: Color(0xff7d7f88),
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      '${property['area'] ?? 'Unknown Area'} m²',
-                      style: TextStyle(color: Color(0xff7d7f88)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Text(
-                      '${property['price']}',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    Text(
-                      ' / month',
-                      style: TextStyle(color: Color(0xff7d7f88)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Text(
-                  isVerified ? 'Verified' : 'Not Verified',
-                  style: TextStyle(
-                      color: isVerified ? Colors.green : Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ],
-            ),
-            SizedBox(width: 20),
-            Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Icon(
-                  isVerified ? Icons.verified_user : Icons.not_interested_sharp,
-                  color: isVerified ? Colors.green : Colors.red,
-                ),
-              ],
-            ),
-          ],
+                  SizedBox(height: 10),
+                  Text(property['location'] ?? 'Unknown Location',
+                      style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.bed, color: Color(0xff7d7f88)),
+                      SizedBox(width: 5),
+                      Text(
+                        '${property['bhk']}',
+                        style: TextStyle(color: Color(0xff7d7f88)),
+                      ),
+                      SizedBox(width: 10),
+                      Icon(Icons.house, color: Color(0xff7d7f88)),
+                      SizedBox(width: 5),
+                      Text(
+                        '${property['area'] ?? 'Unknown Area'} m²',
+                        style: TextStyle(color: Color(0xff7d7f88)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        '${property['price']}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(
+                        ' / month',
+                        style: TextStyle(color: Color(0xff7d7f88)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    isVerified ? 'Verified' : 'Not Verified',
+                    style: TextStyle(
+                        color: isVerified ? Colors.green : Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('Property posted by ${property['owner']}')
+                ],
+              ),
+              SizedBox(width: 20),
+              Column(
+                children: [
+                  SizedBox(height: 20),
+                  Icon(
+                    isVerified
+                        ? Icons.verified_user
+                        : Icons.not_interested_sharp,
+                    color: isVerified ? Colors.green : Colors.red,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     ),

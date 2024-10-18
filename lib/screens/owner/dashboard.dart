@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
-import 'package:tolet/screens/owner/chat_screen.dart'; // Import your other screens
-import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/complain.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart'; // CustomtenantBottomNavBar file
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -12,12 +11,52 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
+  String? userName;
+  int _totalProperties = 0;
 
   // Handle bottom navigation taps
   void _onItemTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  void initState() {
+    super.initState();
+    _fetchUserData();
+    _fectTotalProperties();
+  }
+
+  Future<void> _fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (userDoc.exists) {
+        setState(() {
+          userName = userDoc['firstname'] ?? 'User';
+        });
+      }
+    }
+  }
+
+  Future<void> _fectTotalProperties() async {
+    User? user = await FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      QuerySnapshot propertySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('properties')
+          .get();
+
+      setState(() {
+        _totalProperties = propertySnapshot.size;
+      });
+    }
   }
 
   @override
@@ -49,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Welcome, Anil",
+                "Welcome, ${userName!.toUpperCase() ?? 'Loading...'}",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -68,7 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       end: Alignment.bottomRight,
                     ),
                     title: 'Total Property',
-                    value: '8',
+                    value: _totalProperties.toString(),
                   ),
                   _buildDashboardCard(
                     gradient: LinearGradient(
@@ -77,7 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       end: Alignment.bottomRight,
                     ),
                     title: 'Total Bookings',
-                    value: '2',
+                    value: '0',
                   ),
                 ],
               ),

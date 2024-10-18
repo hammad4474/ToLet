@@ -1,15 +1,88 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/tenant/description.dart';
 import 'package:tolet/screens/tenant/galler_pd.dart';
 import 'package:tolet/screens/tenant/reveiw_pd.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
+  final String title;
+  final String location;
+  final String price;
+  final String area;
+  final String bhk;
+  final String imageURL;
+  final bool isVerified;
+  final String owner;
+  final String propertyId;
+
+  PropertyDetailsScreen({
+    required this.title,
+    required this.location,
+    required this.price,
+    required this.area,
+    required this.bhk,
+    required this.imageURL,
+    required this.isVerified,
+    required this.owner,
+    required this.propertyId, // Ensure this matches
+    Key? key,
+  }) : super(key: key);
   @override
   _PropertyDetailsScreenState createState() => _PropertyDetailsScreenState();
 }
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   int selectedTabIndex = 0;
+  String ownerName = "";
+  List<String> facilities = [];
+  List<String> galleryImages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPropertyDetails();
+  }
+
+  Future<void> fetchPropertyDetails() async {
+    try {
+      DocumentSnapshot propertySnapshot = await FirebaseFirestore.instance
+          .collection('propertiesAll')
+          .doc(widget.propertyId)
+          .get();
+
+      if (propertySnapshot.exists) {
+        print('Fetched Data: ${propertySnapshot.data()}');
+
+        var facilitiesData = propertySnapshot.get('facilities');
+        if (facilitiesData is List) {
+          setState(() {
+            facilities = List<String>.from(facilitiesData);
+          });
+        } else {
+          print('Facilities data is not a list: $facilitiesData');
+        }
+
+        var galleryData = propertySnapshot.get('imageURL');
+        if (galleryData is String) {
+          setState(() {
+            galleryImages = [galleryData];
+          });
+        } else if (galleryData is List) {
+          setState(() {
+            galleryImages = List<String>.from(galleryData);
+          });
+        } else {
+          print('Gallery images data is not a string or list: $galleryData');
+        }
+      } else {
+        print('Property not found');
+      }
+    } catch (e) {
+      print('Error fetching property details: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +140,11 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       height: 250,
                       child: PageView(
                         children: [
-                          Image.asset('assets/images/pd.png', fit: BoxFit.cover),
-                          Image.network('https://via.placeholder.com/400', fit: BoxFit.cover),
-                          Image.network('https://via.placeholder.com/400', fit: BoxFit.cover),
+                          Image.network(widget.imageURL, fit: BoxFit.cover),
+                          Image.network('https://via.placeholder.com/400',
+                              fit: BoxFit.cover),
+                          Image.network('https://via.placeholder.com/400',
+                              fit: BoxFit.cover),
                         ],
                       ),
                     ),
@@ -110,7 +185,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
                               ),
                               child: Center(
                                 child: Text(
@@ -131,15 +207,12 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Small cottage in Hyderabad',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            widget.title,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Icon(Icons.favorite_border),
                         ],
-                      ),
-                      Text(
-                        'view of begmati',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 8),
                       Row(
@@ -160,7 +233,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                 height: 24,
                               ),
                               SizedBox(width: 8),
-                              Text('2 Room', style: TextStyle(fontSize: 16)),
+                              Text('${widget.bhk}',
+                                  style: TextStyle(fontSize: 16)),
                             ],
                           ),
                         ],
@@ -172,10 +246,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             children: [
                               Icon(Icons.location_on, color: Colors.grey),
                               SizedBox(width: 4),
-                              Text('Kapan, Jorpati'),
+                              Text(widget.location),
                             ],
                           ),
-                          SizedBox(width: 105),
+                          SizedBox(width: 80),
                           Row(
                             children: [
                               Image.asset(
@@ -184,7 +258,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                 height: 24,
                               ),
                               SizedBox(width: 8),
-                              Text('874 m²', style: TextStyle(fontSize: 16)),
+                              Text(widget.area, style: TextStyle(fontSize: 16)),
                             ],
                           ),
                         ],
@@ -193,7 +267,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundImage: AssetImage('assets/images/delhi.png'),
+                            backgroundImage:
+                                AssetImage('assets/images/delhi.png'),
                             radius: 24,
                           ),
                           SizedBox(width: 8),
@@ -201,8 +276,9 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Anil',
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                widget.owner.toUpperCase(),
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               Text('Property owner'),
                             ],
@@ -266,7 +342,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '₹10,000 / month',
+                    '₹${widget.price} / month',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -345,4 +421,118 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     );
   }
 
+// for facilities
+  Widget buildDescriptionContent() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                'Home Facilities',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                'See all facilities',
+                style: TextStyle(color: Colors.blue, fontSize: 16),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          // Display only available facilities
+          Column(
+            children: [
+              // First row with dynamic icons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (facilities.contains('Car Parking'))
+                    buildFacilityIcon('assets/icons/car.png', 'Car Parking'),
+                  if (facilities.contains('Furnished'))
+                    buildFacilityIcon('assets/icons/Vector.png', 'Furnished'),
+                  if (facilities.contains('Gym Fit'))
+                    buildFacilityIcon('assets/icons/gym.png', 'Gym Fit'),
+                  if (facilities.contains('Kitchen'))
+                    buildFacilityIcon('assets/icons/Vector (2).png', 'Kitchen'),
+                ],
+              ),
+              SizedBox(height: 16), // Spacing between the rows
+              // Second row with dynamic icons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (facilities.contains('Wi-Fi'))
+                    buildFacilityIcon('assets/icons/wifi.png', 'Wi-Fi'),
+                  if (facilities.contains('Pet Center'))
+                    buildFacilityIcon('assets/icons/pets.png', 'Pet Center'),
+                  if (facilities.contains('Sports Club'))
+                    buildFacilityIcon(
+                        'assets/icons/running.png', 'Sports Club'),
+                  if (facilities.contains('Laundry'))
+                    buildFacilityIcon('assets/icons/laundry.png', 'Laundry'),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // for gallery images
+  Widget buildGalleryContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: const [
+            Text(
+              'Gallery',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(
+              '(400)',
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 900,
+          child: GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 3,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            padding: const EdgeInsets.all(8),
+            physics: const AlwaysScrollableScrollPhysics(),
+            childAspectRatio: 1,
+            children: List.generate(
+              galleryImages.length,
+              (index) => ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  galleryImages[index],
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 150,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

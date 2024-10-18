@@ -27,6 +27,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   bool isChecked = false;
   String propertyTitle = '';
   String price = '';
+  String? owner = '';
 
   File? _selectedImage;
 
@@ -127,11 +128,22 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
 
     try {
       User? user = FirebaseAuth.instance.currentUser;
+      owner = user.toString();
       if (user != null) {
         String fileName =
             'properties/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
         Reference firebaseStorageRef =
             FirebaseStorage.instance.ref().child(fileName);
+
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        if (userDoc.exists) {
+          setState(() {
+            owner = userDoc['firstname'] ?? 'User';
+          });
+        }
 
         TaskSnapshot uploadTask =
             await firebaseStorageRef.putFile(_selectedImage!);
@@ -148,6 +160,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           'price': price,
           'imageURL': downloadURL,
           'createdAt': FieldValue.serverTimestamp(),
+          'owner': owner,
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -162,6 +175,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           'price': price,
           'imageURL': downloadURL,
           'createdAt': FieldValue.serverTimestamp(),
+          'owner': owner,
         });
 
         setState(() {
