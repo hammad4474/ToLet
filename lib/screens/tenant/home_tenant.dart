@@ -390,8 +390,8 @@ Widget buildPropertyCard(
   double screenWidth = MediaQuery.of(context).size.width;
 
   // Define dimensions based on screen width
-  double cardWidth = screenWidth > 450 ? screenWidth * 0.9 : screenWidth * 1.0; // 80% for larger screens, 90% for smaller
-  double cardHeight = 189; // Fixed height for consistency
+  double cardWidth = screenWidth > 450 ? screenWidth * 0.9 : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
+  double cardHeight = 250; // Fixed height for consistency
   double imageWidth = 108; // Fixed image width
   double iconSize = 24.0; // Standard icon size
 
@@ -448,6 +448,7 @@ Widget buildPropertyCard(
                 ),
               ),
               // Property details
+              SizedBox(height: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
