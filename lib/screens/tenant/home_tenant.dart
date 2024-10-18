@@ -390,7 +390,7 @@ Widget buildPropertyCard(
   double screenWidth = MediaQuery.of(context).size.width;
 
   // Define dimensions based on screen width
-  double cardWidth = screenWidth > 600 ? screenWidth * 0.8 : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
+  double cardWidth = screenWidth > 450 ? screenWidth * 0.9 : screenWidth * 1.0; // 80% for larger screens, 90% for smaller
   double cardHeight = 189; // Fixed height for consistency
   double imageWidth = 108; // Fixed image width
   double iconSize = 24.0; // Standard icon size
@@ -437,7 +437,7 @@ Widget buildPropertyCard(
                 child: property['imageURL'] != null
                     ? Image.network(
                   property['imageURL'],
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   height: cardHeight,
                   width: imageWidth,
                 )
@@ -447,7 +447,6 @@ Widget buildPropertyCard(
                   width: imageWidth,
                 ),
               ),
-              SizedBox(width: 16), // Spacing
               // Property details
               Expanded(
                 child: Column(
@@ -519,19 +518,19 @@ Widget buildPropertyCard(
                     color: isVerified ? Colors.green : Colors.red,
                     size: iconSize,
                   ),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      // Handle the tap event, e.g., toggle the favorite status
-                      onTip = !onTip; // Toggle the value of onTip
-                    },
-                    child: Icon(
-                      onTip ? Icons.favorite_border : Icons.favorite, // Show appropriate icon
-                      color: onTip ? Colors.grey : Colors.red, // Change color based on status
-                      size: iconSize,
-                    ),
-                  ),
-                  SizedBox(height: 10),
+                  // Spacer(),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     // Handle the tap event, e.g., toggle the favorite status
+                  //     onTip = !onTip; // Toggle the value of onTip
+                  //   },
+                  //   child: Icon(
+                  //     onTip ? Icons.favorite_border : Icons.favorite, // Show appropriate icon
+                  //     color: onTip ? Colors.grey : Colors.red, // Change color based on status
+                  //     size: iconSize,
+                  //   ),
+                  // ),
+                  // SizedBox(height: 10),
                 ],
               ),
             ],

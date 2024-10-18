@@ -76,54 +76,69 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        toolbarHeight: 70,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context); // Go back to the previous screen
-          },
-        ),
-        title: Container(
-          height: 40.0, // Set a suitable height for the search bar
-          decoration: BoxDecoration(
-            color: Colors.grey[200], // Light grey background for the search bar
-            borderRadius: BorderRadius.circular(20.0), // Rounded corners
-          ),
-          child: Row(
+        appBar:AppBar(
+          automaticallyImplyLeading: false, // Disable default back button
+          backgroundColor: Colors.white,
+          elevation: 0,
+          toolbarHeight: 70,
+          title: Row(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Icon(Icons.search, color: Colors.black54), // Search icon
-              ),
-              Expanded(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center, // Center the text vertically
-                  decoration: InputDecoration(
-                    hintText: 'Hyderabad',
-                    border: InputBorder.none, // Remove the underline
-                    isCollapsed: true, // Reduce the padding around the hint text
-                    contentPadding: EdgeInsets.symmetric(vertical: 12.0), // Add padding for better alignment
-                  ),
-                  style: TextStyle(color: Colors.grey[200]),
-                ),
-              ),
+              // Logo
+              SizedBox(width: 10),
+              IconButton(
+                   icon: const Icon(Icons.arrow_back, color: Colors.black),
+                   onPressed: () {
+                     Navigator.pop(context);
+                     }, // Go back to the previous screen},
+                 ),
+              SizedBox(width: 10),
 
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: Colors.black),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FilterScreen()),
-              );
-            },
+              // Search Bar with tap detection
+              Expanded(// Trigger callback when tapped
+                  child: Container(
+                    height: 45,
+                    constraints: BoxConstraints(
+                        maxWidth: 500), // Limit max width of search bar
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Icon(Icons.search, color: Colors.grey),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Search address, city, location',
+                            style:
+                            TextStyle(color: Colors.grey), // Placeholder style
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+              // Tune Icon on the right
+              IconButton(
+                icon: Image.asset(
+                  'assets/icons/custum_tune_icon.png', // Replace with your actual custom icon asset
+                  height: 40,
+                  width: 40,
+                ),
+
+                onPressed: () {
+                     Navigator.push(
+                       context,
+                       MaterialPageRoute(builder: (context) => FilterScreen()),
+                     );
+                   },
+    ),
+            ],
           ),
-        ],
-      ),
         ),
-      ),
       body: Stack(
         children: [
           // GoogleMap(
