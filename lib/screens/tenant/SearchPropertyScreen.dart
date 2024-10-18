@@ -78,27 +78,39 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        // This should keep the color fixed
         elevation: 0,
-        // Removes shadow
         toolbarHeight: 70,
-        // Fixed height
-        title: const Text(
-          'Search Property',
-          style: TextStyle(color: Colors.black),
-        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(
-                context); // This will pop the current screen and return to the previous one
+            Navigator.pop(context); // Go back to the previous screen
           },
         ),
-        actions: [
-          // IconButton(
-          //   icon: const Icon(Icons.search, color: Colors.black),
-          //   onPressed: () {},
-          // ),
+        title: Container(
+          height: 40.0, // Set a suitable height for the search bar
+          decoration: BoxDecoration(
+            color: Colors.grey[200], // Light grey background for the search bar
+            borderRadius: BorderRadius.circular(20.0), // Rounded corners
+          ),
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Icon(Icons.search, color: Colors.black54), // Search icon
+              ),
+              Expanded(
+                child: TextField(
+                  textAlignVertical: TextAlignVertical.center, // Center the text vertically
+                  decoration: InputDecoration(
+                    hintText: 'Hyderabad',
+                    border: InputBorder.none, // Remove the underline
+                    isCollapsed: true, // Reduce the padding around the hint text
+                    contentPadding: EdgeInsets.symmetric(vertical: 12.0), // Add padding for better alignment
+                  ),
+                  style: TextStyle(color: Colors.grey[200]),
+                ),
+              ),
+
           IconButton(
             icon: const Icon(Icons.filter_list, color: Colors.black),
             onPressed: () {
@@ -109,6 +121,8 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
             },
           ),
         ],
+      ),
+        ),
       ),
       body: Stack(
         children: [

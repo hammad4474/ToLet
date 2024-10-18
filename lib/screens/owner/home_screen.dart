@@ -6,6 +6,8 @@ import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/owner/list_property.dart';
 import 'package:tolet/screens/owner/properties_panel.dart';
+import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
+import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 import '../popup_screen.dart';
@@ -55,8 +57,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar:
-              HomeAppBar(onTuneIconPressed: () {}, onSearchBarTapped: () {}),
+          appBar: HomeAppBar(
+            onSearchBarTapped: () {
+              Get.to(() => SearchPropertyScreen(), transition: Transition.fade);
+            },
+            onTuneIconPressed: () {
+              Get.to(() => FilterScreen(), transition: Transition.zoom);
+            },
+          ),
           body: Container(
             color: Colors.white, // Set your desired background color here
             child: Column(
@@ -175,29 +183,29 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         // Owner Button (Inactive)
-                        Expanded(
-                          child: Container(
-                            // Slightly smaller height for the inactive button
-                            margin: const EdgeInsets.all(
-                                7.5), // Center the smaller button vertically
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors
-                                  .transparent, // Background color for unselected button
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Tenant',
-                                style: TextStyle(
-                                  color: Colors
-                                      .grey, // Text color for unselected button
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Expanded(
+                        //   child: Container(
+                        //     // Slightly smaller height for the inactive button
+                        //     margin: const EdgeInsets.all(
+                        //         7.5), // Center the smaller button vertically
+                        //     decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(30),
+                        //       color: Colors
+                        //           .transparent, // Background color for unselected button
+                        //     ),
+                        //     child: Center(
+                        //       child: Text(
+                        //         'Tenant',
+                        //         style: TextStyle(
+                        //           color: Colors
+                        //               .grey, // Text color for unselected button
+                        //           fontWeight: FontWeight.bold,
+                        //           fontSize: 16,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         // Tenant Button (Active)
                       ],
                     ),

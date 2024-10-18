@@ -23,7 +23,7 @@ class HometenantScreen extends StatefulWidget {
 class _HometenantScreenState extends State<HometenantScreen> {
   String _selectedLocation = 'Hyderabad';
   late Future<List<Map<String, dynamic>>> userProperties;
-
+  bool onTip = false;
   int _selectedIndex = 0;
   List<Property> _properties = [];
   final List<Map<String, String>> cities = [
@@ -162,7 +162,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(12.0),
               child: Container(
                 height: 50,
                 width: double.infinity,
@@ -173,29 +173,29 @@ class _HometenantScreenState extends State<HometenantScreen> {
                 child: Row(
                   children: [
                     // Owner Button (Inactive)
-                    Expanded(
-                      child: Container(
-                        // Slightly smaller height for the inactive button
-                        margin: const EdgeInsets.all(
-                            7.5), // Center the smaller button vertically
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors
-                              .transparent, // Background color for unselected button
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Owner',
-                            style: TextStyle(
-                              color: Colors
-                                  .grey, // Text color for unselected button
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: Container(
+                    //     // Slightly smaller height for the inactive button
+                    //     margin: const EdgeInsets.all(
+                    //         7.5), // Center the smaller button vertically
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(30),
+                    //       color: Colors
+                    //           .transparent, // Background color for unselected button
+                    //     ),
+                    //     child: Center(
+                    //       child: Text(
+                    //         'Owner',
+                    //         style: TextStyle(
+                    //           color: Colors
+                    //               .grey, // Text color for unselected button
+                    //           fontWeight: FontWeight.bold,
+                    //           fontSize: 16,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     // Tenant Button (Active)
                     Expanded(
                       child: Container(
@@ -308,7 +308,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                       itemBuilder: (context, index) {
                                         final property = properties[index];
                                         return buildPropertyCard(
-                                            context, property, true);
+                                            context, property, true, false);
                                       },
                                     ),
                                   ),
@@ -355,7 +355,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                       itemBuilder: (context, index) {
                                         final property = properties[index];
                                         return buildPropertyCard(
-                                            context, property, false);
+                                            context, property, false, true);
                                       },
                                     ),
                                   ),
@@ -384,40 +384,35 @@ class _HometenantScreenState extends State<HometenantScreen> {
 }
 
 Widget buildPropertyCard(
-    BuildContext context, Map<String, dynamic> property, bool isVerified) {
+    BuildContext context, Map<String, dynamic> property, bool isVerified, bool onTip) {
+
+  // Get the screen width
+  double screenWidth = MediaQuery.of(context).size.width;
+
+  // Define dimensions based on screen width
+  double cardWidth = screenWidth > 600 ? screenWidth * 0.8 : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
+  double cardHeight = 189; // Fixed height for consistency
+  double imageWidth = 108; // Fixed image width
+  double iconSize = 24.0; // Standard icon size
+
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
       onTap: () {
         Get.to(
-            () => PropertyDetailsScreen(
-                  title: property['propertyTitle'] ?? 'No Title',
-                  location: property['location'] ?? 'Unknown Location',
-                  price: property['price'] ?? 'Unknown Price',
-                  area: property['area'] ?? 'Unknown Area',
-                  bhk: property['bhk'] ?? 'Unknown BHK',
-                  imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
-                  isVerified: isVerified,
-                  owner: property['owner'],
-                  propertyId: property['id'] ?? 'Unknown id',
-                ),
-            transition: Transition.fade);
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => PropertyDetailsScreen(
-        //       title: property['propertyTitle'] ?? 'No Title',
-        //       location: property['location'] ?? 'Unknown Location',
-        //       price: property['price'] ?? 'Unknown Price',
-        //       area: property['area'] ?? 'Unknown Area',
-        //       bhk: property['bhk'] ?? 'Unknown BHK',
-        //       imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
-        //       isVerified: isVerified,
-        //       owner: property['owner'],
-        //       propertyId: property['id'] ?? 'Unknown id',
-        //     ),
-        //   ),
-        // );
+              () => PropertyDetailsScreen(
+            title: property['propertyTitle'] ?? 'No Title',
+            location: property['location'] ?? 'Unknown Location',
+            price: property['price'] ?? 'Unknown Price',
+            area: property['area'] ?? 'Unknown Area',
+            bhk: property['bhk'] ?? 'Unknown BHK',
+            imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
+            isVerified: isVerified,
+            owner: property['owner'],
+            propertyId: property['id'] ?? 'Unknown id',
+          ),
+          transition: Transition.fade,
+        );
       },
       child: Card(
         elevation: 3,
@@ -427,101 +422,116 @@ Widget buildPropertyCard(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
           ),
-          height: 200,
-          width: 410,
+          height: cardHeight,
+          width: cardWidth,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              property['imageURL'] != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15)),
-                      child: Image.network(
-                        property['imageURL'],
-                        fit: BoxFit.cover,
-                        height: 250,
-                        width: 110,
-                      ),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15)),
-                      child: Image.asset(
-                        'assets/icons/wifi.png',
-                        height: 250,
-                      ),
+              // Property image
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                ),
+                child: property['imageURL'] != null
+                    ? Image.network(
+                  property['imageURL'],
+                  fit: BoxFit.cover,
+                  height: cardHeight,
+                  width: imageWidth,
+                )
+                    : Image.asset(
+                  'assets/icons/wifi.png',
+                  height: cardHeight,
+                  width: imageWidth,
+                ),
+              ),
+              SizedBox(width: 16), // Spacing
+              // Property details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 16),
+                    Text(
+                      property['propertyTitle'] ?? 'No Title',
+                      style: TextStyle(fontSize: 18),
                     ),
-              SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  Text(
-                    property['propertyTitle'] ?? 'No Title',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(height: 10),
-                  Text(property['location'] ?? 'Unknown Location',
-                      style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(Icons.bed, color: Color(0xff7d7f88)),
-                      SizedBox(width: 5),
-                      Text(
-                        '${property['bhk']}',
-                        style: TextStyle(color: Color(0xff7d7f88)),
-                      ),
-                      SizedBox(width: 10),
-                      Icon(Icons.house, color: Color(0xff7d7f88)),
-                      SizedBox(width: 5),
-                      Text(
-                        '${property['area'] ?? 'Unknown Area'} m²',
-                        style: TextStyle(color: Color(0xff7d7f88)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Text(
-                        '${property['price']}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      Text(
-                        ' / month',
-                        style: TextStyle(color: Color(0xff7d7f88)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    isVerified ? 'Verified' : 'Not Verified',
-                    style: TextStyle(
+                    SizedBox(height: 8),
+                    Text(
+                      property['location'] ?? 'Unknown Location',
+                      style: TextStyle(color: Color(0xff7d7f88), fontSize: 16),
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
+                        SizedBox(width: 5),
+                        Text(
+                          '${property['bhk']}',
+                          style: TextStyle(color: Color(0xff7d7f88)),
+                        ),
+                        SizedBox(width: 10),
+                        Icon(Icons.house, color: Color(0xff7d7f88), size: iconSize),
+                        SizedBox(width: 5),
+                        Text(
+                          '${property['area'] ?? 'Unknown Area'} m²',
+                          style: TextStyle(color: Color(0xff7d7f88)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Text(
+                          '${property['price']}',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        Text(
+                          ' / month',
+                          style: TextStyle(color: Color(0xff7d7f88)),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Text(
+                      isVerified ? 'Verified' : 'Not Verified',
+                      style: TextStyle(
                         color: isVerified ? Colors.green : Colors.red,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('Property posted by ${property['owner']}')
-                ],
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text('Property posted by ${property['owner']}'),
+                    SizedBox(height: 10),
+                  ],
+                ),
               ),
-              SizedBox(width: 20),
+              SizedBox(width: 16), // Spacing
+              // Verification and favorite icon
               Column(
                 children: [
-                  SizedBox(height: 20),
+                  SizedBox(height: 16),
                   Icon(
-                    isVerified
-                        ? Icons.verified_user
-                        : Icons.not_interested_sharp,
+                    isVerified ? Icons.verified_user : Icons.not_interested_sharp,
                     color: isVerified ? Colors.green : Colors.red,
+                    size: iconSize,
                   ),
+                  Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      // Handle the tap event, e.g., toggle the favorite status
+                      onTip = !onTip; // Toggle the value of onTip
+                    },
+                    child: Icon(
+                      onTip ? Icons.favorite_border : Icons.favorite, // Show appropriate icon
+                      color: onTip ? Colors.grey : Colors.red, // Change color based on status
+                      size: iconSize,
+                    ),
+                  ),
+                  SizedBox(height: 10),
                 ],
               ),
             ],
@@ -531,3 +541,4 @@ Widget buildPropertyCard(
     ),
   );
 }
+
