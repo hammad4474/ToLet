@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:tolet/auth/signup_infoFill.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
-import 'package:email_otp/email_otp.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -18,45 +17,33 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _verifyEmailController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-  String? fullphone;
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _otpController = TextEditingController();
 
+  String? fullPhoneNumber;
   String? verificationId;
   bool _isOtpVerified = false;
 
   @override
   void initState() {
     super.initState();
-    _verifyEmailController.clear();
     _phoneController.clear();
   }
 
   @override
   void dispose() {
-    _verifyEmailController.clear();
     _phoneController.dispose();
     _otpController.dispose();
     super.dispose();
   }
 
-  String? _emailValidator(String? value) {
   String? _phoneValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your email';
       return 'Please enter your phone number';
     }
-    String pattern = r'^[^@]+@[^@]+\.[^@]+';
-    RegExp regExp = RegExp(pattern);
-    if (!regExp.hasMatch(value)) {
-      return 'Please enter a valid email';
-
     if (!RegExp(r'^\+\d{1,3}\d{4,14}$').hasMatch(value)) {
-      return 'Please enter a valid phone number in E.164 format';
+      return 'Please enter a valid phone number';
     }
-
     return null;
   }
 
@@ -100,8 +87,7 @@ class _SignupScreenState extends State<SignupScreen> {
               Center(
                 child: Image.asset(
                   'assets/images/tolet.png',
-                  width: screenWidth *
-                      0.5, // Adjust image size based on screen width
+                  width: screenWidth * 0.5,
                 ),
               ),
               SizedBox(
@@ -117,36 +103,26 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: TextStyle(
                         color: Color(constcolor.App_blue_color),
                         fontWeight: FontWeight.bold,
-                        fontSize: screenWidth * 0.08, // Responsive font size
+                        fontSize: screenWidth * 0.08,
                       ),
                     ),
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
                     Text(
-                      'VERIFY THROUGH EMAIL',
                       'VERIFY THROUGH Phone No',
                       style: TextStyle(
                         color: Color(0xffc3c3c3),
-                        fontSize: screenWidth * 0.045, // Responsive font size
+                        fontSize: screenWidth * 0.045,
                       ),
                     ),
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
-                    TextFormField(
-                      controller: _verifyEmailController,
-                      validator: _emailValidator,
                     IntlPhoneField(
                       controller: _phoneController,
-                      focusNode: _focusNode,
-                      onChanged: (phone) {
-                        setState(() {
-                          fullphone = phone.completeNumber;
-                        });
-                      },
                       decoration: InputDecoration(
-                        hintText: 'yourmail@gmail.com',
+                        labelText: 'Your Phone Number',
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
                         contentPadding: EdgeInsets.symmetric(
@@ -160,48 +136,24 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
                         ),
-                        labelText: 'Your Phone Number',
-                        border: OutlineInputBorder(borderSide: BorderSide()),
                       ),
+                      initialCountryCode: 'PK',
+                      onChanged: (phone) {
+                        fullPhoneNumber = phone.completeNumber;
+                      },
                     ),
-                    // IntlPhoneField(
-                    //   controller: _phoneController,
-                    //   focusNode: _focusNode,
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Phone Number',
-                    //     filled: true,
-                    //     fillColor: Color(0xfff2f3f3),
-                    //     contentPadding: EdgeInsets.symmetric(
-                    //       vertical: screenHeight * 0.02,
-                    //       horizontal: screenWidth * 0.03,
-                    //     ),
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    //   initialCountryCode: 'PK', // Set the initial country code
-                    //   onChanged: (phone) {
-                    //     print(phone.completeNumber);
-                    //   },
-                    // ),
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),
                     Row(
                       children: [
                         SizedBox(
-                          width: screenWidth * 0.4, // Responsive width
+                          width: screenWidth * 0.4,
                           child: TextFormField(
                             obscureText: true,
                             controller: _otpController,
                             decoration: InputDecoration(
-                              hintText: "***",
-                              hintText: "****",
+                              hintText: 'OTP',
                               filled: true,
                               fillColor: Color(0xfff2f3f3),
                               contentPadding: EdgeInsets.symmetric(
@@ -222,25 +174,11 @@ class _SignupScreenState extends State<SignupScreen> {
                           width: screenWidth * 0.03,
                         ),
                         InkWell(
-                          onTap: () {
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
-                              print('form is valid');
-                              EmailOTP.config(
-                                appName: 'ToLet',
-                                otpType: OTPType.numeric,
-                                expiry: 30000,
-                                emailTheme: EmailTheme.v1,
-                                appEmail: 'nagaanil16@gmail.com',
-                                otpLength: 6,
-                              );
-                              EmailOTP.sendOTP(
-                                  email: _verifyEmailController.text);
-                              Fluttertoast.showToast(msg: 'Sending OTP...');
-
                               try {
                                 await FirebaseAuth.instance.verifyPhoneNumber(
-                                  phoneNumber: fullphone!,
+                                  phoneNumber: fullPhoneNumber!,
                                   timeout: Duration(seconds: 60),
                                   verificationCompleted:
                                       (PhoneAuthCredential credential) async {
@@ -287,11 +225,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: CustomizedButton(
                             title: 'Get Code',
                             colorButton: Color(constcolor.App_blue_color),
-                            height: screenHeight * 0.06, // Responsive height
-                            widht: screenWidth * 0.4, // Responsive width
+                            height: screenHeight * 0.06,
+                            widht: screenWidth * 0.4,
                             colorText: Colors.white,
-                            fontSize:
-                                screenWidth * 0.04, // Responsive font size
+                            fontSize: screenWidth * 0.04,
                           ),
                         ),
                       ],
@@ -301,41 +238,15 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     Center(
                       child: InkWell(
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            print('form is valid');
-                            bool isVerified =
-                                EmailOTP.verifyOTP(otp: _otpController.text);
-                            if (isVerified) {
-                              Fluttertoast.showToast(
-                                msg: 'Verified',
-                                backgroundColor: Colors.green,
-                                toastLength: Toast.LENGTH_SHORT,
-                              );
-                              setState(() {
-                                _isOtpVerified = true;
-                              });
-                            } else {
-                              Fluttertoast.showToast(
-                                msg: 'Wrong OTP',
-                                backgroundColor: Colors.red,
-                                toastLength: Toast.LENGTH_SHORT,
-                              );
-                              setState(() {
-                                _isOtpVerified = false;
-                              });
-                            }
-                          if (_otpController.text.isNotEmpty) {
-                            _verifyOtp();
-                          }
-                        },
+                        onTap:
+                            _otpController.text.isNotEmpty ? _verifyOtp : null,
                         child: CustomizedButton(
                           title: 'Verify',
                           colorButton: Color(constcolor.App_blue_color),
-                          height: screenHeight * 0.06, // Responsive height
-                          widht: screenWidth * 0.85, // Responsive width
+                          height: screenHeight * 0.06,
+                          widht: screenWidth * 0.85,
                           colorText: Colors.white,
-                          fontSize: screenWidth * 0.045, // Responsive font size
+                          fontSize: screenWidth * 0.045,
                         ),
                       ),
                     ),
@@ -346,12 +257,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: screenHeight * 0.1,
               ),
               InkWell(
-                onTap: //_isOtpVerified
-                    // ?
-                    () {
-                  Get.to(() => SignupInfofill(), transition: Transition.fade);
-                },
-                // : null,
                 onTap: _isOtpVerified
                     ? () {
                         Get.to(() => SignupInfofill(),
@@ -361,10 +266,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: CustomizedButton(
                   title: 'Next',
                   colorButton: Color(constcolor.App_blue_color),
-                  height: screenHeight * 0.06, // Responsive height
-                  widht: screenWidth * 0.85, // Responsive width
+                  height: screenHeight * 0.06,
+                  widht: screenWidth * 0.85,
                   colorText: Colors.white,
-                  fontSize: screenWidth * 0.045, // Responsive font size
+                  fontSize: screenWidth * 0.045,
                 ),
               ),
             ],
