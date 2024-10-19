@@ -88,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Welcome, ${userName!.toUpperCase() ?? 'Loading...'}",
+                "Welcome, ${userName?.toUpperCase() ?? 'Loading...'}",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

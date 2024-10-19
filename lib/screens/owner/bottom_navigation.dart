@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/owner/list_property.dart';
+import 'package:tolet/screens/owner/owner_profile.dart';
 import 'package:tolet/screens/tenant/user_profile.dart';
 // import 'package:tolet/screens/tenant/tenant_finder.dart';
 // import 'package:tolet/screens/user_profile.dart';
@@ -21,8 +22,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.white, // Set the background color to black
-      selectedItemColor:
-      Color(0xff192747), // Set selected item color
+      selectedItemColor: Color(0xff192747), // Set selected item color
       unselectedItemColor: Colors.grey, // Set unselected item color
       type: BottomNavigationBarType.fixed, // Ensure all items are fixed
       currentIndex: currentIndex, // Track the current selected index
@@ -34,25 +34,25 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
             break;
           case 1:
-            Get.to(() => HomeScreen(), transition: Transition.fade);
+            Get.offAll(() => HomeScreen(), transition: Transition.fade);
 
             // Navigate to the Explore screen
             // Replace with the correct screen if available
             break;
           case 2:
             // Navigate to the Chat screen
-            Get.off(() => ListPropertyScreen(), transition: Transition.fade);
+            Get.to(() => ListPropertyScreen(), transition: Transition.fade);
 
             break;
           case 3:
-            Get.off(() => ChatScreen(), transition: Transition.fade);
+            Get.to(() => ChatScreen(), transition: Transition.fade);
 
             // Navigate to the Saved screen
             // Replace with the correct screen if available
             break;
           case 4:
             // Navigate to the Profile screen
-            Get.to(() => ProfileScreen(), transition: Transition.fade);
+            Get.to(() => OwnerProfileScreen(), transition: Transition.fade);
 
             break;
         }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
@@ -12,6 +13,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 4; // Keep track of the selected index
+  User? currentUser;
+  String userName = '';
+  String userEmail = '';
 
   // Function to handle tap on navigation items
   void _onItemTapped(int index) {
@@ -19,6 +23,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _selectedIndex = index;
     });
     // Add logic here for navigation or any other action
+  }
+
+  @override
+  void initState() {
+    _getCurrentUser();
+    super.initState();
+  }
+
+  Future<void> _getCurrentUser() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+
+      setState(() {
+        userName = userDoc.get('firstname');
+        userEmail = currentUser.email ?? 'No Email';
+      });
+    }
   }
 
   @override
@@ -51,11 +77,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Anil',
+                    userName,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'anil.tolet@gmail.com',
+                    userEmail,
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ],
@@ -78,9 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 isBold: true),
             SizedBox(height: 25),
             Divider(thickness: 1, color: Colors.grey),
-            buildListTile(
-                'assets/icons/toggle-off-circle.png', 'Switch to landlord',
-                isBold: true),
+            // buildListTile(
+            //     'assets/icons/toggle-off-circle.png', 'Switch to landlord',
+            //     isBold: true),
 
             SizedBox(height: 30),
 
@@ -94,7 +120,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     gradient: LinearGradient(
                       colors: [
                         Color(0xff192760), // Correct way to create a Color
-                        Color(0xff192747), // Use the actual color value for App_blue_color
+                        Color(
+                            0xff192747), // Use the actual color value for App_blue_color
                       ], // Light blue to dark blue
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,

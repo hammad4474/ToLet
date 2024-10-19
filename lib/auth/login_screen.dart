@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:tolet/auth/forgot_pasword.dart';
 import 'package:tolet/auth/signup_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
@@ -225,6 +226,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
+                        Get.to(() => ForgotPasswordView(),
+                            transition: Transition.fadeIn);
                       },
                       child: Text(
                         'Forgot Password?',

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/owner/list_property.dart';
+import 'package:tolet/screens/owner/owner_property_display.dart';
 import 'package:tolet/screens/owner/properties_panel.dart';
 import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
 import 'package:tolet/screens/tenant/filter_screen.dart';
@@ -62,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Get.to(() => SearchPropertyScreen(), transition: Transition.fade);
             },
             onTuneIconPressed: () {
-              Get.to(() => FilterScreen(), transition: Transition.zoom);
+              Get.to(() => HomeOwnerScreen(), transition: Transition.zoom);
             },
           ),
           body: Container(
@@ -163,8 +164,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(35),
                               gradient: LinearGradient(
                                 colors: [
-                                  Color(0xff192760), // Correct way to create a Color
-                                  Color(0xff192747), // Use the actual color value for App_blue_color
+                                  Color(
+                                      0xff192760), // Correct way to create a Color
+                                  Color(
+                                      0xff192747), // Use the actual color value for App_blue_color
                                 ], // Gradient for selected button
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -291,7 +294,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     gradient: LinearGradient(
                       colors: [
                         Color(0xff192760), // Correct way to create a Color
-                        Color(0xff192747), // Use the actual color value for App_blue_color
+                        Color(
+                            0xff192747), // Use the actual color value for App_blue_color
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,

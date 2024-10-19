@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/description.dart';
 import 'package:tolet/screens/tenant/galler_pd.dart';
@@ -417,37 +418,42 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChatScreen()),
-                  );
+                  Get.to(() => ChatScreen(), transition: Transition.fade);
                 },
                 child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xff192747),
-                        Color(0xff192750),
-                      ],
+                    height: 40,
+                    width: 70,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xff192747),
+                          Color(0xff192750),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: ElevatedButton.icon(
-                    onPressed: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChatScreen()),
-                    );
-                      // Call button functionality here
-                    },
-                    label: Text(
-                      'Contact',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: Center(
+                      child: Text(
+                        'Contact',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                    // ElevatedButton.icon(
+                    //   onPressed: () {Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => ChatScreen()),
+                    //   );
+                    //     // Call button functionality here
+                    //   },
+                    //   label: Text(
+                    //     'Contact',
+                    //     style: TextStyle(color: Colors.white),
+                    //   ),
 
-                  ),
-                ),
+                    // ),
+                    ),
               ),
             ],
           ),
@@ -468,19 +474,14 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           Text(
             title,
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color:selectedTabIndex == index ? Color(0xff192747) : Colors.black
-
-            ),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: selectedTabIndex == index
+                    ? Color(0xff192747)
+                    : Colors.black),
           ),
-
           if (selectedTabIndex == index)
-            Container(
-              height: 2,
-              width: 60,
-                color: Color(0xff192747)
-            )
+            Container(height: 2, width: 60, color: Color(0xff192747))
         ],
       ),
     );
@@ -533,8 +534,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   if (facilities.contains('Pet Center'))
                     buildFacilityIcon('assets/icons/PET.png', 'Pet Center'),
                   if (facilities.contains('Sports Club'))
-                    buildFacilityIcon(
-                        'assets/icons/RUN.png', 'Sports Club'),
+                    buildFacilityIcon('assets/icons/RUN.png', 'Sports Club'),
                   if (facilities.contains('Laundry'))
                     buildFacilityIcon('assets/icons/LAUNDRY.png', 'Laundry'),
                 ],

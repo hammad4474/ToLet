@@ -250,13 +250,16 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                       labelText: 'Property title',
                       labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
-                      fillColor: Color(0xfff2f3f3), // Set the grey background color
+                      fillColor:
+                          Color(0xfff2f3f3), // Set the grey background color
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(3.0), // Adjust the curve
+                        borderRadius:
+                            BorderRadius.circular(3.0), // Adjust the curve
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.transparent, // Remove border when inactive
+                          color:
+                              Colors.transparent, // Remove border when inactive
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -298,6 +301,10 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                     GestureDetector(
                       onTap: () => _onSelect('1 BHK'),
                       child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              13), // Match the Container's radius
+                        ),
                         elevation: 3.0,
                         shadowColor: Colors.black,
                         child: Container(
@@ -315,6 +322,10 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                     GestureDetector(
                       onTap: () => _onSelect('2 BHK'),
                       child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              13), // Match the Container's radius
+                        ),
                         elevation: 3.0,
                         shadowColor: Colors.black,
                         child: Container(
@@ -332,6 +343,10 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                     GestureDetector(
                       onTap: () => _onSelect('3 BHK'),
                       child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              13), // Match the Container's radius
+                        ),
                         elevation: 3.0,
                         shadowColor: Colors.black,
                         child: Container(
@@ -349,6 +364,10 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                     GestureDetector(
                       onTap: () => _onSelect('4 BHK'),
                       child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              13), // Match the Container's radius
+                        ),
                         elevation: 3.0,
                         shadowColor: Colors.black,
                         child: Container(
@@ -385,13 +404,16 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                       labelText: '600/ per day',
                       labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
-                      fillColor: Color(0xfff2f3f3), // Set the grey background color
+                      fillColor:
+                          Color(0xfff2f3f3), // Set the grey background color
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(3.0), // Adjust the curve
+                        borderRadius:
+                            BorderRadius.circular(3.0), // Adjust the curve
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.transparent, // Remove border when inactive
+                          color:
+                              Colors.transparent, // Remove border when inactive
                         ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -577,6 +599,10 @@ class facilities extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(15), 
+        ),
         elevation: 3,
         shadowColor: Colors.black,
         child: Container(

@@ -43,6 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: TextStyle(
                     fontSize: screenWidth * 0.04, // Responsive font size
                     fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
                     color: Color(0xff192747),
                   ),
                 ),

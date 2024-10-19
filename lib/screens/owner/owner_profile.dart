@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/owner/dashboard.dart';
+import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
@@ -13,7 +15,32 @@ class OwnerProfileScreen extends StatefulWidget {
 }
 
 class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
-  int _selectedIndex = 4; // Keep track of the selected index
+  int _selectedIndex = 4;
+  User? currentUser;
+  String userName = '';
+  String userEmail = '';
+
+  @override
+  void initState() {
+    _getCurrentUser();
+    super.initState();
+  }
+
+  Future<void> _getCurrentUser() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+
+      setState(() {
+        userName = userDoc.get('firstname');
+        userEmail = currentUser.email ?? 'No Email';
+      });
+    }
+  } // Keep track of the selected index
 
   // Function to handle tap on navigation items
   void _onItemTapped(int index) {
@@ -53,11 +80,11 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Anil',
+                    userName,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'anil.tolet@gmail.com',
+                    userEmail,
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ],
@@ -67,27 +94,26 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
             SizedBox(height: 5),
 
             // Menu Options with proper asset icons
-            InkWell(
-              onTap: () {
-                Get.to(() => DashboardScreen(), transition: Transition.fade);
-              },
-              child: buildListTile('assets/icons/frame.png', 'Personal details',
-                  isBold: true),
-            ),
-            SizedBox(height: 15),
-            buildListTile('assets/icons/setting-2.png', 'Settings',
+            buildListTile(
+                () => Get.to(() => DashboardScreen(),
+                    transition: Transition.fade),
+                'assets/icons/frame.png',
+                'Personal details',
                 isBold: true),
             SizedBox(height: 15),
-            buildListTile('assets/icons/card.png', 'Payment details',
+            buildListTile(() => (), 'assets/icons/setting-2.png', 'Settings',
                 isBold: true),
             SizedBox(height: 15),
-            buildListTile('assets/icons/message-question.png', 'FAQ',
+            buildListTile(() => (), 'assets/icons/card.png', 'Payment details',
+                isBold: true),
+            SizedBox(height: 15),
+            buildListTile(() => (), 'assets/icons/message-question.png', 'FAQ',
                 isBold: true),
             SizedBox(height: 25),
             Divider(thickness: 1, color: Colors.grey),
-            buildListTile(
-                'assets/icons/toggle-off-circle.png', 'Switch to landlord',
-                isBold: true),
+            // buildListTile(
+            //     'assets/icons/toggle-off-circle.png', 'Switch to landlord',
+            //     isBold: true),
 
             SizedBox(height: 30),
 
@@ -101,8 +127,9 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
                     gradient: LinearGradient(
                       colors: [
                         Color(0xff192760), // Correct way to create a Color
-                        Color(0xff192747), // Use the actual color value for App_blue_color
-                      ],// Light blue to dark blue
+                        Color(
+                            0xff192747), // Use the actual color value for App_blue_color
+                      ], // Light blue to dark blue
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -147,7 +174,8 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
   }
 
   // Single definition of buildListTile with optional isBold parameter
-  Widget buildListTile(String assetPath, String title, {bool isBold = false}) {
+  Widget buildListTile(VoidCallback? onTap, String assetPath, String title,
+      {bool isBold = false}) {
     return ListTile(
       leading: Container(
         width: 40,
@@ -177,9 +205,7 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
         ),
       ),
       trailing: Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () {
-        // Add functionality for each option here
-      },
+      onTap: onTap,
     );
   }
 }

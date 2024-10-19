@@ -207,8 +207,10 @@ class _HometenantScreenState extends State<HometenantScreen> {
                           borderRadius: BorderRadius.circular(35),
                           gradient: LinearGradient(
                             colors: [
-                              Color(0xff192760), // Correct way to create a Color
-                              Color(0xff192747), // Use the actual color value for App_blue_color
+                              Color(
+                                  0xff192760), // Correct way to create a Color
+                              Color(
+                                  0xff192747), // Use the actual color value for App_blue_color
                             ], // Gradient for selected button
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -416,6 +418,9 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
         );
       },
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         elevation: 3,
         shadowColor: Colors.black,
         child: Container(
