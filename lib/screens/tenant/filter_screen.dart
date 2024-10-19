@@ -70,37 +70,32 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
         ),
       ),
-
-      body: Stack(
+      body: Column(
         children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildPropertyTypeSection(),
-                const SizedBox(height: 16),
-                _buildPriceRangeWidget(),
-                const SizedBox(height: 16),
-                _buildPropertyFacilities(facilities),
-                // Pass facilities map
-                const SizedBox(height: 100),
-                // Add spacing at the bottom for the action buttons
-              ],
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildPropertyTypeSection(),
+                  const SizedBox(height: 16),
+                  _buildPriceRangeWidget(),
+                  const SizedBox(height: 16),
+                  _buildPropertyFacilities(facilities), // Pass facilities map
+                ],
+              ),
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              color: Colors.white, // Background color for the button section
-              child: _buildActionButtons(),
-            ),
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            color: Colors.white, // Background color for the button section
+            child: _buildActionButtons(),
           ),
         ],
       ),
+
+
     );
   }
 
@@ -344,6 +339,8 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 }
+
+
 class PriceGraphPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
