@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/screens/tenant/property_detailscreen.dart';
 
@@ -162,22 +163,19 @@ class SearchPropertyCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PropertyDetailsScreen(
-              propertyId: property.id,
-              title: property['propertyTitle'] ?? 'Unknown Title',
-              location: property['city'] ?? 'Unknown Location',
-              price: property['price'] ?? 'Unknown Price',
-              imageURL: property['imageURL'] ?? '',
-              area: property['area'] ?? 'Unknown Area',
-              bhk: property['bhk'] ?? 'Unknown Rooms',
-              isVerified: property['isVerified'] ?? false,
-              owner: property['owner'] ?? 'Unknown Owner',
-            ),
-          ),
-        );
+        Get.to(
+            () => PropertyDetailsScreen(
+                  propertyId: property.id,
+                  title: property['propertyTitle'] ?? 'Unknown Title',
+                  location: 'Unkown Location',
+                  price: property['price'] ?? 'Unknown Price',
+                  imageURL: property['imageURL'] ?? '',
+                  area: 'Unknown Area',
+                  bhk: property['bhk'] ?? 'Unknown Rooms',
+                  isVerified: false,
+                  owner: property['owner'] ?? 'Unknown Owner',
+                ),
+            transition: Transition.leftToRightWithFade);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
