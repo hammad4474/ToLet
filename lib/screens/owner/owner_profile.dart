@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/dashboard.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
@@ -65,8 +67,13 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
             SizedBox(height: 5),
 
             // Menu Options with proper asset icons
-            buildListTile('assets/icons/frame.png', 'Personal details',
-                isBold: true),
+            InkWell(
+              onTap: () {
+                Get.to(() => DashboardScreen(), transition: Transition.fade);
+              },
+              child: buildListTile('assets/icons/frame.png', 'Personal details',
+                  isBold: true),
+            ),
             SizedBox(height: 15),
             buildListTile('assets/icons/setting-2.png', 'Settings',
                 isBold: true),
@@ -78,9 +85,9 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
                 isBold: true),
             SizedBox(height: 25),
             Divider(thickness: 1, color: Colors.grey),
-            buildListTile(
-                'assets/icons/toggle-off-circle.png', 'Switch to landlord',
-                isBold: true),
+            // buildListTile(
+            //     'assets/icons/toggle-off-circle.png', 'Switch to landlord',
+            //     isBold: true),
 
             SizedBox(height: 30),
 

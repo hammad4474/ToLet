@@ -28,7 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       try {
         UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text);
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim());
 
         String uid = userCredential.user!.uid;
 

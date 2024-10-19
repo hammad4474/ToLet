@@ -78,9 +78,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 isBold: true),
             SizedBox(height: 25),
             Divider(thickness: 1, color: Colors.grey),
-            buildListTile(
-                'assets/icons/toggle-off-circle.png', 'Switch to landlord',
-                isBold: true),
+            // buildListTile(
+            //     'assets/icons/toggle-off-circle.png', 'Switch to landlord',
+            //     isBold: true),
 
             SizedBox(height: 30),
 

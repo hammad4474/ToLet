@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/owner/list_property.dart';
-import 'package:tolet/screens/owner/owner_profile.dart';
-import 'package:tolet/screens/owner/tenant_finder.dart';
+import 'package:tolet/screens/tenant/user_profile.dart';
+// import 'package:tolet/screens/tenant/tenant_finder.dart';
+// import 'package:tolet/screens/user_profile.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
@@ -29,29 +30,29 @@ class CustomBottomNavigationBar extends StatelessWidget {
         switch (index) {
           case 0:
             // Navigate to the Home screen
-            Get.to(() => HomeScreen(), transition: Transition.fade);
+            Get.offAll(() => HomeScreen(), transition: Transition.fade);
 
             break;
           case 1:
-            Get.to(() => TenantFinderScreen(), transition: Transition.fade);
+            Get.to(() => HomeScreen(), transition: Transition.fade);
 
             // Navigate to the Explore screen
             // Replace with the correct screen if available
             break;
           case 2:
             // Navigate to the Chat screen
-            Get.to(() => ListPropertyScreen(), transition: Transition.fade);
+            Get.off(() => ListPropertyScreen(), transition: Transition.fade);
 
             break;
           case 3:
-            Get.to(() => ChatScreen(), transition: Transition.fade);
+            Get.off(() => ChatScreen(), transition: Transition.fade);
 
             // Navigate to the Saved screen
             // Replace with the correct screen if available
             break;
           case 4:
             // Navigate to the Profile screen
-            Get.to(() => OwnerProfileScreen(), transition: Transition.fade);
+            Get.to(() => ProfileScreen(), transition: Transition.fade);
 
             break;
         }

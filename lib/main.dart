@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(color: Colors.white),
         primaryColor: Color(0xff1c2746),
       ),
-      // home: FilterScreen(),
       home: WelcomeScreen(),
     );
   }

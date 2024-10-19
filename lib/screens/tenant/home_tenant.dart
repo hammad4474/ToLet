@@ -383,14 +383,15 @@ class _HometenantScreenState extends State<HometenantScreen> {
   }
 }
 
-Widget buildPropertyCard(
-    BuildContext context, Map<String, dynamic> property, bool isVerified, bool onTip) {
-
+Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
+    bool isVerified, bool onTip) {
   // Get the screen width
   double screenWidth = MediaQuery.of(context).size.width;
 
   // Define dimensions based on screen width
-  double cardWidth = screenWidth > 450 ? screenWidth * 0.9 : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
+  double cardWidth = screenWidth > 450
+      ? screenWidth * 0.9
+      : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
   double cardHeight = 250; // Fixed height for consistency
   double imageWidth = 108; // Fixed image width
   double iconSize = 24.0; // Standard icon size
@@ -400,7 +401,7 @@ Widget buildPropertyCard(
     child: GestureDetector(
       onTap: () {
         Get.to(
-              () => PropertyDetailsScreen(
+          () => PropertyDetailsScreen(
             title: property['propertyTitle'] ?? 'No Title',
             location: property['location'] ?? 'Unknown Location',
             price: property['price'] ?? 'Unknown Price',
@@ -436,19 +437,19 @@ Widget buildPropertyCard(
                 ),
                 child: property['imageURL'] != null
                     ? Image.network(
-                  property['imageURL'],
-                  fit: BoxFit.fill,
-                  height: cardHeight,
-                  width: imageWidth,
-                )
+                        property['imageURL'],
+                        fit: BoxFit.fill,
+                        height: cardHeight,
+                        width: imageWidth,
+                      )
                     : Image.asset(
-                  'assets/icons/wifi.png',
-                  height: cardHeight,
-                  width: imageWidth,
-                ),
+                        'assets/icons/wifi.png',
+                        height: cardHeight,
+                        width: imageWidth,
+                      ),
               ),
               // Property details
-              SizedBox(width: 16),
+              SizedBox(width: 18),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -466,14 +467,16 @@ Widget buildPropertyCard(
                     SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
+                        Icon(Icons.bed,
+                            color: Color(0xff7d7f88), size: iconSize),
                         SizedBox(width: 5),
                         Text(
                           '${property['bhk']}',
                           style: TextStyle(color: Color(0xff7d7f88)),
                         ),
                         SizedBox(width: 10),
-                        Icon(Icons.house, color: Color(0xff7d7f88), size: iconSize),
+                        Icon(Icons.house,
+                            color: Color(0xff7d7f88), size: iconSize),
                         SizedBox(width: 5),
                         Text(
                           '${property['area'] ?? 'Unknown Area'} m²',
@@ -486,7 +489,8 @@ Widget buildPropertyCard(
                       children: [
                         Text(
                           '${property['price']}',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         Text(
                           ' / month',
@@ -515,7 +519,9 @@ Widget buildPropertyCard(
                 children: [
                   SizedBox(height: 16),
                   Icon(
-                    isVerified ? Icons.verified_user : Icons.not_interested_sharp,
+                    isVerified
+                        ? Icons.verified_user
+                        : Icons.not_interested_sharp,
                     color: isVerified ? Colors.green : Colors.red,
                     size: iconSize,
                   ),
@@ -541,4 +547,3 @@ Widget buildPropertyCard(
     ),
   );
 }
-

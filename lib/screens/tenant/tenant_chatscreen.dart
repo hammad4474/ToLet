@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/tenant/tenant_messageScreen.dart';
 import 'package:tolet/widgets/constcolor.dart';
@@ -15,6 +16,7 @@ class _ChatScreenState extends State<tenantChatScreen> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,12 +55,9 @@ class _ChatScreenState extends State<tenantChatScreen> {
             time: '15:23',
             unreadMessages: 2,
             avatar:
-            'assets/images/dp.png', // Replace with actual avatar URL or asset
+                'assets/images/dp.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => tenantmessagescreen()));
+              Get.to(() => tenantmessagescreen(), transition: Transition.fade);
             },
           ),
           ChatTile(
@@ -66,12 +65,9 @@ class _ChatScreenState extends State<tenantChatScreen> {
             message: 'Your payment was accepted.',
             time: 'Yesterday',
             avatar:
-            'assets/Images/delhi.png', // Replace with actual avatar URL or asset
+                'assets/Images/delhi.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => tenantmessagescreen()));
+              Get.to(() => tenantmessagescreen(), transition: Transition.fade);
             },
           ),
           ChatTile(
@@ -79,12 +75,9 @@ class _ChatScreenState extends State<tenantChatScreen> {
             message: 'It was great experience!',
             time: '11/10/2021',
             avatar:
-            'assets/Images/dp.png', // Replace with actual avatar URL or asset
+                'assets/Images/dp.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => tenantmessagescreen()));
+              Get.to(() => tenantmessagescreen(), transition: Transition.fade);
             },
           ),
           ChatTile(
@@ -92,12 +85,9 @@ class _ChatScreenState extends State<tenantChatScreen> {
             message: 'How much does it cost?',
             time: '11/10/2021',
             avatar:
-            'assets/images/Capture.png', // Replace with actual avatar URL or asset
+                'assets/images/Capture.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => tenantmessagescreen()));
+              Get.to(() => tenantmessagescreen(), transition: Transition.fade);
             },
           ),
           ChatTile(
@@ -105,12 +95,9 @@ class _ChatScreenState extends State<tenantChatScreen> {
             message: 'Sure, man!',
             time: '11/10/2021',
             avatar:
-            'assets/images/delhi.png', // Replace with actual avatar URL or asset
+                'assets/images/delhi.png', // Replace with actual avatar URL or asset
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => tenantmessagescreen()));
+              Get.to(() => tenantmessagescreen(), transition: Transition.fade);
             },
           ),
         ],
@@ -149,7 +136,7 @@ class ChatTile extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundImage:
-          AssetImage(avatar), // Replace with actual asset if necessary
+              AssetImage(avatar), // Replace with actual asset if necessary
           radius: 25,
         ),
         title: Text(name),

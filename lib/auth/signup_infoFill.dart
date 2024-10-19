@@ -88,15 +88,15 @@ class _SignupInfofillState extends State<SignupInfofill> {
     if (_formKey.currentState!.validate()) {
       try {
         UserCredential userCredential =
-        await _auth.createUserWithEmailAndPassword(
-            email: _emailController.text,
-            password: _passwordController.text);
+            await _auth.createUserWithEmailAndPassword(
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim());
 
         User? user = userCredential.user;
         if (user != null) {
           await _firestore.collection('users').doc(user.uid).set({
-            'firstname': _fnameController.text,
-            'lastname': _lnameController.text,
+            'firstname': _fnameController.text.trim,
+            'lastname': _lnameController.text.trim,
             'email': user.email,
             'userType': selectedUserType,
           });
@@ -128,28 +128,32 @@ class _SignupInfofillState extends State<SignupInfofill> {
               Center(
                 child: Text(
                   'Congratulations',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.06),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * 0.06),
                 ),
               ),
               Center(
                 child: Text(
                   'on verifying the email belongs to you',
-                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.04),
+                  style: TextStyle(
+                      color: Colors.black, fontSize: screenWidth * 0.04),
                 ),
               ),
               SizedBox(height: screenHeight * 0.04),
               Align(
-                alignment: Alignment.centerLeft, // Aligns the text to the start of the column
+                alignment: Alignment
+                    .centerLeft, // Aligns the text to the start of the column
                 child: Text(
                   'Sign up',
                   style: TextStyle(
                     color: Color(constcolor.App_blue_color),
                     fontWeight: FontWeight.bold,
-                    fontSize: screenWidth * 0.08, // Adjusts font size based on screen width
+                    fontSize: screenWidth *
+                        0.08, // Adjusts font size based on screen width
                   ),
                 ),
               ),
-
               SizedBox(height: screenHeight * 0.02),
               Row(
                 children: [
@@ -161,7 +165,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
                         hintText: 'Firstname',
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -182,7 +187,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
                         hintText: 'Lastname',
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
@@ -204,7 +210,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
                   hintText: 'yourmail@gmail.com',
                   filled: true,
                   fillColor: Color(0xfff2f3f3),
-                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -233,7 +240,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
                   hintText: 'Passcode',
                   filled: true,
                   fillColor: Color(0xfff2f3f3),
-                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -256,12 +264,14 @@ class _SignupInfofillState extends State<SignupInfofill> {
                           _isobsecureText1 = !_isobsecureText1;
                         });
                       },
-                      icon: Icon(
-                          _isobsecureText1 ? Icons.visibility_off : Icons.visibility)),
+                      icon: Icon(_isobsecureText1
+                          ? Icons.visibility_off
+                          : Icons.visibility)),
                   hintText: 'Confirm passcode',
                   filled: true,
                   fillColor: Color(0xfff2f3f3),
-                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -274,7 +284,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
               ),
               SizedBox(height: screenHeight * 0.02),
               Align(
-                alignment: Alignment.centerLeft, // Aligns the text to the start of the row
+                alignment: Alignment
+                    .centerLeft, // Aligns the text to the start of the row
                 child: Text(
                   'TYPE OF USER',
                   style: TextStyle(
@@ -284,7 +295,6 @@ class _SignupInfofillState extends State<SignupInfofill> {
                   ),
                 ),
               ),
-
               SizedBox(height: screenHeight * 0.02),
               DropdownButtonFormField<String>(
                 value: selectedUserType,
@@ -309,7 +319,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
                   hintText: 'Choose your user type',
                   filled: true,
                   fillColor: Color(0xfff2f3f3),
-                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -347,7 +358,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
                   child: Text(
                     'Back to login',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: screenWidth * 0.04),
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenWidth * 0.04),
                   ),
                 ),
               ),

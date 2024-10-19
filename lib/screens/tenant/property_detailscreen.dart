@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/tenant/description.dart';
 import 'package:tolet/screens/tenant/galler_pd.dart';
@@ -38,11 +39,59 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   String ownerName = "";
   List<String> facilities = [];
   List<String> galleryImages = [];
+  bool isFavorited = false;
 
   @override
   void initState() {
     super.initState();
+    checkIfFavorited();
     fetchPropertyDetails();
+  }
+
+  Future<void> checkIfFavorited() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final tenantFavorites = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites')
+          .doc(widget.propertyId)
+          .get();
+
+      setState(() {
+        isFavorited = tenantFavorites.exists;
+      });
+    }
+  }
+
+  Future<void> toggleFavorite() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final favoritesRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites')
+          .doc(widget.propertyId);
+
+      if (isFavorited) {
+        // If it's already favorited, remove from favorites
+        await favoritesRef.delete();
+      } else {
+        // If it's not favorited, add to favorites
+        await favoritesRef.set({
+          'propertyId': widget.propertyId,
+          'title': widget.title,
+          'location': widget.location,
+          'price': widget.price,
+          'bhk': widget.bhk,
+          'imageURL': widget.imageURL,
+        });
+      }
+
+      setState(() {
+        isFavorited = !isFavorited;
+      });
+    }
   }
 
   Future<void> fetchPropertyDetails() async {
@@ -211,7 +260,17 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          Icon(Icons.favorite_border),
+                          IconButton(
+                            icon: Icon(
+                              isFavorited
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorited ? Colors.red : Colors.black,
+                            ),
+                            onPressed: () {
+                              toggleFavorite();
+                            },
+                          ),
                         ],
                       ),
                       SizedBox(height: 8),
