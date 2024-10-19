@@ -99,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               Center(
                 child: Image.asset(
-                  'assets/images/image 3.png',
+                  'assets/images/tolet.png',
                   width: screenWidth *
                       0.5, // Adjust image size based on screen width
                 ),

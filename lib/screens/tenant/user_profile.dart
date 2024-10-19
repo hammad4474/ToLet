@@ -78,9 +78,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 isBold: true),
             SizedBox(height: 25),
             Divider(thickness: 1, color: Colors.grey),
-            // buildListTile(
-            //     'assets/icons/toggle-off-circle.png', 'Switch to landlord',
-            //     isBold: true),
+            buildListTile(
+                'assets/icons/toggle-off-circle.png', 'Switch to landlord',
+                isBold: true),
 
             SizedBox(height: 30),
 
@@ -93,8 +93,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xffADD8E6),
-                        Color(constcolor.App_blue_color)
+                        Color(0xff192760), // Correct way to create a Color
+                        Color(0xff192747), // Use the actual color value for App_blue_color
                       ], // Light blue to dark blue
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,

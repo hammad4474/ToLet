@@ -2,12 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:tolet/screens/owner/dashboard.dart';
+import 'package:tolet/screens/owner/chat_screen.dart';
+
 import 'package:tolet/screens/owner/home_screen.dart';
+import 'package:tolet/screens/owner/list_property.dart';
+import 'package:tolet/screens/owner/properties_panel.dart';
 import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'firebase_options.dart';
+import 'screens/owner/dashboard.dart';
 import 'screens/tenant/filter_screen.dart';
 
 void main() async {
@@ -29,8 +33,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: false,
         appBarTheme: AppBarTheme(color: Colors.white),
-        primaryColor: Color(0xff021623),
+        primaryColor: Color(0xff1c2746),
       ),
+      // home: FilterScreen(),
       home: WelcomeScreen(),
     );
   }

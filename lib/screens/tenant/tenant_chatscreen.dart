@@ -40,11 +40,17 @@ class _ChatScreenState extends State<tenantChatScreen> {
             decoration: InputDecoration(
               hintText: 'Search messages',
               hintStyle: TextStyle(color: Colors.grey),
-              prefixIcon: Icon(Icons.search, color: Colors.grey),
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset('assets/icons/search-normal.png', // Replace with your actual asset path
+                  width: 24,
+                  height: 24,
+                ),
+              ),
               border: InputBorder.none, // No default underline border
               contentPadding: EdgeInsets.symmetric(vertical: 10.0),
             ),
-          ),
+          )
         ),
       ),
       body: ListView(
@@ -100,6 +106,19 @@ class _ChatScreenState extends State<tenantChatScreen> {
               Get.to(() => tenantmessagescreen(), transition: Transition.fade);
             },
           ),
+          SizedBox(height: 20), // Space between the TextField and the button
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Navigates back to the previous screen
+            },
+            child: Text(
+              'Back',
+              style: TextStyle(fontSize: 15,color: Colors.grey), // Adjust the text size
+            ),
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0), // Add padding
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: CustomtenantBottomNavBar(
@@ -144,7 +163,7 @@ class ChatTile extends StatelessWidget {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(time, style: TextStyle(color: Colors.grey)),
+            Text(time, style: TextStyle(color: Color(0xff192747))),
             if (unreadMessages > 0)
               CircleAvatar(
                 radius: 10,

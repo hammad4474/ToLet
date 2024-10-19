@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/description.dart';
 import 'package:tolet/screens/tenant/galler_pd.dart';
 import 'package:tolet/screens/tenant/reveiw_pd.dart';
@@ -214,7 +215,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
-                                Color(0xFF06A6DD),
+                                Color(0xff192747),
                                 Color(0xFF1C66AD),
                               ],
                             ),
@@ -241,7 +242,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                 child: Text(
                                   'Watch Intro Video',
                                   style: TextStyle(
-                                    color: Color(0xFF1C66AD),
+                                    color: Color(0xff192747),
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -414,34 +415,37 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   ),
                 ],
               ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFF06A6DD),
-                      Color(0xFF1C66AD),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    // Call button functionality here
-                  },
-                  label: Text(
-                    'Call',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  icon: Icon(Icons.phone, color: Colors.white),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatScreen()),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xff192747),
+                        Color(0xff192750),
+                      ],
                     ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: () {Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChatScreen()),
+                    );
+                      // Call button functionality here
+                    },
+                    label: Text(
+                      'Contact',
+                      style: TextStyle(color: Colors.white),
+                    ),
+
                   ),
                 ),
               ),
@@ -466,14 +470,16 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: selectedTabIndex == index ? Colors.blue : Colors.black,
+              color:selectedTabIndex == index ? Color(0xff192747) : Colors.black
+
             ),
           ),
+
           if (selectedTabIndex == index)
             Container(
               height: 2,
               width: 60,
-              color: Colors.blue,
+                color: Color(0xff192747)
             )
         ],
       ),
@@ -495,7 +501,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               ),
               Text(
                 'See all facilities',
-                style: TextStyle(color: Colors.blue, fontSize: 16),
+                style: TextStyle(color: Color(0xff192747), fontSize: 16),
               ),
             ],
           ),
@@ -508,13 +514,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   if (facilities.contains('Car Parking'))
-                    buildFacilityIcon('assets/icons/car.png', 'Car Parking'),
+                    buildFacilityIcon('assets/icons/CAR.png', 'Car Parking'),
                   if (facilities.contains('Furnished'))
-                    buildFacilityIcon('assets/icons/Vector.png', 'Furnished'),
+                    buildFacilityIcon('assets/icons/HOME.png', 'Furnished'),
                   if (facilities.contains('Gym Fit'))
-                    buildFacilityIcon('assets/icons/gym.png', 'Gym Fit'),
+                    buildFacilityIcon('assets/icons/GYM.png', 'Gym Fit'),
                   if (facilities.contains('Kitchen'))
-                    buildFacilityIcon('assets/icons/Vector (2).png', 'Kitchen'),
+                    buildFacilityIcon('assets/icons/FOOD.png', 'Kitchen'),
                 ],
               ),
               SizedBox(height: 16), // Spacing between the rows
@@ -523,14 +529,14 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   if (facilities.contains('Wi-Fi'))
-                    buildFacilityIcon('assets/icons/wifi.png', 'Wi-Fi'),
+                    buildFacilityIcon('assets/icons/WIFI.png', 'Wi-Fi'),
                   if (facilities.contains('Pet Center'))
-                    buildFacilityIcon('assets/icons/pets.png', 'Pet Center'),
+                    buildFacilityIcon('assets/icons/PET.png', 'Pet Center'),
                   if (facilities.contains('Sports Club'))
                     buildFacilityIcon(
-                        'assets/icons/running.png', 'Sports Club'),
+                        'assets/icons/RUN.png', 'Sports Club'),
                   if (facilities.contains('Laundry'))
-                    buildFacilityIcon('assets/icons/laundry.png', 'Laundry'),
+                    buildFacilityIcon('assets/icons/LAUNDRY.png', 'Laundry'),
                 ],
               ),
             ],
@@ -559,7 +565,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             Text(
               '(400)',
               style: TextStyle(
-                color: Colors.blue,
+                color: Color(0xff192747),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),

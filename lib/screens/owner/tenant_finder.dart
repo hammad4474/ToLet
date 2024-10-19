@@ -133,7 +133,7 @@ class TenantCard extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 16.0),
           elevation: 2,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          color: Color(0xFFE4F7FF),
+          color: Colors.grey,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
