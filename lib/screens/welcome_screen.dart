@@ -32,7 +32,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   width: double
                       .infinity, // House image height is around 25% of screen height
                   child: Image.asset(
-                    'assets/images/img2.png', // Replace this with the top house image path
+                    'assets/images/ghar.png', // Replace this with the top house image path
                     fit: BoxFit.fill,
                     width: MediaQuery.of(context).size.width,
                   ),
@@ -43,12 +43,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: TextStyle(
                     fontSize: screenWidth * 0.04, // Responsive font size
                     fontWeight: FontWeight.normal,
-                    color: Color(constcolor.App_lightblue_color),
+                    color: Color(0xff192747),
                   ),
                 ),
                 // Small space after "Welcome to" text
                 Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/tolet.png',
                   height: 100, // Replace this with the logo image path
                   width: 100, // Logo width
                 ),

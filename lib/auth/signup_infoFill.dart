@@ -128,13 +128,13 @@ class _SignupInfofillState extends State<SignupInfofill> {
               Center(
                 child: Text(
                   'Congratulations',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.06),
+                  style: TextStyle(color: Color(0xff192747),fontWeight: FontWeight.bold, fontSize: screenWidth * 0.06),
                 ),
               ),
               Center(
                 child: Text(
                   'on verifying the email belongs to you',
-                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.04),
+                  style: TextStyle(color: Color(0xff192747), fontSize: screenWidth * 0.04),
                 ),
               ),
               SizedBox(height: screenHeight * 0.04),

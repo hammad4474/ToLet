@@ -175,7 +175,7 @@ class MessageTile extends StatelessWidget {
                 children: [
                   if (isRead)
                     Icon(Icons.done_all,
-                        color: Color(constcolor.App_blue_color), size: 16), // Double tick
+                        color: Color(0xff192747), size: 16), // Double tick
                   SizedBox(height: 2), // Small space between tick and time
                   Text(
                     time,
@@ -194,7 +194,7 @@ class MessageTile extends StatelessWidget {
                 // Apply gradient
                 gradient: LinearGradient(
                   colors: isSentByMe
-                      ? [Color(constcolor.App_lightblue_color)!, Color(constcolor.App_blue_color)!]
+                      ? [Colors.blue[900]!, Color(0xff192747)]
                       : [Colors.white!, Colors.grey[300]!],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,

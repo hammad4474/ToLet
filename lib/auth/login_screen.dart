@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Center(
                 child: Image.asset(
-                  'assets/images/Logo 1.png',
+                  'assets/images/tolet.png',
                   width: screenWidth * 0.4, // Responsive image width
                 ),
               ),
@@ -221,6 +221,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () {
+                      },
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Color(constcolor.App_blue_color),
+                          fontSize: screenWidth * 0.03,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -266,7 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: CustomizedButton(
                     title: 'Create an Account',
-                    colorButton: Color(constcolor.App_lightblue_color),
+                    colorButton: Color(constcolor.App_blue_color),
                     height: screenHeight * 0.07,
                     widht: screenWidth * 0.7,
                     colorText: Colors.white,

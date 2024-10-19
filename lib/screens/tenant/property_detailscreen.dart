@@ -370,7 +370,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       end: Alignment.bottomRight,
                       colors: [
                         Color(0xff192747),
-                        Color(0xFF1C66AD),
+                        Color(0xff192750),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(30),
@@ -411,7 +411,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: selectedTabIndex == index ? Colors.blue:Colors.black,
+              color:selectedTabIndex == index ? Color(0xff192747) : Colors.black
+
             ),
           ),
 
