@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [
-                        Icon(Icons.location_on, color: Colors.blue),
+                        Icon(Icons.location_on, color: Color(0xff192747)),
                         SizedBox(width: 5),
                         Text(
                           _selectedLocation + ', India',
@@ -163,8 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(35),
                               gradient: LinearGradient(
                                 colors: [
-                                  Color(constcolor.App_lightblue_color),
-                                  Color(constcolor.App_blue_color)
+                                  Color(0xff192760), // Correct way to create a Color
+                                  Color(0xff192747), // Use the actual color value for App_blue_color
                                 ], // Gradient for selected button
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -290,10 +290,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     gradient: LinearGradient(
                       colors: [
-                        Color(constcolor.App_lightblue_color),
-                        Color(constcolor.App_blue_color)
+                        Color(0xff192760), // Correct way to create a Color
+                        Color(0xff192747), // Use the actual color value for App_blue_color
                       ],
-                      // Blue gradient
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),

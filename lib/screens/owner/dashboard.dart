@@ -129,13 +129,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   _buildActionCard(
                     assetPath:
-                        'assets/icons/earn.png', // Path to your asset image
+                        'assets/icons/PR.png', // Path to your asset image
                     title: 'Payment Received',
                     subtitle: '\$25,001',
                   ),
                   _buildActionCard(
                     assetPath:
-                        'assets/icons/payment.png', // Path to your asset image
+                        'assets/icons/EARNING.png', // Path to your asset image
                     title: 'Earn Daily Income',
                   ),
                 ],

@@ -25,7 +25,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           // Logo
           SizedBox(width: 10),
           Image.asset(
-            'assets/images/logo.png', // Replace with your actual logo asset
+            'assets/images/tolet.png', // Replace with your actual logo asset
             height: 90,
             width: 70,
           ),
@@ -44,20 +44,24 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Row(
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Icon(Icons.search, color: Colors.grey),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Image.asset(
+                        'assets/icons/search-normal.png', // Replace with your actual asset path
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         'Search address, city, location',
-                        style:
-                            TextStyle(color: Colors.grey), // Placeholder style
+                        style: TextStyle(color: Colors.grey), // Placeholder style
                       ),
                     ),
                   ],
                 ),
+
               ),
             ),
           ),

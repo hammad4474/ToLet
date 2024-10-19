@@ -65,7 +65,8 @@ class _ComplaintsSectionState extends State<ComplaintsSection> {
                 constraints: BoxConstraints(minWidth: constraints.maxWidth),
                 child: DataTable(
                   dividerThickness: 2.0,  // Adjust this value for thicker lines
-                  dataRowHeight: 60,  // Adjust row height if needed
+                  dataRowHeight: 50,
+                  // Adjust row height if needed
                   headingRowHeight: 56,
                   columns: const [
                     DataColumn(

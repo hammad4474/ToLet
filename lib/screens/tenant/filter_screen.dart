@@ -46,7 +46,11 @@ class _FilterScreenState extends State<FilterScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Icon(Icons.search, color: Colors.black54), // Search icon
+                child: Image.asset(
+                  'assets/icons/search-normal.png', // Replace with your actual asset path
+                  width: 24,
+                  height: 24,
+                ), // Search icon
               ),
               Expanded(
                 child: TextField(
@@ -143,7 +147,10 @@ class _FilterScreenState extends State<FilterScreen> {
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
-            colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
+            colors: [
+              Color(0xff192760), // Correct way to create a Color
+              Color(0xff192747), // Use the actual color value for App_blue_color
+            ],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           )
@@ -197,7 +204,7 @@ class _FilterScreenState extends State<FilterScreen> {
       min: 0,
       max: 50000,
       divisions: 10,
-      activeColor: Color(constcolor.App_blue_color),
+      activeColor: Color(0xff192747),
       onChanged: (RangeValues values) {
         setState(() {
           _minPrice = values.start;
@@ -246,7 +253,10 @@ class _FilterScreenState extends State<FilterScreen> {
         decoration: BoxDecoration(
           gradient: isSelected
               ? LinearGradient(
-            colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
+            colors: [
+              Color(0xff192760), // Correct way to create a Color
+              Color(0xff192747), // Use the actual color value for App_blue_color
+            ],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           )
@@ -254,7 +264,7 @@ class _FilterScreenState extends State<FilterScreen> {
           color: isSelected ? null : Colors.grey[200],
           borderRadius: BorderRadius.circular(20),
           boxShadow: isSelected
-              ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 5)]
+              ? [BoxShadow(color: Color(0xff192760).withOpacity(0.5), blurRadius: 5)]
               : [],
         ),
         child: Text(
@@ -348,7 +358,7 @@ class PriceGraphPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.blue.withOpacity(0.5)
+      ..color = Color(0xff192760)
       ..style = PaintingStyle.fill;
 
     final path = Path();
@@ -388,7 +398,10 @@ class FacilityChip extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: active
               ? LinearGradient(
-            colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)],
+            colors: [
+              Color(0xff192760), // Correct way to create a Color
+              Color(0xff192747), // Use the actual color value for App_blue_color
+            ],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           )
@@ -396,7 +409,7 @@ class FacilityChip extends StatelessWidget {
           color: active ? null : Colors.grey[200],
           borderRadius: BorderRadius.circular(20),
           boxShadow: active
-              ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 5)]
+              ? [BoxShadow(color: Color(0xff192747).withOpacity(0.5), blurRadius: 5)]
               : [],
         ),
         child: Center(
