@@ -19,6 +19,7 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
   @override
   void initState() {
     super.initState();
+    _searchController.clear();
   }
 
   @override
@@ -51,7 +52,7 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                   controller: _searchController,
                   onChanged: (value) {
                     setState(() {
-                      searchQuery = value;
+                      searchQuery = value.trim();
                     });
                   },
                   textAlignVertical: TextAlignVertical.center,

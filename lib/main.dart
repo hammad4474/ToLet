@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: false,
         appBarTheme: AppBarTheme(color: Colors.white),
-        primaryColor: Color(0xff1c2746),
+        primaryColor: Color(0xff021623),
       ),
       home: WelcomeScreen(),
     );

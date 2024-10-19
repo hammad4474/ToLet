@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/phone_number.dart';
 import 'package:tolet/auth/signup_infoFill.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 import 'package:email_otp/email_otp.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -16,32 +19,67 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _verifyEmailController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  String? fullphone;
+  TextEditingController _phoneController = TextEditingController();
   TextEditingController _otpController = TextEditingController();
 
+  String? verificationId;
   bool _isOtpVerified = false;
 
   @override
   void initState() {
     super.initState();
     _verifyEmailController.clear();
+    _phoneController.clear();
   }
 
   @override
   void dispose() {
     _verifyEmailController.clear();
+    _phoneController.dispose();
+    _otpController.dispose();
     super.dispose();
   }
 
   String? _emailValidator(String? value) {
+  String? _phoneValidator(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
+      return 'Please enter your phone number';
     }
     String pattern = r'^[^@]+@[^@]+\.[^@]+';
     RegExp regExp = RegExp(pattern);
     if (!regExp.hasMatch(value)) {
       return 'Please enter a valid email';
+
+    if (!RegExp(r'^\+\d{1,3}\d{4,14}$').hasMatch(value)) {
+      return 'Please enter a valid phone number in E.164 format';
     }
+
     return null;
+  }
+
+  Future<void> _verifyOtp() async {
+    if (verificationId != null) {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId!,
+        smsCode: _otpController.text,
+      );
+
+      try {
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        setState(() {
+          _isOtpVerified = true;
+        });
+        Fluttertoast.showToast(msg: 'OTP verified successfully');
+      } catch (e) {
+        Fluttertoast.showToast(msg: 'Wrong OTP. Please try again.');
+        setState(() {
+          _isOtpVerified = false;
+        });
+      }
+    }
   }
 
   @override
@@ -87,6 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     Text(
                       'VERIFY THROUGH EMAIL',
+                      'VERIFY THROUGH Phone No',
                       style: TextStyle(
                         color: Color(0xffc3c3c3),
                         fontSize: screenWidth * 0.045, // Responsive font size
@@ -98,6 +137,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     TextFormField(
                       controller: _verifyEmailController,
                       validator: _emailValidator,
+                    IntlPhoneField(
+                      controller: _phoneController,
+                      focusNode: _focusNode,
+                      onChanged: (phone) {
+                        setState(() {
+                          fullphone = phone.completeNumber;
+                        });
+                      },
                       decoration: InputDecoration(
                         hintText: 'yourmail@gmail.com',
                         filled: true,
@@ -113,8 +160,35 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
                         ),
+                        labelText: 'Your Phone Number',
+                        border: OutlineInputBorder(borderSide: BorderSide()),
                       ),
                     ),
+                    // IntlPhoneField(
+                    //   controller: _phoneController,
+                    //   focusNode: _focusNode,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Phone Number',
+                    //     filled: true,
+                    //     fillColor: Color(0xfff2f3f3),
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //       vertical: screenHeight * 0.02,
+                    //       horizontal: screenWidth * 0.03,
+                    //     ),
+                    //     enabledBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide: BorderSide.none,
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide: BorderSide.none,
+                    //     ),
+                    //   ),
+                    //   initialCountryCode: 'PK', // Set the initial country code
+                    //   onChanged: (phone) {
+                    //     print(phone.completeNumber);
+                    //   },
+                    // ),
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),
@@ -127,6 +201,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             controller: _otpController,
                             decoration: InputDecoration(
                               hintText: "***",
+                              hintText: "****",
                               filled: true,
                               fillColor: Color(0xfff2f3f3),
                               contentPadding: EdgeInsets.symmetric(
@@ -148,6 +223,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         InkWell(
                           onTap: () {
+                          onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               print('form is valid');
                               EmailOTP.config(
@@ -160,6 +236,52 @@ class _SignupScreenState extends State<SignupScreen> {
                               );
                               EmailOTP.sendOTP(
                                   email: _verifyEmailController.text);
+                              Fluttertoast.showToast(msg: 'Sending OTP...');
+
+                              try {
+                                await FirebaseAuth.instance.verifyPhoneNumber(
+                                  phoneNumber: fullphone!,
+                                  timeout: Duration(seconds: 60),
+                                  verificationCompleted:
+                                      (PhoneAuthCredential credential) async {
+                                    await FirebaseAuth.instance
+                                        .signInWithCredential(credential);
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Phone number verified automatically.');
+                                    setState(() {
+                                      _isOtpVerified = true;
+                                    });
+                                  },
+                                  verificationFailed:
+                                      (FirebaseAuthException e) {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Verification failed: ${e.message}');
+                                    setState(() {
+                                      _isOtpVerified = false;
+                                    });
+                                  },
+                                  codeSent: (String verificationId,
+                                      int? resendToken) {
+                                    Fluttertoast.showToast(
+                                        msg: 'OTP sent successfully');
+                                    setState(() {
+                                      this.verificationId = verificationId;
+                                    });
+                                  },
+                                  codeAutoRetrievalTimeout:
+                                      (String verificationId) {
+                                    Fluttertoast.showToast(
+                                        msg: 'OTP auto-retrieval timed out');
+                                    setState(() {
+                                      this.verificationId = verificationId;
+                                    });
+                                  },
+                                );
+                              } catch (e) {
+                                Fluttertoast.showToast(msg: 'Error: $e');
+                              }
                             }
                           },
                           child: CustomizedButton(
@@ -203,6 +325,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 _isOtpVerified = false;
                               });
                             }
+                          if (_otpController.text.isNotEmpty) {
+                            _verifyOtp();
                           }
                         },
                         child: CustomizedButton(
@@ -228,6 +352,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   Get.to(() => SignupInfofill(), transition: Transition.fade);
                 },
                 // : null,
+                onTap: _isOtpVerified
+                    ? () {
+                        Get.to(() => SignupInfofill(),
+                            transition: Transition.fade);
+                      }
+                    : null,
                 child: CustomizedButton(
                   title: 'Next',
                   colorButton: Color(constcolor.App_blue_color),
