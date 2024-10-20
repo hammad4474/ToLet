@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tolet/screens/tenant/bottom_navbar.dart';
 
 class FavoriteProperty extends StatefulWidget {
   const FavoriteProperty({super.key});
@@ -10,6 +11,12 @@ class FavoriteProperty extends StatefulWidget {
 }
 
 class _FavoritePropertyState extends State<FavoriteProperty> {
+  int _selectedIndex = 3;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -116,6 +123,10 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
                 style: TextStyle(fontSize: 16),
               ),
             ),
+      bottomNavigationBar: CustomtenantBottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }

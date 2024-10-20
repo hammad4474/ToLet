@@ -454,7 +454,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       ),
               ),
               // Property details
-              SizedBox(width: 18),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

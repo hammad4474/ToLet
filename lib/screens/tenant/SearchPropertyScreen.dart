@@ -45,7 +45,11 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Icon(Icons.search, color: Colors.black54),
+                child: Image.asset(
+                  'assets/icons/search-normal.png', // Replace with your actual asset path
+                  width: 24,
+                  height: 24,
+                ),
               ),
               Expanded(
                 child: TextField(
@@ -65,19 +69,30 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                   style: TextStyle(color: Colors.black),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.filter_list, color: Colors.black),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FilterScreen()),
-                  );
-                },
-              ),
             ],
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Image.asset(
+                'assets/icons/tune.png', // Replace with your actual custom icon asset
+                height: 40,
+                width: 40,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FilterScreen()),
+                );
+              },
+            ),
+          ),
+        ],
       ),
+
+
       body: Stack(
         children: [
           Image.asset(
@@ -93,8 +108,8 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
                   ),
                 ),
                 child: StreamBuilder<QuerySnapshot>(
@@ -127,7 +142,19 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text('Showing $matchCount results'),
+                          child:Row(
+                            children:[
+                            Text('Showing $matchCount results'),
+                          Spacer(),
+                              IconButton(
+                                icon: const Icon(Icons.sort, color: Colors.black),
+                                onPressed: () {
+
+                                },
+                              ),
+                              Text('Sort'),
+                    ],
+                          ),
                         ),
                         Expanded(
                           child: ListView.builder(

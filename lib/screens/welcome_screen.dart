@@ -26,6 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             // Top part with image and title
             Column(
               children: [
+                SizedBox(height: screenHeight * 0.05),
                 // House image
                 SizedBox(
                   height: screenHeight * 0.45,
