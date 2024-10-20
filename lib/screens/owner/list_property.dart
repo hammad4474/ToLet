@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
@@ -27,6 +28,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   String propertyTitle = '';
   String price = '';
   String? owner = '';
+  bool isLoading = false;
 
   File? _selectedImage;
 
@@ -125,6 +127,10 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       User? user = FirebaseAuth.instance.currentUser;
       owner = user.toString();
@@ -195,6 +201,10 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error saving property: $e')),
       );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -401,7 +411,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                       price = value;
                     },
                     decoration: InputDecoration(
-                      labelText: '600/ per day',
+                      labelText: '600/ per month',
                       labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       filled: true,
                       fillColor:
@@ -445,7 +455,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                       onTap: () => toggleSelection('Car Parking'),
                     ),
                     facilities(
-                      image: 'assets/icons/HOME.png',
+                      image: 'assets/icons/Vector (3).png',
                       text: 'Furnished',
                       isSelected: selectedFacilities.contains('Furnished'),
                       onTap: () => toggleSelection('Furnished'),
@@ -501,30 +511,33 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Column(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center, // Align to the left
-                      children: [
-                        // "Photos" label above the camera icon
-                        Text(
-                          'Photos',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/icons/upload.png'),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            // "Upload Property Pictures" on the left
-                            Text('Upload Property Pictures'),
-                          ],
-                        ),
-                      ],
-                    ),
+                    child: isLoading
+                        ? LoadingAnimationWidget.waveDots(
+                            color: Colors.black, size: 50)
+                        : Column(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, // Align to the left
+                            children: [
+                              // "Photos" label above the camera icon
+                              Text(
+                                'Photos',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset('assets/icons/upload.png'),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  // "Upload Property Pictures" on the left
+                                  Text('Upload Property Pictures'),
+                                ],
+                              ),
+                            ],
+                          ),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -600,8 +613,7 @@ class facilities extends StatelessWidget {
       onTap: onTap,
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(15), 
+          borderRadius: BorderRadius.circular(15),
         ),
         elevation: 3,
         shadowColor: Colors.black,

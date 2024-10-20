@@ -17,6 +17,7 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -124,7 +125,7 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
               ),
             ),
       bottomNavigationBar: CustomtenantBottomNavBar(
-        currentIndex: _selectedIndex,
+        currentIndex: 3,
         onTap: _onItemTapped,
       ),
     );

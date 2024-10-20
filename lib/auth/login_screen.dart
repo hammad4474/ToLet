@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tolet/auth/forgot_pasword.dart';
 import 'package:tolet/auth/signup_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
@@ -23,11 +24,15 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _isobsecureText = true;
+  bool isLoading = false;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
       try {
         UserCredential userCredential = await _auth.signInWithEmailAndPassword(
             email: _emailController.text.trim(),
@@ -78,6 +83,10 @@ class _LoginScreenState extends State<LoginScreen> {
         Fluttertoast.showToast(
             msg: 'Something went wrong. Please try again.',
             backgroundColor: Colors.red);
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
       }
     }
   }
@@ -250,21 +259,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: screenHeight * 0.04,
               ),
               Center(
-                child: InkWell(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      _login();
-                    }
-                  },
-                  child: CustomizedButton(
-                    title: 'Login',
-                    colorButton: Color(constcolor.App_blue_color),
-                    height: screenHeight * 0.07,
-                    widht: screenWidth * 0.7,
-                    colorText: Colors.white,
-                    fontSize: screenWidth * 0.045,
-                  ),
-                ),
+                child: isLoading
+                    ? LoadingAnimationWidget.inkDrop(
+                        color: Colors.black, size: 50)
+                    : InkWell(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            _login();
+                          }
+                        },
+                        child: CustomizedButton(
+                          title: 'Login',
+                          colorButton: Color(constcolor.App_blue_color),
+                          height: screenHeight * 0.07,
+                          widht: screenWidth * 0.7,
+                          colorText: Colors.white,
+                          fontSize: screenWidth * 0.045,
+                        ),
+                      ),
               ),
               SizedBox(
                 height: screenHeight * 0.15,

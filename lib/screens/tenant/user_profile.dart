@@ -136,7 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         await FirebaseAuth.instance.signOut();
 
                         // Clear all shared preferences
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
                         await prefs.clear();
 
                         Get.offAll(() => WelcomeScreen(),

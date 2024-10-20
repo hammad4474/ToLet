@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/favorite_property.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
+import 'package:tolet/screens/tenant/see_all_properties.dart';
 import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 //import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/tenant/user_profile.dart';
@@ -21,8 +22,7 @@ class CustomtenantBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.white, // Set the background color
-      selectedItemColor:
-      Color(0xff192747), // Set selected item color
+      selectedItemColor: Color(0xff192747), // Set selected item color
       unselectedItemColor: Colors.grey, // Set unselected item color
       type: BottomNavigationBarType.fixed, // Ensure all items are fixed
       currentIndex: currentIndex, // Track the current selected index
@@ -34,7 +34,7 @@ class CustomtenantBottomNavBar extends StatelessWidget {
 
             break;
           case 1:
-
+            Get.to(() => SeeAllProperties(), transition: Transition.fade);
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
             // Navigate to the Explore screen

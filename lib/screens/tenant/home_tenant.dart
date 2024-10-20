@@ -11,6 +11,7 @@ import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/screens/tenant/property_decorofcard.dart';
 import 'package:tolet/screens/tenant/property_detailscreen.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
+import 'package:tolet/screens/tenant/see_all_properties.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class HometenantScreen extends StatefulWidget {
@@ -292,7 +293,11 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                               color: Color(0xff747b7d)),
                                         ),
                                         TextButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Get.to(() => SeeAllProperties(),
+                                                  transition:
+                                                      Transition.leftToRight);
+                                            },
                                             child: Text(
                                               'see all',
                                               style: TextStyle(
@@ -339,7 +344,11 @@ class _HometenantScreenState extends State<HometenantScreen> {
                                               color: Color(0xff747b7d)),
                                         ),
                                         TextButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Get.to(() => SeeAllProperties(),
+                                                  transition:
+                                                      Transition.fadeIn);
+                                            },
                                             child: Text(
                                               'see all',
                                               style: TextStyle(

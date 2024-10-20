@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tolet/auth/signup_infoFill.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
@@ -23,6 +24,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String? email;
   String? verificationId;
   EmailOTP emailOTP = EmailOTP();
+  bool _isVerified = false;
 
   @override
   void initState() {
@@ -49,6 +51,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Future<void> _sendOtp() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isVerified = true;
+      });
       EmailOTP.config(
         appName: 'Tolet',
         otpType: OTPType.numeric,
@@ -60,17 +65,31 @@ class _SignupScreenState extends State<SignupScreen> {
 
       EmailOTP.sendOTP(email: _emailController.text);
 
+      setState(() {
+        _isVerified = false;
+      });
+
       Fluttertoast.showToast(
           msg: 'OTP sent successfully to ${_emailController.text}');
     }
   }
 
   Future<void> _verifyOtp() async {
+    setState(() {
+      _isVerified = true;
+    });
     if (EmailOTP.verifyOTP(otp: _otpController.text)) {
       Fluttertoast.showToast(msg: 'OTP verified successfully');
+      setState(() {
+        _isVerified = false;
+      });
+
       Get.to(() => SignupInfofill(), transition: Transition.fadeIn);
     } else {
       Fluttertoast.showToast(msg: 'Wrong OTP. Please try again.');
+      setState(() {
+        _isVerified = false;
+      });
     }
   }
 
@@ -282,14 +301,17 @@ class _SignupScreenState extends State<SignupScreen> {
                           //     }
                           //   }
                           // },
-                          child: CustomizedButton(
-                            title: 'Get Code',
-                            colorButton: Color(constcolor.App_blue_color),
-                            height: screenHeight * 0.06,
-                            widht: screenWidth * 0.4,
-                            colorText: Colors.white,
-                            fontSize: screenWidth * 0.04,
-                          ),
+                          child: _isVerified
+                              ? LoadingAnimationWidget.inkDrop(
+                                  color: Colors.black, size: 50)
+                              : CustomizedButton(
+                                  title: 'Get Code',
+                                  colorButton: Color(constcolor.App_blue_color),
+                                  height: screenHeight * 0.06,
+                                  widht: screenWidth * 0.4,
+                                  colorText: Colors.white,
+                                  fontSize: screenWidth * 0.04,
+                                ),
                         ),
                       ],
                     ),
@@ -297,19 +319,22 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: screenHeight * 0.08,
                     ),
                     Center(
-                      child: InkWell(
-                        onTap: _verifyOtp,
-                        // onTap:
-                        //     _otpController.text.isNotEmpty ? _verifyOtp : null,
-                        child: CustomizedButton(
-                          title: 'Verify',
-                          colorButton: Color(constcolor.App_blue_color),
-                          height: screenHeight * 0.06,
-                          widht: screenWidth * 0.85,
-                          colorText: Colors.white,
-                          fontSize: screenWidth * 0.045,
-                        ),
-                      ),
+                      child: _isVerified
+                          ? LoadingAnimationWidget.inkDrop(
+                              color: Colors.black, size: 50)
+                          : InkWell(
+                              onTap: _verifyOtp,
+                              // onTap:
+                              //     _otpController.text.isNotEmpty ? _verifyOtp : null,
+                              child: CustomizedButton(
+                                title: 'Verify',
+                                colorButton: Color(constcolor.App_blue_color),
+                                height: screenHeight * 0.06,
+                                widht: screenWidth * 0.85,
+                                colorText: Colors.white,
+                                fontSize: screenWidth * 0.045,
+                              ),
+                            ),
                     ),
                   ],
                 ),

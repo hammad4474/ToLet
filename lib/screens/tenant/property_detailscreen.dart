@@ -518,7 +518,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   if (facilities.contains('Car Parking'))
                     buildFacilityIcon('assets/icons/CAR.png', 'Car Parking'),
                   if (facilities.contains('Furnished'))
-                    buildFacilityIcon('assets/icons/HOME.png', 'Furnished'),
+                    buildFacilityIcon(
+                        'assets/icons/Vector (3).png', 'Furnished'),
                   if (facilities.contains('Gym Fit'))
                     buildFacilityIcon('assets/icons/GYM.png', 'Gym Fit'),
                   if (facilities.contains('Kitchen'))

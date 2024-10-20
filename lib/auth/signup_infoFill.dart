@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 
@@ -86,6 +87,9 @@ class _SignupInfofillState extends State<SignupInfofill> {
 
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       try {
         UserCredential userCredential =
             await _auth.createUserWithEmailAndPassword(
@@ -107,6 +111,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
         }
       } catch (e) {
         Fluttertoast.showToast(msg: 'Failed', backgroundColor: Colors.red);
+      } finally {
+        _isLoading = false;
       }
     }
   }
@@ -128,13 +134,16 @@ class _SignupInfofillState extends State<SignupInfofill> {
               Center(
                 child: Text(
                   'Congratulations',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.06),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * 0.06),
                 ),
               ),
               Center(
                 child: Text(
                   'on verifying the email belongs to you',
-                  style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.04),
+                  style: TextStyle(
+                      color: Colors.black, fontSize: screenWidth * 0.04),
                 ),
               ),
               SizedBox(height: screenHeight * 0.04),
@@ -330,21 +339,24 @@ class _SignupInfofillState extends State<SignupInfofill> {
               ),
               SizedBox(height: screenHeight * 0.04),
               Center(
-                child: InkWell(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      print('Form is valid');
-                      _signUp();
-                    }
-                  },
-                  child: CustomizedButton(
-                      title: 'Submit',
-                      colorButton: Color(constcolor.App_blue_color),
-                      height: 44,
-                      widht: screenWidth * 0.8,
-                      colorText: Colors.white,
-                      fontSize: screenWidth * 0.05),
-                ),
+                child: _isLoading
+                    ? LoadingAnimationWidget.inkDrop(
+                        color: Colors.black, size: 50)
+                    : InkWell(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            print('Form is valid');
+                            _signUp();
+                          }
+                        },
+                        child: CustomizedButton(
+                            title: 'Submit',
+                            colorButton: Color(constcolor.App_blue_color),
+                            height: 44,
+                            widht: screenWidth * 0.8,
+                            colorText: Colors.white,
+                            fontSize: screenWidth * 0.05),
+                      ),
               ),
               SizedBox(height: screenHeight * 0.03),
               Center(
