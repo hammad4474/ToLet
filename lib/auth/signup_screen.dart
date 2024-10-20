@@ -1,8 +1,8 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_field/phone_number.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:tolet/auth/signup_infoFill.dart';
 import 'package:tolet/widgets/constcolor.dart';
@@ -18,56 +18,93 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _phoneController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   TextEditingController _otpController = TextEditingController();
-
-  String? fullPhoneNumber;
+  String? email;
   String? verificationId;
-  bool _isOtpVerified = false;
+  EmailOTP emailOTP = EmailOTP();
 
   @override
   void initState() {
     super.initState();
-    _phoneController.clear();
+    _emailController.clear();
   }
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _emailController.dispose();
     _otpController.dispose();
     super.dispose();
   }
 
-  String? _phoneValidator(String? value) {
+  String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your phone number';
+      return 'Please enter your email';
     }
-    if (!RegExp(r'^\+\d{1,3}\d{4,14}$').hasMatch(value)) {
-      return 'Please enter a valid phone number';
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      return 'Please enter a valid email';
     }
     return null;
   }
 
-  Future<void> _verifyOtp() async {
-    if (verificationId != null) {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId!,
-        smsCode: _otpController.text,
+  Future<void> _sendOtp() async {
+    if (_formKey.currentState!.validate()) {
+      EmailOTP.config(
+        appName: 'Tolet',
+        otpType: OTPType.numeric,
+        expiry: 30000,
+        emailTheme: EmailTheme.v6,
+        appEmail: 'Tolet@company',
+        otpLength: 6,
       );
 
-      try {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        setState(() {
-          _isOtpVerified = true;
-        });
-        Fluttertoast.showToast(msg: 'OTP verified successfully');
-      } catch (e) {
-        Fluttertoast.showToast(msg: 'Wrong OTP. Please try again.');
-        setState(() {
-          _isOtpVerified = false;
-        });
-      }
+      EmailOTP.sendOTP(email: _emailController.text);
+
+      Fluttertoast.showToast(
+          msg: 'OTP sent successfully to ${_emailController.text}');
     }
   }
+
+  Future<void> _verifyOtp() async {
+    if (EmailOTP.verifyOTP(otp: _otpController.text)) {
+      Fluttertoast.showToast(msg: 'OTP verified successfully');
+      Get.to(() => SignupInfofill(), transition: Transition.fadeIn);
+    } else {
+      Fluttertoast.showToast(msg: 'Wrong OTP. Please try again.');
+    }
+  }
+
+  // String? _phoneValidator(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Please enter your phone number';
+  //   }
+  //   if (!RegExp(r'^\+\d{1,3}\d{4,14}$').hasMatch(value)) {
+  //     return 'Please enter a valid phone number';
+  //   }
+  //   return null;
+  // }
+
+  // Future<void> _verifyOtp() async {
+  //   if (verificationId != null) {
+  //     PhoneAuthCredential credential = PhoneAuthProvider.credential(
+  //       verificationId: verificationId!,
+  //       smsCode: _otpController.text,
+  //     );
+
+  //     try {
+  //       await FirebaseAuth.instance.signInWithCredential(credential);
+  //       setState(() {
+  //         _isOtpVerified = true;
+  //       });
+  //       Fluttertoast.showToast(msg: 'OTP verified successfully');
+  //     } catch (e) {
+  //       Fluttertoast.showToast(msg: 'Wrong OTP. Please try again.');
+  //       setState(() {
+  //         _isOtpVerified = false;
+  //       });
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +156,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
-                    IntlPhoneField(
-                      controller: _phoneController,
+                    TextFormField(
+                      controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Your Phone Number',
+                        labelText: 'Your Email',
                         filled: true,
                         fillColor: Color(0xfff2f3f3),
                         contentPadding: EdgeInsets.symmetric(
@@ -137,11 +174,34 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      initialCountryCode: 'PK',
-                      onChanged: (phone) {
-                        fullPhoneNumber = phone.completeNumber;
+                      validator: _emailValidator,
+                      onChanged: (value) {
+                        email = value;
                       },
                     ),
+                    // IntlPhoneField(
+                    //   controller: _phoneController,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Your Phone Number',
+                    //     filled: true,
+                    //     fillColor: Color(0xfff2f3f3),
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //         vertical: screenHeight * 0.02,
+                    //         horizontal: screenWidth * 0.03),
+                    //     enabledBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide: BorderSide.none,
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide: BorderSide.none,
+                    //     ),
+                    //   ),
+                    //   initialCountryCode: 'PK',
+                    //   onChanged: (phone) {
+                    //     fullPhoneNumber = phone.completeNumber;
+                    //   },
+                    // ),
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),
@@ -174,54 +234,54 @@ class _SignupScreenState extends State<SignupScreen> {
                           width: screenWidth * 0.03,
                         ),
                         InkWell(
-                          onTap: () async {
-                            if (_formKey.currentState!.validate()) {
-                              try {
-                                await FirebaseAuth.instance.verifyPhoneNumber(
-                                  phoneNumber: fullPhoneNumber!,
-                                  timeout: Duration(seconds: 60),
-                                  verificationCompleted:
-                                      (PhoneAuthCredential credential) async {
-                                    await FirebaseAuth.instance
-                                        .signInWithCredential(credential);
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Phone number verified automatically.');
-                                    setState(() {
-                                      _isOtpVerified = true;
-                                    });
-                                  },
-                                  verificationFailed:
-                                      (FirebaseAuthException e) {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Verification failed: ${e.message}');
-                                    setState(() {
-                                      _isOtpVerified = false;
-                                    });
-                                  },
-                                  codeSent: (String verificationId,
-                                      int? resendToken) {
-                                    Fluttertoast.showToast(
-                                        msg: 'OTP sent successfully');
-                                    setState(() {
-                                      this.verificationId = verificationId;
-                                    });
-                                  },
-                                  codeAutoRetrievalTimeout:
-                                      (String verificationId) {
-                                    Fluttertoast.showToast(
-                                        msg: 'OTP auto-retrieval timed out');
-                                    setState(() {
-                                      this.verificationId = verificationId;
-                                    });
-                                  },
-                                );
-                              } catch (e) {
-                                Fluttertoast.showToast(msg: 'Error: $e');
-                              }
-                            }
-                          },
+                          onTap: _sendOtp,
+                          //   if (_formKey.currentState!.validate()) {
+                          //     try {
+                          //       await FirebaseAuth.instance.verifyPhoneNumber(
+                          //         phoneNumber: fullPhoneNumber!,
+                          //         timeout: Duration(seconds: 60),
+                          //         verificationCompleted:
+                          //             (PhoneAuthCredential credential) async {
+                          //           await FirebaseAuth.instance
+                          //               .signInWithCredential(credential);
+                          //           Fluttertoast.showToast(
+                          //               msg:
+                          //                   'Phone number verified automatically.');
+                          //           setState(() {
+                          //             _isOtpVerified = true;
+                          //           });
+                          //         },
+                          //         verificationFailed:
+                          //             (FirebaseAuthException e) {
+                          //           Fluttertoast.showToast(
+                          //               msg:
+                          //                   'Verification failed: ${e.message}');
+                          //           setState(() {
+                          //             _isOtpVerified = false;
+                          //           });
+                          //         },
+                          //         codeSent: (String verificationId,
+                          //             int? resendToken) {
+                          //           Fluttertoast.showToast(
+                          //               msg: 'OTP sent successfully');
+                          //           setState(() {
+                          //             this.verificationId = verificationId;
+                          //           });
+                          //         },
+                          //         codeAutoRetrievalTimeout:
+                          //             (String verificationId) {
+                          //           Fluttertoast.showToast(
+                          //               msg: 'OTP auto-retrieval timed out');
+                          //           setState(() {
+                          //             this.verificationId = verificationId;
+                          //           });
+                          //         },
+                          //       );
+                          //     } catch (e) {
+                          //       Fluttertoast.showToast(msg: 'Error: $e');
+                          //     }
+                          //   }
+                          // },
                           child: CustomizedButton(
                             title: 'Get Code',
                             colorButton: Color(constcolor.App_blue_color),
@@ -238,8 +298,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     Center(
                       child: InkWell(
-                        onTap:
-                            _otpController.text.isNotEmpty ? _verifyOtp : null,
+                        onTap: _verifyOtp,
+                        // onTap:
+                        //     _otpController.text.isNotEmpty ? _verifyOtp : null,
                         child: CustomizedButton(
                           title: 'Verify',
                           colorButton: Color(constcolor.App_blue_color),
@@ -257,12 +318,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: screenHeight * 0.1,
               ),
               InkWell(
-                onTap: _isOtpVerified
-                    ? () {
-                        Get.to(() => SignupInfofill(),
-                            transition: Transition.fade);
-                      }
-                    : null,
+                onTap: () {
+                  Get.to(() => SignupInfofill(), transition: Transition.fadeIn);
+                },
+                // onTap: _isOtpVerified
+                //     ? () {
+                //         Get.to(() => SignupInfofill(),
+                //             transition: Transition.fade);
+                //       }
+                //     : null,
                 child: CustomizedButton(
                   title: 'Next',
                   colorButton: Color(constcolor.App_blue_color),

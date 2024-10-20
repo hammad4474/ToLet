@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
@@ -132,10 +133,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WelcomeScreen()));
+                        Get.offAll(() => WelcomeScreen(),
+                            transition: Transition.fadeIn);
                       } catch (e) {
                         print("Error signing out: $e");
                       }

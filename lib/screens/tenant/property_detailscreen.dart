@@ -8,6 +8,7 @@ import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/description.dart';
 import 'package:tolet/screens/tenant/galler_pd.dart';
 import 'package:tolet/screens/tenant/reveiw_pd.dart';
+import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
   final String title;
@@ -418,7 +419,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => ChatScreen(), transition: Transition.fade);
+                  Get.to(() => tenantChatScreen(), transition: Transition.fade);
                 },
                 child: Container(
                     height: 40,
