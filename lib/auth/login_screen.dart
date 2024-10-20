@@ -9,6 +9,7 @@ import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -41,6 +42,11 @@ class _LoginScreenState extends State<LoginScreen> {
           Map<String, dynamic> userData =
               userDoc.data() as Map<String, dynamic>;
           String userType = userData['userType'];
+
+          // Save userType and login state to SharedPreferences
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true);
+          await prefs.setString('userType', userType);
 
           if (userType == 'Tenant') {
             Get.to(() => HometenantScreen(), transition: Transition.fade);

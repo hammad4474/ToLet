@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
@@ -133,6 +134,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
+
+                        // Clear all shared preferences
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        await prefs.clear();
+
                         Get.offAll(() => WelcomeScreen(),
                             transition: Transition.fadeIn);
                       } catch (e) {

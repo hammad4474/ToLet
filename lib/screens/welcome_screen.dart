@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tolet/auth/login_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
@@ -80,7 +81,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Column(
               children: [
                 InkWell(
-                  onTap: () {
+                  onTap: ()  async {
+                    // Set isFirstTime to false in SharedPreferences
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('isFirstTime', false);
+
+                    // Navigate to the LoginScreen
                     Get.to(() => LoginScreen(), transition: Transition.fadeIn);
                   },
                   child: CustomizedButton(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
 import 'package:tolet/screens/owner/dashboard.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
@@ -139,6 +140,11 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
                     onPressed: () async {
                       try {
                         await FirebaseAuth.instance.signOut();
+
+                        // Clear all shared preferences
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        await prefs.clear();
+
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
