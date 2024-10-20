@@ -399,7 +399,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
   double iconSize = 24.0; // Standard icon size
 
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.all(12.0),
     child: GestureDetector(
       onTap: () {
         Get.to(
@@ -454,7 +454,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       ),
               ),
               // Property details
-              SizedBox(width: 12),
+              SizedBox(width: 6),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
