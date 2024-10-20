@@ -29,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 SizedBox(height: screenHeight * 0.05),
                 // House image
                 SizedBox(
-                  height: screenHeight * 0.45,
+                  height: screenHeight * 0.35,
                   width: double
                       .infinity, // House image height is around 25% of screen height
                   child: Image.asset(
