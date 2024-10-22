@@ -179,156 +179,316 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
   }
 }
 
-class SearchPropertyCard extends StatelessWidget {
+class SearchPropertyCard extends StatefulWidget {
   final QueryDocumentSnapshot property;
 
-  const SearchPropertyCard({Key? key, required this.property})
-      : super(key: key);
+  const SearchPropertyCard({Key? key, required this.property}) : super(key: key);
+
+  @override
+  _SearchPropertyCardState createState() => _SearchPropertyCardState();
+}
+
+class _SearchPropertyCardState extends State<SearchPropertyCard> {
+  bool onTip = false;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    double cardHeight = 180;
+    double cardWidth = screenWidth * 1.0; // Adjust for responsiveness
+    double imageWidth = screenWidth * 0.3; // Adjust based on screen width
+    double iconSize = 22.0;
+    //bool isVerified = widget.property.exists && widget.property['isVerified'] != null ? widget.property['isVerified'] : false;
 
-    return GestureDetector(
-      onTap: () {
-        Get.to(
-            () => PropertyDetailsScreen(
-                  propertyId: property.id,
-                  title: property['propertyTitle'] ?? 'Unknown Title',
-                  location: 'Unkown Location',
-                  price: property['price'] ?? 'Unknown Price',
-                  imageURL: property['imageURL'] ?? '',
-                  area: 'Unknown Area',
-                  bhk: property['bhk'] ?? 'Unknown Rooms',
-                  isVerified: false,
-                  owner: property['owner'] ?? 'Unknown Owner',
-                ),
-            transition: Transition.leftToRightWithFade);
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 5,
+
+    // Fetch dynamic verification status
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+      child: GestureDetector(
+        onTap: () {
+          Get.to(
+                () => PropertyDetailsScreen(
+              propertyId: widget.property.id,
+              title: widget.property['propertyTitle'] ?? 'Unknown Title',
+              location: widget.property['location'] ?? 'Unknown Location',
+              price: widget.property['price'] ?? 'Unknown Price',
+              imageURL: widget.property['imageURL'] ?? '',
+              area: widget.property['area'] ?? 'Unknown Area',
+              bhk: widget.property['bhk'] ?? 'Unknown Rooms',
+              isVerified: false,
+              owner: widget.property['owner'] ?? 'Unknown Owner',
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // Left Section: Image
-            Container(
-              width: screenWidth * 0.3,
-              height: 189,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.zero,
-                    bottomLeft: Radius.circular(8),
-                    bottomRight: Radius.zero),
-                image: DecorationImage(
-                  image: NetworkImage(property['imageURL'] ?? ''),
-                  fit: BoxFit.cover,
-                ),
-              ),
+            transition: Transition.leftToRightWithFade,
+          );
+        },
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          elevation: 3,
+          shadowColor: Colors.black,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
             ),
-            const SizedBox(width: 24),
-            // Right Section: Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Rating
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/icons/rating.png',
-                        height: 16,
-                        width: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      // Text(
-                      //   '${property['rating'] ?? '0.0'}',
-                      //   style: const TextStyle(color: Colors.grey),
-                      // ),
-                    ],
+            height: cardHeight,
+            width: cardWidth,
+            child: Row(
+              children: [
+                // Property Image
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
                   ),
-                  const SizedBox(height: 10),
-                  // Property Title
-                  Text(
-                    property['propertyTitle'] ?? 'Unknown Title',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                  child: widget.property['imageURL'] != null
+                      ? Image.network(
+                    widget.property['imageURL'],
+                    fit: BoxFit.cover,
+                    height: cardHeight,
+                    width: imageWidth,
+                  )
+                      : Image.asset(
+                    'assets/icons/wifi.png',
+                    fit: BoxFit.cover,
+                    height: cardHeight,
+                    width: imageWidth,
+                  ),
+                ),
+                // Property Details
+                SizedBox(width: 8),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title and Verification Status
+                    Row(
+                       children: [
+                         Image.asset(
+                           'assets/icons/rating.png',
+                           height: 16,
+                           width: 16,
+                         ),
+                         SizedBox(width: 4),
+                         // Text(
+                         //   '${property['rating'] ?? '0.0'}',
+                         //   style: const TextStyle(color: Colors.grey),
+                         // ),
+                       ],
+                     ),
+                        SizedBox(height: 10),
+                      Text(
+                        widget.property['propertyTitle'] ?? 'No Title',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  // City
-                  Text(
-                    'Unknown City',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Property Details
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/icons/ic_bed.png',
-                        height: 16,
-                        width: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${property['bhk'] ?? '0'}',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                      const SizedBox(width: 8),
-                      Image.asset(
-                        'assets/icons/ic_area.png',
-                        height: 16,
-                        width: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${'28 m²'}',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  // Price
-                  Row(
-                    children: [
-                      Text(
-                        property['price'] ?? 'Unknown Price',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                        SizedBox(height: 4),
+                        // Location
+                        Text(
+                            'Unknown City',
+                          style: TextStyle(color: Color(0xff7d7f88), fontSize: 14),
                         ),
-                      ),
-                      const Spacer(),
-                      Image.asset(
-                        'assets/icons/verified.png',
-                        height: 20,
-                        width: 20,
-                      ),
-                    ],
+                        SizedBox(height: 4),
+                        // Icons and Details Row
+                        Row(
+                          children: [
+                            Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
+                            SizedBox(width: 4),
+                            Text(
+                              '${widget.property['bhk'] ?? '0'}',
+                              style: TextStyle(color: Color(0xff7d7f88)),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(Icons.square_foot, color: Color(0xff7d7f88), size: iconSize),
+                            SizedBox(width: 4),
+                            Text(
+                                '${'28 m²'}',
+                              style: TextStyle(color: Color(0xff7d7f88)),
+                            ),
+                          ],
+                        ),
+
+                        // Price and Verification Text
+                        // Owner and Favorite Icon Row
+                        Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                            widget.property['price']+'/ month' ?? 'Unknown Price' +'/ month',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  onTip = !onTip; // Toggle the value of onTip
+                                });
+                              },
+                              child: Icon(
+                                onTip ? Icons.favorite : Icons.favorite_border, // Show appropriate icon
+                                color: onTip ? Colors.red : Colors.grey, // Change color based on status
+                                size: iconSize,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
+    // return GestureDetector(
+    //   onTap: () {
+    //     Get.to(
+    //         () => PropertyDetailsScreen(
+    //               propertyId: property.id,
+    //               title: property['propertyTitle'] ?? 'Unknown Title',
+    //               location: 'Unkown Location',
+    //               price: property['price'] ?? 'Unknown Price',
+    //               imageURL: property['imageURL'] ?? '',
+    //               area: 'Unknown Area',
+    //               bhk: property['bhk'] ?? 'Unknown Rooms',
+    //               isVerified: false,
+    //               owner: property['owner'] ?? 'Unknown Owner',
+    //             ),
+    //         transition: Transition.leftToRightWithFade);
+    //   },
+    //   child: Container(
+    //     margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+    //     decoration: BoxDecoration(
+    //       color: Colors.white,
+    //       borderRadius: BorderRadius.circular(16),
+    //       boxShadow: [
+    //         BoxShadow(
+    //           color: Colors.grey.withOpacity(0.3),
+    //           spreadRadius: 2,
+    //           blurRadius: 5,
+    //         ),
+    //       ],
+    //     ),
+    //     child: Row(
+    //       children: [
+    //         // Left Section: Image
+    //         Container(
+    //           width: screenWidth * 0.3,
+    //           height: 189,
+    //           decoration: BoxDecoration(
+    //             borderRadius: BorderRadius.only(
+    //                 topLeft: Radius.circular(8),
+    //                 topRight: Radius.zero,
+    //                 bottomLeft: Radius.circular(8),
+    //                 bottomRight: Radius.zero),
+    //             image: DecorationImage(
+    //               image: NetworkImage(property['imageURL'] ?? ''),
+    //               fit: BoxFit.cover,
+    //             ),
+    //           ),
+    //         ),
+    //         const SizedBox(width: 24),
+    //         // Right Section: Details
+    //         Expanded(
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: [
+    //               // Rating
+    //               Row(
+    //                 children: [
+    //                   Image.asset(
+    //                     'assets/icons/rating.png',
+    //                     height: 16,
+    //                     width: 16,
+    //                   ),
+    //                   const SizedBox(width: 4),
+    //                   // Text(
+    //                   //   '${property['rating'] ?? '0.0'}',
+    //                   //   style: const TextStyle(color: Colors.grey),
+    //                   // ),
+    //                 ],
+    //               ),
+    //               const SizedBox(height: 10),
+    //               // Property Title
+    //               Text(
+    //                 property['propertyTitle'] ?? 'Unknown Title',
+    //                 style: const TextStyle(
+    //                   fontSize: 16,
+    //                   fontWeight: FontWeight.bold,
+    //                   color: Colors.black87,
+    //                 ),
+    //               ),
+    //               const SizedBox(height: 10),
+    //               // City
+    //               Text(
+    //                 'Unknown City',
+    //                 style: const TextStyle(
+    //                   fontSize: 14,
+    //                   color: Colors.grey,
+    //                 ),
+    //               ),
+    //               const SizedBox(height: 10),
+    //               // Property Details
+    //               Row(
+    //                 children: [
+    //                   Image.asset(
+    //                     'assets/icons/ic_bed.png',
+    //                     height: 16,
+    //                     width: 16,
+    //                   ),
+    //                   const SizedBox(width: 4),
+    //                   Text(
+    //                     '${property['bhk'] ?? '0'}',
+    //                     style: const TextStyle(color: Colors.grey),
+    //                   ),
+    //                   const SizedBox(width: 8),
+    //                   Image.asset(
+    //                     'assets/icons/ic_area.png',
+    //                     height: 16,
+    //                     width: 16,
+    //                   ),
+    //                   const SizedBox(width: 4),
+    //                   Text(
+    //                     '${'28 m²'}',
+    //                     style: const TextStyle(color: Colors.grey),
+    //                   ),
+    //                 ],
+    //               ),
+    //               const SizedBox(height: 8),
+    //               // Price
+    //               Row(
+    //                 children: [
+    //                   Text(
+    //                     property['price'] ?? 'Unknown Price',
+    //                     style: const TextStyle(
+    //                       fontSize: 16,
+    //                       fontWeight: FontWeight.bold,
+    //                       color: Colors.black87,
+    //                     ),
+    //                   ),
+    //                   const Spacer(),
+    //                   Image.asset(
+    //                     'assets/icons/verified.png',
+    //                     height: 20,
+    //                     width: 20,
+    //                   ),
+    //                 ],
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
+
