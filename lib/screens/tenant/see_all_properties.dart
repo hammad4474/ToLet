@@ -49,13 +49,34 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Properties',
-          style: TextStyle(color: Color(0xff1a2847)),
-        ),
+  appBar: AppBar(
+    title: Text(
+      'See all properties',
+      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black), // Ensure the text is black
+    ),
+    centerTitle: true,
+    elevation: 0,
+    backgroundColor: Colors.white, // Background is white
+    leading: IconButton(
+      icon: Icon(
+        Icons.arrow_back,
+        color: Colors.black, // Icon color must be black to stand out on white
+        size: 35,
       ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    ),
+    actions: [
+      IconButton(
+        icon: Icon(Icons.menu, color: Colors.black), // Ensure menu icon is black
+        onPressed: () {},
+      ),
+    ],
+  ), 
       body: Container(
         color: Colors.white,
         child: Column(
@@ -83,19 +104,25 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     List<Map<String, dynamic>> properties = snapshot.data!;
 
-                    return GridView.builder(
-                      padding: const EdgeInsets.all(10),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // 2 properties per row
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio:
-                            0.75, // Adjust the ratio to fit the cards
-                      ),
-                      itemCount: properties.length,
-                      itemBuilder: (context, index) {
-                        final property = properties[index];
-                        return buildPropertyCard(context, property);
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        int crossAxisCount = screenWidth < 600 ? 2 : 3;
+                        double childAspectRatio = screenWidth < 600 ? 0.75 : 0.8;
+
+                        return GridView.builder(
+                          padding: const EdgeInsets.all(10),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount, // Adjusted dynamically
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: childAspectRatio, // Adjusted ratio
+                          ),
+                          itemCount: properties.length,
+                          itemBuilder: (context, index) {
+                            final property = properties[index];
+                            return buildPropertyCard(context, property);
+                          },
+                        );
                       },
                     );
                   } else {
@@ -115,7 +142,6 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
 
 Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
   double cardHeight = 250;
-  double imageWidth = 108;
   double iconSize = 24.0;
 
   return GestureDetector(
@@ -153,7 +179,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                   ? Image.network(
                       property['imageURL'],
                       fit: BoxFit.fill,
-                      height: 120,
+                      height: 150,
                       width: double.infinity,
                     )
                   : Image.asset(

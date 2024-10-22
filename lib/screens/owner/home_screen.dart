@@ -215,39 +215,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 // Property ListView
-                Expanded(
-                  child: ListView(
-                    children: [
-                      _buildPropertyCard(
-                        onTap: () {
-                          Get.to(() => ListPropertyScreen(),
-                              transition: Transition.fade);
-                        },
-                        context: context,
-                        imageUrl: 'assets/images/home0.png',
-                        // Replace with actual image
-                        title: 'Want to host your new place?',
-                        description:
-                            'Post and manage rental listings & generate revenue from both long-term leases and daily rentals.',
-                        buttonText: 'List New Property',
-                      ),
-                      SizedBox(height: 10), // Space between cards
-                      _buildPropertyCard(
-                        onTap: () {
-                          Get.to(() => PropertiesPanel(),
-                              transition: Transition.fade);
-                        },
-                        context: context,
-                        imageUrl: 'assets/images/home1.png',
-                        // Replace with actual image
-                        title: 'Earn Daily Income',
-                        description:
-                            'Rent out your property for short-term stays and start earning daily. Manage bookings, track earnings, and maximize your revenue.',
-                        buttonText: 'See Your Property',
-                      ),
-                    ],
-                  ),
-                ),
+               Expanded(
+  child: ListView(
+    padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.05,
+        vertical: MediaQuery.of(context).size.height * 0.02), // Added vertical padding to ensure space
+    children: [
+      _buildPropertyCard(
+        onTap: () {
+          Get.to(() => ListPropertyScreen(), transition: Transition.fade);
+        },
+        context: context,
+        imageUrl: 'assets/images/home0.png', // Replace with actual image
+        title: 'Want to host your new place?',
+        description:
+            'Post and manage rental listings & generate revenue from both long-term leases and daily rentals.',
+        buttonText: 'List New Property',
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.02), // Responsive space between cards
+      _buildPropertyCard(
+        onTap: () {
+          Get.to(() => PropertiesPanel(), transition: Transition.fade);
+        },
+        context: context,
+        imageUrl: 'assets/images/home1.png', // Replace with actual image
+        title: 'Earn Daily Income',
+        description:
+            'Rent out your property for short-term stays and start earning daily. Manage bookings, track earnings, and maximize your revenue.',
+        buttonText: 'See Your Property',
+      ),
+    ],
+  ),
+),
+
               ],
             ),
           ),
