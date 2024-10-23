@@ -23,13 +23,18 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
 
   Future<List<Map<String, dynamic>>> fetchAllProperties() async {
     try {
-      // Fetch all properties from the 'propertiesAll' collection
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance.collection('propertiesAll').get();
 
       List<Map<String, dynamic>> properties = snapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         data['id'] = doc.id;
+
+        if (data['imageURLs'] is List) {
+          data['imageURLs'] = List<String>.from(data['imageURLs']);
+        } else {
+          data['imageURLs'] = [];
+        }
 
         return data;
       }).toList();
@@ -152,7 +157,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property, do
             price: property['price'] ?? 'Unknown Price',
             area: property['area'] ?? 'Unknown Area',
             bhk: property['bhk'] ?? 'Unknown BHK',
-            imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
+            imageURL: property['imageURLs'][0] ?? 'assets/icons/wifi.png',
             isVerified: true, // Assuming properties are verified
             owner: property['owner'],
             propertyId: property['id'] ?? 'Unknown id',
@@ -175,9 +180,9 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property, do
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: property['imageURL'] != null
+              child: property['imageURLs'] != null
                   ? Image.network(
-                      property['imageURL'],
+                      property['imageURLs'][0],
                       fit: BoxFit.fill,
                       height: 110,
                       width: double.infinity,

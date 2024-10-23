@@ -68,7 +68,7 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: Image.network(
-                                favorite['imageURL'],
+                                favorite['imageURLs'],
                                 height: 80,
                                 width: 80,
                                 fit: BoxFit.cover,

@@ -399,9 +399,9 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
   double screenWidth = MediaQuery.of(context).size.width;
 
   double cardWidth = screenWidth < 450 ? screenWidth * 0.9 : screenWidth * 0.9;
-  double cardHeight = 180; 
+  double cardHeight = 180;
   double imageWidth = screenWidth * 0.3;
-  double iconSize = 22.0; 
+  double iconSize = 22.0;
 
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -414,7 +414,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
             price: property['price'] ?? 'Unknown Price',
             area: property['area'] ?? 'Unknown Area',
             bhk: property['bhk'] ?? 'Unknown BHK',
-            imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
+            imageURL: property['imageURLs'][0] ?? 'assets/icons/wifi.png',
             isVerified: isVerified,
             owner: property['owner'],
             propertyId: property['id'] ?? 'Unknown id',
@@ -445,9 +445,9 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                   topLeft: Radius.circular(15),
                   bottomLeft: Radius.circular(15),
                 ),
-                child: property['imageURL'] != null
+                child: property['imageURLs'] != null
                     ? Image.network(
-                        property['imageURL'],
+                        property['imageURLs'][0],
                         fit: BoxFit.cover,
                         height: cardHeight,
                         width: imageWidth,

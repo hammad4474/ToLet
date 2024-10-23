@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/owner_property_detail.dart';
 import 'package:tolet/screens/tenant/bottom_navbar.dart';
 import 'package:tolet/screens/tenant/listview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,6 +22,8 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
   final User? user = FirebaseAuth.instance.currentUser;
   late Future<List<Map<String, dynamic>>> userProperties;
 
+  String username = '';
+
   @override
   void initState() {
     super.initState();
@@ -36,9 +39,12 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
             .collection('properties')
             .get();
 
-        List<Map<String, dynamic>> properties = snapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
+        List<Map<String, dynamic>> properties = snapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          data['id'] = doc.id;
+
+          return data;
+        }).toList();
 
         print('Fetched properties: $properties'); // Debugging line
 
@@ -223,100 +229,123 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
 
   return Padding(
     padding: const EdgeInsets.all(8.0),
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 3,
-      shadowColor: Colors.black,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
+    child: GestureDetector(
+      onTap: () {
+        Get.to(
+          () => OwnerPropertyDetailScreen(
+            title: property['propertyTitle'] ?? 'No Title',
+            price: property['price'] ?? 'Unknown Price',
+            location: property['location'] ?? 'Unknown Location',
+            area: property['area'] ?? 'Unknown Area',
+            bhk: property['bhk'].toString(),
+            imageURL: property['imageURLs'] != null &&
+                    property['imageURLs'].isNotEmpty
+                ? property['imageURLs'][0]
+                : '',
+            isVerified: isVerified,
+            owner: property['firstname'] ?? 'Unknown Owner',
+            propertyId: property['propertyId'] ?? '',
+          ),
+          transition: Transition.fadeIn,
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        height: 200,
-        width: 400,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            property['imageURL'] != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomLeft: Radius.circular(15)),
-                    child: Image.network(
-                      property['imageURL'],
-                      fit: BoxFit.cover,
-                      height: 250,
-                      width: 110,
+        elevation: 3,
+        shadowColor: Colors.black,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          height: 200,
+          width: 400,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              property['imageURLs'] != null && property['imageURLs'].isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15)),
+                      child: Image.network(
+                        property['imageURLs'][0],
+                        fit: BoxFit.cover,
+                        height: 250,
+                        width: 110,
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15)),
+                      child: Image.asset(
+                        'assets/icons/wifi.png',
+                        height: 250,
+                      ),
                     ),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomLeft: Radius.circular(15)),
-                    child: Image.asset(
-                      'assets/icons/wifi.png',
-                      height: 250,
-                    ),
+              SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    property['propertyTitle'] ?? 'No Title',
+                    style: TextStyle(fontSize: 18),
                   ),
-            SizedBox(width: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
-                Text(
-                  property['propertyTitle'] ?? 'No Title',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 10),
-                Text(property['location'] ?? 'Unknown Location',
-                    style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.bed),
-                    SizedBox(width: 5),
-                    Text('${property['bhk']}'),
-                    SizedBox(width: 10),
-                    Icon(Icons.house),
-                    SizedBox(width: 5),
-                    Text('${property['area'] ?? 'Unknown Area'} m²'),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Text('${property['price']}'),
-                    Text(' / month'),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text(
-                  isVerified ? 'Verified' : 'Not Verified',
-                  style: TextStyle(
-                      color: isVerified ? Colors.green : Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ],
-            ),
-            SizedBox(width: 20),
-            Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Icon(
-                  isVerified ? Icons.verified_user : Icons.not_interested_sharp,
-                  color: isVerified ? Colors.green : Colors.red,
-                ),
-              ],
-            ),
-          ],
+                  SizedBox(height: 10),
+                  Text(property['location'] ?? 'Unknown Location',
+                      style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.bed),
+                      SizedBox(width: 5),
+                      Text('${property['bhk']}'),
+                      SizedBox(width: 10),
+                      Icon(Icons.house),
+                      SizedBox(width: 5),
+                      Text('${property['area'] ?? 'Unknown Area'} m²'),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text('${property['price']}'),
+                      Text(' / month'),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    isVerified ? 'Verified' : 'Not Verified',
+                    style: TextStyle(
+                        color: isVerified ? Colors.green : Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //   Text('property owned by ${property['firstname']}'),
+                ],
+              ),
+              SizedBox(width: 20),
+              Column(
+                children: [
+                  SizedBox(height: 20),
+                  Icon(
+                    isVerified
+                        ? Icons.verified_user
+                        : Icons.not_interested_sharp,
+                    color: isVerified ? Colors.green : Colors.red,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     ),

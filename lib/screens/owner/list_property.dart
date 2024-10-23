@@ -31,24 +31,38 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   bool isLoading = false;
 
   File? _selectedImage;
+  List<File> _selectedImages = [];
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImages() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final List<XFile>? images =
+        await _picker.pickMultiImage(); // Updated to pick multiple images
 
-    if (image != null) {
+    if (images != null && images.isNotEmpty) {
       bool? confirm = await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Confirm Image Selection'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.file(File(image.path)),
-                SizedBox(height: 10),
-                Text('Do you want to confirm this image?'),
-              ],
+            content: SizedBox(
+              height: 200,
+              width: 400,
+              child: Column(
+                children: [
+                  Flexible(
+                    child: ListView.builder(
+                      itemCount: images.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.file(File(images[index].path)),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
             actions: [
               TextButton(
@@ -70,10 +84,10 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
 
       if (confirm == true) {
         setState(() {
-          _selectedImage = File(image.path);
+          _selectedImages = images.map((image) => File(image.path)).toList();
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image confirmed and selected.')),
+          SnackBar(content: Text('Images confirmed and selected.')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -119,10 +133,9 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
         price.isEmpty ||
         selectedBHK.isEmpty ||
         selectedFacilities.isEmpty ||
-        _selectedImage == null) {
+        _selectedImages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Please fill all the fields and select an image')),
+        SnackBar(content: Text('Please fill all the fields and select images')),
       );
       return;
     }
@@ -135,10 +148,18 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
       User? user = FirebaseAuth.instance.currentUser;
       owner = user.toString();
       if (user != null) {
-        String fileName =
-            'properties/${user.uid}/${DateTime.now().millisecondsSinceEpoch}.png';
-        Reference firebaseStorageRef =
-            FirebaseStorage.instance.ref().child(fileName);
+        List<String> downloadURLs = [];
+
+        for (File image in _selectedImages) {
+          String fileName =
+              'properties/${user.uid}/${DateTime.now().millisecondsSinceEpoch}_${_selectedImages.indexOf(image)}.png';
+          Reference firebaseStorageRef =
+              FirebaseStorage.instance.ref().child(fileName);
+
+          TaskSnapshot uploadTask = await firebaseStorageRef.putFile(image);
+          String downloadURL = await uploadTask.ref.getDownloadURL();
+          downloadURLs.add(downloadURL);
+        }
 
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection('users')
@@ -150,10 +171,6 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           });
         }
 
-        TaskSnapshot uploadTask =
-            await firebaseStorageRef.putFile(_selectedImage!);
-        String downloadURL = await uploadTask.ref.getDownloadURL();
-
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
@@ -163,14 +180,14 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           'bhk': selectedBHK,
           'facilities': selectedFacilities.toList(),
           'price': price,
-          'imageURL': downloadURL,
+          'imageURLs': downloadURLs, // Saving multiple image URLs
           'createdAt': FieldValue.serverTimestamp(),
           'owner': owner,
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('Property details and image saved successfully!')),
+              content: Text('Property details and images saved successfully!')),
         );
 
         await FirebaseFirestore.instance.collection('propertiesAll').add({
@@ -178,7 +195,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           'bhk': selectedBHK,
           'facilities': selectedFacilities.toList(),
           'price': price,
-          'imageURL': downloadURL,
+          'imageURLs': downloadURLs, // Saving multiple image URLs
           'createdAt': FieldValue.serverTimestamp(),
           'owner': owner,
         });
@@ -188,7 +205,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           price = '';
           selectedBHK = '';
           selectedFacilities.clear();
-          _selectedImage = null;
+          _selectedImages.clear();
         });
 
         print('PropertyAll added successfully');
@@ -502,7 +519,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                 // Upload photos
                 GestureDetector(
                   onTap: () {
-                    _pickImage();
+                    _pickImages();
                   },
                   child: Container(
                     width: double.infinity,

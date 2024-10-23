@@ -210,7 +210,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
               title: widget.property['propertyTitle'] ?? 'Unknown Title',
               location: 'Unknown Location',
               price: widget.property['price'] ?? 'Unknown Price',
-              imageURL: widget.property['imageURL'] ?? '',
+              imageURL: widget.property['imageURLs'][0] ?? '',
               area: 'Unknown Area',
               bhk: widget.property['bhk'] ?? 'Unknown Rooms',
               isVerified: false,
@@ -240,9 +240,9 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                     topLeft: Radius.circular(15),
                     bottomLeft: Radius.circular(15),
                   ),
-                  child: widget.property['imageURL'] != null
+                  child: widget.property['imageURLs'] != null
                       ? Image.network(
-                          widget.property['imageURL'],
+                          widget.property['imageURLs'][0],
                           fit: BoxFit.cover,
                           height: cardHeight,
                           width: imageWidth,
@@ -327,24 +327,24 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  onTip = !onTip; // Toggle the value of onTip
-                                });
-                              },
-                              child: Icon(
-                                onTip
-                                    ? Icons.favorite
-                                    : Icons
-                                        .favorite_border, // Show appropriate icon
-                                color: onTip
-                                    ? Colors.red
-                                    : Colors
-                                        .grey, // Change color based on status
-                                size: iconSize,
-                              ),
-                            ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     setState(() {
+                            //       onTip = !onTip; // Toggle the value of onTip
+                            //     });
+                            //   },
+                            //   child: Icon(
+                            //     onTip
+                            //         ? Icons.favorite
+                            //         : Icons
+                            //             .favorite_border, // Show appropriate icon
+                            //     color: onTip
+                            //         ? Colors.red
+                            //         : Colors
+                            //             .grey, // Change color based on status
+                            //     size: iconSize,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],
