@@ -146,9 +146,9 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: property['imageURL'] != null
+              child: property['imageURLs'] != null
                   ? Image.network(
-                      property['imageURL'],
+                      property['imageURLs'][0],
                       fit: BoxFit.fill,
                       height: 120,
                       width: double.infinity,

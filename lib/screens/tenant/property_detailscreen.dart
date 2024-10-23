@@ -87,7 +87,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           'location': widget.location,
           'price': widget.price,
           'bhk': widget.bhk,
-          'imageURL': widget.imageURL,
+          'imageURLs': widget.imageURL,
         });
       }
 
@@ -116,7 +116,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           print('Facilities data is not a list: $facilitiesData');
         }
 
-        var galleryData = propertySnapshot.get('imageURL');
+        var galleryData = propertySnapshot.get('imageURLs');
         if (galleryData is String) {
           setState(() {
             galleryImages = [galleryData];
@@ -501,17 +501,15 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 'Home Facilities',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text(
-                'See all facilities',
-                style: TextStyle(color: Color(0xff192747), fontSize: 16),
-              ),
+              // Text(
+              //   'See all facilities',
+              //   style: TextStyle(color: Color(0xff192747), fontSize: 16),
+              // ),
             ],
           ),
           SizedBox(height: 16),
-          // Display only available facilities
           Column(
             children: [
-              // First row with dynamic icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -526,14 +524,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     buildFacilityIcon('assets/icons/FOOD.png', 'Kitchen'),
                 ],
               ),
-              SizedBox(height: 16), // Spacing between the rows
-              // Second row with dynamic icons
+              SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  if (facilities.contains('Wi-Fi'))
+                  if (facilities.contains('WI-fi'))
                     buildFacilityIcon('assets/icons/WIFI.png', 'Wi-Fi'),
-                  if (facilities.contains('Pet Center'))
+                  if (facilities.contains('Pet center'))
                     buildFacilityIcon('assets/icons/PET.png', 'Pet Center'),
                   if (facilities.contains('Sports Club'))
                     buildFacilityIcon('assets/icons/RUN.png', 'Sports Club'),
@@ -548,7 +545,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     );
   }
 
-  // for gallery images
   Widget buildGalleryContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -560,43 +556,37 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
-                color: Colors.black,
               ),
             ),
-            SizedBox(width: 8),
-            Text(
-              '(400)',
-              style: TextStyle(
-                color: Color(0xff192747),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Spacer(),
+            // Text(
+            //   'See all',
+            //   style: TextStyle(color: Color(0xff192747), fontSize: 16),
+            // ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 16),
         Container(
-          height: 900,
-          child: GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 3,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            padding: const EdgeInsets.all(8),
-            physics: const AlwaysScrollableScrollPhysics(),
-            childAspectRatio: 1,
-            children: List.generate(
-              galleryImages.length,
-              (index) => ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  galleryImages[index],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 150,
-                ),
-              ),
+          height: 200,
+          child: GridView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: galleryImages.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: 1.5,
             ),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    galleryImages[index],
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ],
