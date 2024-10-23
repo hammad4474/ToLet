@@ -15,6 +15,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,35 +23,34 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 70,
-        //leading: IconButton(
-          //icon: const Icon(Icons.arrow_back, color: Colors.black),
-          //onPressed: () {
-            //Navigator.pop(context); // Go back to the previous screen
-         // },
-        //),
-        title: Container(
-          height: 40.0,
-          decoration: BoxDecoration(
-            color: Colors.grey[200], // Light grey background
-            borderRadius: BorderRadius.circular(30), // Oval shape
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Search messages',
-              hintStyle: TextStyle(color: Colors.grey),
-              prefixIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset('assets/icons/search-normal.png', // Replace with your actual asset path
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              border: InputBorder.none, // No default underline border
-              contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-            ),
-          )
-
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
         ),
+        title: Container(
+            height: 40.0,
+            decoration: BoxDecoration(
+              color: Colors.grey[200], // Light grey background
+              borderRadius: BorderRadius.circular(30), // Oval shape
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search messages',
+                hintStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/icons/search-normal.png', // Replace with your actual asset path
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+                border: InputBorder.none, // No default underline border
+                contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+              ),
+            )),
       ),
       body: ListView(
         children: [
@@ -127,10 +127,12 @@ class _ChatScreenState extends State<ChatScreen> {
             },
             child: Text(
               'Back',
-              style: TextStyle(fontSize: 15,color: Colors.grey), // Adjust the text size
+              style: TextStyle(
+                  fontSize: 15, color: Colors.grey), // Adjust the text size
             ),
             style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0), // Add padding
+              padding: EdgeInsets.symmetric(
+                  vertical: 10.0, horizontal: 20.0), // Add padding
             ),
           ),
         ],
@@ -161,7 +163,6 @@ class ChatTile extends StatelessWidget {
     required this.avatar,
     required this.onTap, // Receive the tap function
   });
-
 
   @override
   Widget build(BuildContext context) {

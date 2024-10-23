@@ -269,6 +269,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
+  double cardWidth = screenWidth < 450 ? screenWidth * 0.9 : screenWidth * 0.9;
+  double cardHeight = 180; 
+  double imageWidth = screenWidth * 0.3;
+  double iconSize = 22.0; 
+
     return GestureDetector(
       onTap: onTap, // Call the onTap callback here
       child: Card(

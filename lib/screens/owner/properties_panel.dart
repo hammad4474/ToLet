@@ -214,7 +214,6 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
     bool isVerified, bool onTip) {
   double screenWidth = MediaQuery.of(context).size.width;
 
-  // Define dimensions based on screen width
   double cardWidth = screenWidth > 450
       ? screenWidth * 0.9
       : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
@@ -236,7 +235,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
           borderRadius: BorderRadius.circular(15),
         ),
         height: 200,
-        width: 450,
+        width: 400,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

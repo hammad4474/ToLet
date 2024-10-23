@@ -91,8 +91,6 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
           ),
         ],
       ),
-
-
       body: Stack(
         children: [
           Image.asset(
@@ -142,18 +140,17 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child:Row(
-                            children:[
-                            Text('Showing $matchCount results'),
-                          Spacer(),
+                          child: Row(
+                            children: [
+                              Text('Showing $matchCount results'),
+                              Spacer(),
                               IconButton(
-                                icon: const Icon(Icons.sort, color: Colors.black),
-                                onPressed: () {
-
-                                },
+                                icon:
+                                    const Icon(Icons.sort, color: Colors.black),
+                                onPressed: () {},
                               ),
                               Text('Sort'),
-                    ],
+                            ],
                           ),
                         ),
                         Expanded(
@@ -182,7 +179,8 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
 class SearchPropertyCard extends StatefulWidget {
   final QueryDocumentSnapshot property;
 
-  const SearchPropertyCard({Key? key, required this.property}) : super(key: key);
+  const SearchPropertyCard({Key? key, required this.property})
+      : super(key: key);
 
   @override
   _SearchPropertyCardState createState() => _SearchPropertyCardState();
@@ -200,7 +198,6 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
     double iconSize = 22.0;
     //bool isVerified = widget.property.exists && widget.property['isVerified'] != null ? widget.property['isVerified'] : false;
 
-
     // Fetch dynamic verification status
 
     return Padding(
@@ -208,13 +205,13 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
       child: GestureDetector(
         onTap: () {
           Get.to(
-                () => PropertyDetailsScreen(
+            () => PropertyDetailsScreen(
               propertyId: widget.property.id,
               title: widget.property['propertyTitle'] ?? 'Unknown Title',
-              location: widget.property['location'] ?? 'Unknown Location',
+              location: 'Unknown Location',
               price: widget.property['price'] ?? 'Unknown Price',
               imageURL: widget.property['imageURL'] ?? '',
-              area: widget.property['area'] ?? 'Unknown Area',
+              area: 'Unknown Area',
               bhk: widget.property['bhk'] ?? 'Unknown Rooms',
               isVerified: false,
               owner: widget.property['owner'] ?? 'Unknown Owner',
@@ -245,69 +242,74 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                   ),
                   child: widget.property['imageURL'] != null
                       ? Image.network(
-                    widget.property['imageURL'],
-                    fit: BoxFit.cover,
-                    height: cardHeight,
-                    width: imageWidth,
-                  )
+                          widget.property['imageURL'],
+                          fit: BoxFit.cover,
+                          height: cardHeight,
+                          width: imageWidth,
+                        )
                       : Image.asset(
-                    'assets/icons/wifi.png',
-                    fit: BoxFit.cover,
-                    height: cardHeight,
-                    width: imageWidth,
-                  ),
+                          'assets/icons/wifi.png',
+                          fit: BoxFit.cover,
+                          height: cardHeight,
+                          width: imageWidth,
+                        ),
                 ),
                 // Property Details
                 SizedBox(width: 8),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Title and Verification Status
-                    Row(
-                       children: [
-                         Image.asset(
-                           'assets/icons/rating.png',
-                           height: 16,
-                           width: 16,
-                         ),
-                         SizedBox(width: 4),
-                         // Text(
-                         //   '${property['rating'] ?? '0.0'}',
-                         //   style: const TextStyle(color: Colors.grey),
-                         // ),
-                       ],
-                     ),
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/icons/rating.png',
+                              height: 16,
+                              width: 16,
+                            ),
+                            SizedBox(width: 4),
+                            // Text(
+                            //   '${property['rating'] ?? '0.0'}',
+                            //   style: const TextStyle(color: Colors.grey),
+                            // ),
+                          ],
+                        ),
                         SizedBox(height: 10),
-                      Text(
-                        widget.property['propertyTitle'] ?? 'No Title',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                    ),
+                        Text(
+                          widget.property['propertyTitle'] ?? 'No Title',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         SizedBox(height: 4),
                         // Location
                         Text(
-                            'Unknown City',
-                          style: TextStyle(color: Color(0xff7d7f88), fontSize: 14),
+                          'Unknown City',
+                          style:
+                              TextStyle(color: Color(0xff7d7f88), fontSize: 14),
                         ),
                         SizedBox(height: 4),
                         // Icons and Details Row
                         Row(
                           children: [
-                            Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
+                            Icon(Icons.bed,
+                                color: Color(0xff7d7f88), size: iconSize),
                             SizedBox(width: 4),
                             Text(
                               '${widget.property['bhk'] ?? '0'}',
                               style: TextStyle(color: Color(0xff7d7f88)),
                             ),
                             SizedBox(width: 8),
-                            Icon(Icons.square_foot, color: Color(0xff7d7f88), size: iconSize),
+                            Icon(Icons.square_foot,
+                                color: Color(0xff7d7f88), size: iconSize),
                             SizedBox(width: 4),
                             Text(
-                                '${'28 m²'}',
+                              '${'28 m²'}',
                               style: TextStyle(color: Color(0xff7d7f88)),
                             ),
                           ],
@@ -320,8 +322,10 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                            widget.property['price']+'/ month' ?? 'Unknown Price' +'/ month',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              widget.property['price'] + '/ month' ??
+                                  'Unknown Price' + '/ month',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -330,8 +334,14 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                                 });
                               },
                               child: Icon(
-                                onTip ? Icons.favorite : Icons.favorite_border, // Show appropriate icon
-                                color: onTip ? Colors.red : Colors.grey, // Change color based on status
+                                onTip
+                                    ? Icons.favorite
+                                    : Icons
+                                        .favorite_border, // Show appropriate icon
+                                color: onTip
+                                    ? Colors.red
+                                    : Colors
+                                        .grey, // Change color based on status
                                 size: iconSize,
                               ),
                             ),
