@@ -530,7 +530,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                     ),
                     child: isLoading
                         ? LoadingAnimationWidget.waveDots(
-                            color: Colors.black, size: 50)
+                            color: Colors.black, size: 20)
                         : Column(
                             mainAxisAlignment:
                                 MainAxisAlignment.center, // Align to the left

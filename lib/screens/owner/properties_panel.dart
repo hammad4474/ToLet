@@ -231,20 +231,25 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
       onTap: () {
+        // Passing all relevant property details to the next screen
         Get.to(
           () => OwnerPropertyDetailScreen(
             title: property['propertyTitle'] ?? 'No Title',
             price: property['price'] ?? 'Unknown Price',
             location: property['location'] ?? 'Unknown Location',
             area: property['area'] ?? 'Unknown Area',
-            bhk: property['bhk'].toString(),
-            imageURL: property['imageURLs'] != null &&
+            bhk: property['bhk']?.toString() ?? 'Unknown BHK',
+            imageURLs: property['imageURLs'] != null &&
                     property['imageURLs'].isNotEmpty
-                ? property['imageURLs'][0]
-                : '',
+                ? List<String>.from(property['imageURLs'])
+                : [], // Pass an empty list if no images are found
+            // Only passing the first image URL
             isVerified: isVerified,
             owner: property['firstname'] ?? 'Unknown Owner',
-            propertyId: property['propertyId'] ?? '',
+            propertyId: property['id'] ?? '',
+            facilities: property['facilities'] != null
+                ? List<String>.from(property['facilities'])
+                : [], // Ensure facilities are passed
           ),
           transition: Transition.fadeIn,
         );
@@ -329,7 +334,6 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                   SizedBox(
                     height: 10,
                   ),
-                  //   Text('property owned by ${property['firstname']}'),
                 ],
               ),
               SizedBox(width: 20),

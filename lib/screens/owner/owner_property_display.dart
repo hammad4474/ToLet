@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tolet/screens/owner/fetch_all_properties.dart';
+import 'package:tolet/screens/owner/owner_property_detail.dart';
 import 'package:tolet/screens/tenant/property_detailscreen.dart';
 
 class HomeOwnerScreen extends StatefulWidget {
@@ -22,7 +25,6 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
 
   Future<List<Map<String, dynamic>>> fetchAllProperties() async {
     try {
-      // Fetch all properties from the 'propertiesAll' collection
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance.collection('propertiesAll').get();
 
@@ -116,18 +118,32 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
   double iconSize = 24.0;
 
   return GestureDetector(
+    onLongPress: () {
+      print('long pressed');
+      _showOptionsDialog(context, property);
+    },
     onTap: () {
-      // Get.to(() => PropertyDetailsScreen(
-      //       title: property['propertyTitle'] ?? 'No Title',
-      //       location: property['location'] ?? 'Unknown Location',
-      //       price: property['price'] ?? 'Unknown Price',
-      //       area: property['area'] ?? 'Unknown Area',
-      //       bhk: property['bhk'] ?? 'Unknown BHK',
-      //       imageURL: property['imageURL'] ?? 'assets/icons/wifi.png',
-      //       isVerified: true, // Assuming properties are verified
-      //       owner: property['owner'],
-      //       propertyId: property['id'] ?? 'Unknown id',
-      //     ));
+      Get.to(
+          () => FetchAllProperties(
+                title: property['propertyTitle'] ?? 'No Title',
+                location: property['location'] ?? 'Unknown Location',
+                price: property['price'] ?? 'Unknown Price',
+                area: property['area'] ?? 'Unknown Area',
+                bhk: property['bhk'] ?? 'Unknown BHK',
+                imageURLs: (property['imageURLs'] != null &&
+                        property['imageURLs'].isNotEmpty)
+                    ? (property['imageURLs'] as List<dynamic>)
+                        .cast<String>() // Pass gallery images as List<String>
+                    : [], // Empty list if no images
+                isVerified: true, // Assuming properties are verified
+                owner: property['owner'] ?? 'Unknown Owner',
+                propertyId: property['id'] ?? 'Unknown id',
+                facilities: property['facilities'] != null
+                    ? (property['facilities'] as List<dynamic>)
+                        .cast<String>() // Pass facilities as List<String>
+                    : [], // Empty list if no facilities
+              ),
+          transition: Transition.fadeIn);
     },
     child: Card(
       elevation: 3,
@@ -146,15 +162,17 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: property['imageURLs'] != null
+              child: (property['imageURLs'] != null &&
+                      property['imageURLs'].isNotEmpty)
                   ? Image.network(
-                      property['imageURLs'][0],
+                      (property['imageURLs'] as List<dynamic>)
+                          .cast<String>()[0], // Cast to List<String>
                       fit: BoxFit.fill,
                       height: 120,
                       width: double.infinity,
                     )
                   : Image.asset(
-                      'assets/icons/wifi.png',
+                      'assets/icons/wifi.png', // Default image if no URLs
                       height: 120,
                       width: double.infinity,
                     ),
@@ -179,7 +197,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                       Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
                       SizedBox(width: 5),
                       Text(
-                        '${property['bhk']}',
+                        '${property['bhk'] ?? 'N/A'}',
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                       SizedBox(width: 10),
@@ -187,14 +205,14 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                           color: Color(0xff7d7f88), size: iconSize),
                       SizedBox(width: 5),
                       Text(
-                        '${property['area']} sq.ft.',
+                        '${property['area'] ?? ''} sq.ft.',
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                     ],
                   ),
                   SizedBox(height: 8),
                   Text(
-                    '\INR${property['price']}',
+                    '\INR${property['price'] ?? 'N/A'}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -204,5 +222,80 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
         ),
       ),
     ),
+  );
+}
+
+void _showOptionsDialog(BuildContext context, Map<String, dynamic> property) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Choose an option',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            ListTile(
+              leading: Icon(Icons.edit),
+              title: Text('Update'),
+              onTap: () {
+                // Handle update property action
+                // You may want to navigate to an update screen
+                // Get.to(() => UpdatePropertyScreen(property: property));
+                Navigator.pop(context); // Close the bottom sheet
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.delete),
+              title: Text('Delete'),
+              onTap: () async {
+                // Handle delete property action
+                final confirmation =
+                    await _showDeleteConfirmationDialog(context);
+                if (confirmation == true) {
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection('properties')
+                      .doc(property['id'])
+                      .delete();
+                  Navigator.pop(context); // Close the bottom sheet
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+Future<bool?> _showDeleteConfirmationDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Confirm Delete'),
+        content: Text('Are you sure you want to delete this property?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false); // No
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true); // Yes
+            },
+            child: Text('Delete'),
+          ),
+        ],
+      );
+    },
   );
 }

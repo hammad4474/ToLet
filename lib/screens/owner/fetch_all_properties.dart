@@ -10,7 +10,7 @@ import 'package:tolet/screens/tenant/galler_pd.dart';
 import 'package:tolet/screens/tenant/reveiw_pd.dart';
 import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 
-class OwnerPropertyDetailScreen extends StatefulWidget {
+class FetchAllProperties extends StatefulWidget {
   final String title;
   final String location;
   final String price;
@@ -22,7 +22,7 @@ class OwnerPropertyDetailScreen extends StatefulWidget {
   final String propertyId;
   final List<String> facilities;
 
-  OwnerPropertyDetailScreen({
+  FetchAllProperties({
     required this.title,
     required this.location,
     required this.price,
@@ -37,11 +37,10 @@ class OwnerPropertyDetailScreen extends StatefulWidget {
     Key? key,
   }) : super(key: key);
   @override
-  _OwnerPropertyDetailScreenState createState() =>
-      _OwnerPropertyDetailScreenState();
+  _FetchAllPropertiesState createState() => _FetchAllPropertiesState();
 }
 
-class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
+class _FetchAllPropertiesState extends State<FetchAllProperties> {
   int selectedTabIndex = 0;
   String ownerName = "";
   List<String> facilities = [];
@@ -94,14 +93,9 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
 
   Future<void> fetchPropertyDetails() async {
     try {
-      // Access the current user ID
-      String userId = FirebaseAuth.instance.currentUser!.uid;
-
-      // Fetch the specific property from the 'properties' subcollection
+      // Fetch the specific property from the 'propertiesAll' collection
       DocumentSnapshot propertySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId) // Get the current user document
-          .collection('properties') // Access the 'properties' subcollection
+          .collection('propertiesAll') // Access the 'propertiesAll' collection
           .doc(widget.propertyId) // Get the specific property by its ID
           .get();
 
@@ -117,6 +111,8 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
         } else {
           print('Facilities data is not a list: $facilitiesData');
         }
+
+        // Get the gallery images data (can be a list or a single string)
         var galleryData = propertySnapshot.get('imageURLs');
         if (galleryData is String) {
           setState(() {
@@ -127,12 +123,10 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
             galleryImages = List<String>.from(galleryData);
           });
         } else {
-          // This will catch cases where galleryData is neither
-          // a String nor a List, and you can handle it accordingly.
           print('Gallery images data is not a string or list: $galleryData');
-          galleryImages =
-              []; // Initialize it to an empty list or handle as needed
         }
+      } else {
+        print('Property not found');
       }
     } catch (e) {
       print('Error fetching property details: $e');

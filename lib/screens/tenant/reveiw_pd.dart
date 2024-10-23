@@ -29,6 +29,24 @@ Widget buildReviewContent() {
             0,
             ['assets/images/pd.png'], // Example images from assets
           ),
+          buildReviewTile(
+            'John D.',
+            'The cottage was cozy and had everything we needed. Highly recommend!',
+            '1 month ago',
+            4,
+            3,
+            0,
+            ['assets/images/pd.png'], // Example images from assets
+          ),
+          buildReviewTile(
+            'John D.',
+            'The cottage was cozy and had everything we needed. Highly recommend!',
+            '1 month ago',
+            4,
+            3,
+            0,
+            ['assets/images/pd.png'], // Example images from assets
+          ),
           // Add more review tiles if necessary
         ],
       ),

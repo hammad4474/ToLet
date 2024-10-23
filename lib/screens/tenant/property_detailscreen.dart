@@ -532,7 +532,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     buildFacilityIcon('assets/icons/WIFI.png', 'Wi-Fi'),
                   if (facilities.contains('Pet center'))
                     buildFacilityIcon('assets/icons/PET.png', 'Pet Center'),
-                  if (facilities.contains('Sports Club'))
+                  if (facilities.contains('Sports'))
                     buildFacilityIcon('assets/icons/RUN.png', 'Sports Club'),
                   if (facilities.contains('Laundry'))
                     buildFacilityIcon('assets/icons/LAUNDRY.png', 'Laundry'),
