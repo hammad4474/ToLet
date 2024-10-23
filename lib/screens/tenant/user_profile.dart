@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
@@ -14,18 +14,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 4; // Keep track of the selected index
+  //int _selectedIndex = 4; // Keep track of the selected index
   User? currentUser;
   String userName = '';
   String userEmail = '';
 
   // Function to handle tap on navigation items
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Add logic here for navigation or any other action
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  //   // Add logic here for navigation or any other action
+  // }
 
   @override
   void initState() {
@@ -165,10 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomtenantBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      // bottomNavigationBar: CustomtenantBottomNavBar(
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 

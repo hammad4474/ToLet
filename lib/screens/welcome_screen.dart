@@ -43,7 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Text(
                   "Welcome to",
                   style: TextStyle(
-                    fontSize: screenWidth * 0.04, // Responsive font size
+                    fontSize: screenWidth * 0.07, // Responsive font size
                     fontWeight: FontWeight.normal,
                     fontStyle: FontStyle.italic,
                     color: Color(0xff192747),
@@ -68,7 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               child: Text(
                 'Connects property owners to tenants directly,\n enabling daily rental income and easy property\n management, while offering tenants affordable,\n verified rentals without brokers',
                 style: TextStyle(
-                  fontSize: screenWidth * 0.03, // Responsive text size
+                  fontSize: screenWidth * 0.04, // Responsive text size
                   color: Color(0xff7b809e),
                 ),
                 textAlign: TextAlign.center,

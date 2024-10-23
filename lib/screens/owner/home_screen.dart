@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
-import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/owner/list_property.dart';
 import 'package:tolet/screens/owner/owner_property_display.dart';
 import 'package:tolet/screens/owner/properties_panel.dart';

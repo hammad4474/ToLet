@@ -6,8 +6,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tolet/auth/forgot_pasword.dart';
 import 'package:tolet/auth/signup_screen.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
+import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,9 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
           await prefs.setString('userType', userType);
 
           if (userType == 'Tenant') {
-            Get.to(() => HometenantScreen(), transition: Transition.fade);
+            Get.to(() => tenantDashboard(), transition: Transition.fade);
           } else if (userType == 'Landlord') {
-            Get.to(() => HomeScreen(), transition: Transition.fade);
+            Get.to(() => ownerDashboard(), transition: Transition.fade);
           } else {
             Fluttertoast.showToast(
                 msg: 'Unknown user role', backgroundColor: Colors.red);

@@ -8,56 +8,40 @@ import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 //import 'package:tolet/screens/tenant/tenant_finder.dart';
 import 'package:tolet/screens/tenant/user_profile.dart';
 import 'package:tolet/widgets/constcolor.dart';
+class tenantDashboard extends StatefulWidget {
+  @override
+  _tenantDashboardState createState() => _tenantDashboardState();
+}
 
-class CustomtenantBottomNavBar extends StatelessWidget {
-  final int currentIndex;
-  final Function(int) onTap;
+class _tenantDashboardState extends State<tenantDashboard> {
+  int _currentIndex = 0;
 
-  CustomtenantBottomNavBar({
-    required this.currentIndex,
-    required this.onTap,
-  });
+  final List<Widget> _screens = [
+    HometenantScreen(),
+    SeeAllProperties(),
+    tenantChatScreen(),
+    FavoriteProperty(),
+    ProfileScreen(),
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: Colors.white, // Set the background color
-      selectedItemColor: Color(0xff192747), // Set selected item color
-      unselectedItemColor: Colors.grey, // Set unselected item color
-      type: BottomNavigationBarType.fixed, // Ensure all items are fixed
-      currentIndex: currentIndex, // Track the current selected index
-      onTap: (index) {
-        switch (index) {
-          case 0:
-            // Navigate to the Home screen
-            Get.offAll(() => HometenantScreen(), transition: Transition.fade);
-
-            break;
-          case 1:
-            Get.to(() => SeeAllProperties(), transition: Transition.fade);
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => tenantChatScreen()));
-            // Navigate to the Explore screen
-            // Replace with the correct screen if available
-            break;
-          case 2:
-            // Navigate to the Chat screen
-            Get.to(() => tenantChatScreen(), transition: Transition.fade);
-
-            break;
-          case 3:
-            Get.to(() => FavoriteProperty(), transition: Transition.fade);
-
-            break;
-          case 4:
-            // Navigate to the Profile screen
-            Get.to(() => ProfileScreen(), transition: Transition.fade);
-
-            break;
-        }
-        onTap(index); // Call the onTap function to update the currentIndex
-      },
-      items: <BottomNavigationBarItem>[
+    return Scaffold(
+        body: _screens[_currentIndex], // Display the selected screen
+        bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        selectedItemColor: Color(0xff192747),
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex, // Current index for selected tab
+        onTap: _onTabTapped, // Update selected index
+        items:<BottomNavigationBarItem>[
         BottomNavigationBarItem(
           activeIcon: Image.asset(
             'assets/icons/homeblue.png',
@@ -123,7 +107,8 @@ class CustomtenantBottomNavBar extends StatelessWidget {
           ),
           label: 'Profile',
         ),
-      ],
+        ],
+        ),
     );
   }
 }

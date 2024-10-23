@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/tenant/property_listofcard.dart';
 
 class ListPropertyScreen extends StatefulWidget {

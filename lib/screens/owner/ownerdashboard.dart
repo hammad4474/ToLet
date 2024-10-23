@@ -7,17 +7,17 @@ import 'package:tolet/screens/owner/owner_profile.dart';
 import 'package:tolet/screens/owner/tenant_finder.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget {
+class ownerDashboard extends StatefulWidget {
   @override
-  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState();
+  _ownerDashboardState createState() => _ownerDashboardState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+class _ownerDashboardState extends State<ownerDashboard> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
     HomeScreen(),
-    HomeScreen(),
+    TenantFinderScreen(),
     ListPropertyScreen(),
     ChatScreen(),
     OwnerProfileScreen(),

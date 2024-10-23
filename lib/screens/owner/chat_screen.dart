@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tolet/screens/owner/Message_screen.dart';
-import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class ChatScreen extends StatefulWidget {

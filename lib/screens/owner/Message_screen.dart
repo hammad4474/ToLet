@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class DetailedChatScreen extends StatelessWidget {

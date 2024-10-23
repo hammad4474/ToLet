@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/owner/tenant_detail.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 class TenantFinderScreen extends StatefulWidget {

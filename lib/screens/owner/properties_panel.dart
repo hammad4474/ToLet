@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tolet/screens/owner/bottom_navigation.dart';
+import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/owner/owner_property_detail.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/tenant/listview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

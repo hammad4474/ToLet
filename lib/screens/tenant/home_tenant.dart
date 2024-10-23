@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
 import 'package:tolet/screens/popup_screen.dart';
 import 'package:tolet/screens/tenant/SearchPropertyScreen.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/screens/tenant/property_decorofcard.dart';
 import 'package:tolet/screens/tenant/property_detailscreen.dart';
@@ -25,7 +25,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
   String _selectedLocation = 'Hyderabad';
   late Future<List<Map<String, dynamic>>> userProperties;
   bool onTip = false;
-  int _selectedIndex = 0;
+  //int _selectedIndex = 0;
   List<Property> _properties = [];
   final List<Map<String, String>> cities = [
     {'name': 'Bangalore', 'image': 'assets/images/bangalore.png'},
@@ -42,11 +42,11 @@ class _HometenantScreenState extends State<HometenantScreen> {
     {'name': 'Ahmedabad', 'image': 'assets/images/ahmedabad.png'},
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
   void _setSelectedCity(String city) {
     setState(() {
@@ -386,10 +386,10 @@ class _HometenantScreenState extends State<HometenantScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomtenantBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      // bottomNavigationBar: CustomtenantBottomNavBar(
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 }

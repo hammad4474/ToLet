@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tolet/auth/login_screen.dart';
+import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/owner/home_screen.dart';
 import 'package:tolet/screens/tenant/home_tenant.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,11 +51,11 @@ class _MyAppState extends State<MyApp> {
       // Navigate based on the stored userType
       if (userType == 'Tenant') {
         setState(() {
-          _initialScreen = HometenantScreen();
+          _initialScreen = tenantDashboard();
         });
       } else if (userType == 'Landlord') {
         setState(() {
-          _initialScreen = HomeScreen();
+          _initialScreen = ownerDashboard();
         });
       } else {
         // If userType is unknown, navigate to LoginScreen

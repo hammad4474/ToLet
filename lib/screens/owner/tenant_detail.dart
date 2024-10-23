@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tolet/screens/owner/bottom_navigation.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
 
@@ -207,12 +206,7 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomtenantBottomNavBar(
-        currentIndex: 1, // Example currentIndex to highlight 'Requests'
-        onTap: (index) {
-          // Handle bottom navigation action
-        },
-      ),
-    );
+
+      );
   }
 }

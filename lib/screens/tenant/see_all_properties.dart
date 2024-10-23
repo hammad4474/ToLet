@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/tenant/property_detailscreen.dart';
 
 class SeeAllProperties extends StatefulWidget {
@@ -13,7 +13,7 @@ class SeeAllProperties extends StatefulWidget {
 
 class _SeeAllPropertiesState extends State<SeeAllProperties> {
   late Future<List<Map<String, dynamic>>> allProperties;
-  int _selectedIndex = 0;
+  //int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -46,11 +46,11 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
     }
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +138,8 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
           ],
         ),
       ),
-      bottomNavigationBar:
-          CustomtenantBottomNavBar(currentIndex: 1, onTap: (value) {}),
+      // bottomNavigationBar:
+      //     CustomtenantBottomNavBar(currentIndex: 1, onTap: (value) {}),
     );
   }
 }

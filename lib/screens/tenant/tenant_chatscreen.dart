@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tolet/screens/tenant/bottom_navbar.dart';
+import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/tenant/tenant_messageScreen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
@@ -10,12 +10,12 @@ class tenantChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<tenantChatScreen> {
-  int _selectedIndex = 2;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // int _selectedIndex = 2;
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -121,10 +121,10 @@ class _ChatScreenState extends State<tenantChatScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomtenantBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      // bottomNavigationBar: CustomtenantBottomNavBar(
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 }
