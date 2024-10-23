@@ -16,7 +16,7 @@ class OwnerProfileScreen extends StatefulWidget {
 }
 
 class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
-  int _selectedIndex = 4;
+  //int _selectedIndex = 4;
   User? currentUser;
   String userName = '';
   String userEmail = '';
@@ -44,12 +44,13 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
   } // Keep track of the selected index
 
   // Function to handle tap on navigation items
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   }
+   //);
     // Add logic here for navigation or any other action
-  }
+ // }
 
   @override
   Widget build(BuildContext context) {
@@ -172,10 +173,7 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+       //bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 

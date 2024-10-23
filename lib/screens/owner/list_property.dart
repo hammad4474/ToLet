@@ -604,10 +604,11 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ));
+        // bottomNavigationBar: CustomBottomNavigationBar(
+        //   currentIndex: _selectedIndex,
+        //   onTap: _onItemTapped,
+        // )
+    );
   }
 }
 

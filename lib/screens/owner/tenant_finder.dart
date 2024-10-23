@@ -38,12 +38,7 @@ class _TenantFinderScreenState extends State<TenantFinderScreen> {
         ],
       ),
       body: TenantFinderScreenContent(),
-      bottomNavigationBar: CustomBottomNavigationBar(
-       currentIndex: 1, // Example currentIndex to highlight 'Requests'
-       onTap: (index) {
-      // // Handle bottom navigation action
-      },
-      )// Include content widget
+      // bottomNavigationBar: CustomBottomNavigationBar(),// Include content widget
     );
   }
 }

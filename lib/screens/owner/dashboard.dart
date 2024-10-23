@@ -10,16 +10,12 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _currentIndex = 0;
+
   String? userName;
   int _totalProperties = 0;
 
   // Handle bottom navigation taps
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
+
 
   void initState() {
     super.initState();
@@ -151,10 +147,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
 
       // Bottom Navigation Bar
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
-      ),
+     // bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 

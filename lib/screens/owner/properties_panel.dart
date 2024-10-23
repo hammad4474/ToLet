@@ -209,8 +209,8 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
             },
           ),
         ),
-        bottomNavigationBar:
-            CustomBottomNavigationBar(currentIndex: 0, onTap: (value) {}),
+        // bottomNavigationBar:
+        //     CustomBottomNavigationBar(currentIndex: 0, onTap: (value) {}),
       ),
     );
   }

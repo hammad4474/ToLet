@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _selectedLocation = 'Hyderabad';
 
   //int selectedRoleIndex = 0; // 0 for Owner, 1 for Tenant
-  int _selectedIndex = 0; // Keep track of the selected index
+ // int _selectedIndex = 0; // Keep track of the selected index
   final List<Map<String, String>> cities = [
     {'name': 'Bangalore', 'image': 'assets/images/bangalore.png'},
     {'name': 'Hyderabad', 'image': 'assets/images/Hyderabad.png'},
@@ -41,12 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   // Function to handle tap on navigation items
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Add logic here for navigation or any other action
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  //   // Add logic here for navigation or any other action
+  // }
 
   void _setSelectedCity(String city) {
     setState(() {
@@ -251,10 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-          )),
+        //bottomNavigationBar: CustomBottomNavigationBar(),
+    ),
     );
   }
 
