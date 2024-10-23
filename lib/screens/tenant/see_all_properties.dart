@@ -78,13 +78,6 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
             Navigator.pop(context);
           },
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.menu,
-        //         color: Colors.black), // Ensure menu icon is black
-        //     onPressed: () {},
-        //   ),
-        // ],
       ),
       body: Container(
         color: Colors.white,
@@ -123,17 +116,15 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
                           padding: const EdgeInsets.all(10),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount:
-                                crossAxisCount, // Adjusted dynamically
+                            crossAxisCount: crossAxisCount,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
-                            childAspectRatio:
-                                childAspectRatio, // Adjusted ratio
+                            childAspectRatio: childAspectRatio,
                           ),
                           itemCount: properties.length,
                           itemBuilder: (context, index) {
                             final property = properties[index];
-                            return buildPropertyCard(context, property);
+                            return buildPropertyCard(context, property, screenWidth);
                           },
                         );
                       },
@@ -153,9 +144,10 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
   }
 }
 
-Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
-  double cardHeight = 250;
+Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property, double screenWidth) {
   double iconSize = 24.0;
+  double fontSizeTitle = screenWidth < 600 ? 14.0 : 18.0;  // Dynamically adjust font size based on screen width
+  double fontSizeSubtitle = screenWidth < 600 ? 12.0 : 16.0;
 
   return GestureDetector(
     onTap: () {
@@ -179,8 +171,8 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        height: cardHeight,
         child: Column(
+          mainAxisSize: MainAxisSize.min, // Adjust the column size
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
@@ -204,40 +196,52 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min, // Reduce space below
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     property['propertyTitle'] ?? 'No Title',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: fontSizeTitle),
+                    overflow: TextOverflow.ellipsis, // Prevent overflow
+                    maxLines: 1,
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4),
                   Text(
                     property['location'] ?? 'Unknown Location',
-                    style: TextStyle(color: Color(0xff7d7f88), fontSize: 16),
+                    style: TextStyle(
+                      color: Color(0xff7d7f88),
+                      fontSize: fontSizeSubtitle,
+                    ),
+                    overflow: TextOverflow.ellipsis, // Prevent overflow
+                    maxLines: 1,
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
                       SizedBox(width: 5),
                       Text(
-                        '${property['bhk']}',
+                        '${property['bhk']} BHK',
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                       SizedBox(width: 10),
-                      Icon(Icons.house,
-                          color: Color(0xff7d7f88), size: iconSize),
+                      Icon(Icons.house, color: Color(0xff7d7f88), size: iconSize),
                       SizedBox(width: 5),
-                      Text(
-                        '${property['area']} sq.ft.',
-                        style: TextStyle(color: Color(0xff7d7f88)),
+                      Flexible(
+                        child: Text(
+                          '${property['area']} sq.ft.',
+                          style: TextStyle(color: Color(0xff7d7f88)),
+                          overflow: TextOverflow.ellipsis, // Prevent overflow
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4),
                   Text(
                     '\INR${property['price']}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: fontSizeTitle, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis, // Prevent overflow here
                   ),
                 ],
               ),
