@@ -87,11 +87,10 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
                     return GridView.builder(
                       padding: const EdgeInsets.all(10),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // 2 properties per row
+                        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2, // Adjust based on screen width
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        childAspectRatio:
-                            0.75, // Adjust the ratio to fit the cards
+                        childAspectRatio: 0.7, // Adjust aspect ratio for responsiveness
                       ),
                       itemCount: properties.length,
                       itemBuilder: (context, index) {
@@ -113,33 +112,31 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
 }
 
 Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
-  double cardHeight = 250;
-  double imageWidth = 108;
+  double cardHeight = MediaQuery.of(context).size.height * 0.3; // Set dynamic height
+  double imageHeight = cardHeight * 0.4; // Set image height based on card height
   double iconSize = 24.0;
 
   return GestureDetector(
     onTap: () {
       Get.to(
-          () => FetchAllProperties(
-                title: property['propertyTitle'] ?? 'No Title',
-                location: property['location'] ?? 'Unknown Location',
-                price: property['price'] ?? 'Unknown Price',
-                area: property['area'] ?? 'Unknown Area',
-                bhk: property['bhk'] ?? 'Unknown BHK',
-                imageURLs: (property['imageURLs'] != null &&
-                        property['imageURLs'].isNotEmpty)
-                    ? (property['imageURLs'] as List<dynamic>)
-                        .cast<String>() // Pass gallery images as List<String>
-                    : [], // Empty list if no images
-                isVerified: true, // Assuming properties are verified
-                owner: property['owner'] ?? 'Unknown Owner',
-                propertyId: property['id'] ?? 'Unknown id',
-                facilities: property['facilities'] != null
-                    ? (property['facilities'] as List<dynamic>)
-                        .cast<String>() // Pass facilities as List<String>
-                    : [], // Empty list if no facilities
-              ),
-          transition: Transition.fadeIn);
+        () => FetchAllProperties(
+          title: property['propertyTitle'] ?? 'No Title',
+          location: property['location'] ?? 'Unknown Location',
+          price: property['price'] ?? 'Unknown Price',
+          area: property['area'] ?? 'Unknown Area',
+          bhk: property['bhk'] ?? 'Unknown BHK',
+          imageURLs: (property['imageURLs'] != null && property['imageURLs'].isNotEmpty)
+              ? (property['imageURLs'] as List<dynamic>).cast<String>()
+              : [],
+          isVerified: true,
+          owner: property['owner'] ?? 'Unknown Owner',
+          propertyId: property['id'] ?? 'Unknown id',
+          facilities: property['facilities'] != null
+              ? (property['facilities'] as List<dynamic>).cast<String>()
+              : [],
+        ),
+        transition: Transition.fadeIn,
+      );
     },
     child: Card(
       elevation: 3,
@@ -158,19 +155,18 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: (property['imageURLs'] != null &&
-                      property['imageURLs'].isNotEmpty)
+              child: (property['imageURLs'] != null && property['imageURLs'].isNotEmpty)
                   ? Image.network(
-                      (property['imageURLs'] as List<dynamic>)
-                          .cast<String>()[0], // Cast to List<String>
-                      fit: BoxFit.fill,
-                      height: 120,
+                      (property['imageURLs'] as List<dynamic>).cast<String>()[0],
+                      fit: BoxFit.cover, // Use cover to fill space
+                      height: imageHeight,
                       width: double.infinity,
                     )
                   : Image.asset(
                       'assets/icons/wifi.png', // Default image if no URLs
-                      height: 120,
+                      height: imageHeight,
                       width: double.infinity,
+                      fit: BoxFit.cover, // Use cover to fill space
                     ),
             ),
             Padding(
@@ -182,12 +178,12 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                     property['propertyTitle'] ?? 'No Title',
                     style: TextStyle(fontSize: 18),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4), // Reduced space
                   Text(
                     property['location'] ?? 'Unknown Location',
                     style: TextStyle(color: Color(0xff7d7f88), fontSize: 16),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4), // Reduced space
                   Row(
                     children: [
                       Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
@@ -197,18 +193,17 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                       SizedBox(width: 10),
-                      Icon(Icons.house,
-                          color: Color(0xff7d7f88), size: iconSize),
-                      SizedBox(width: 5),
+                      Icon(Icons.house, color: Color(0xff7d7f88), size: iconSize),
+                      SizedBox(width: 2),
                       Text(
                         '${property['area'] ?? ''} sq.ft.',
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 4), // Reduced space
                   Text(
-                    '\INR${property['price'] ?? 'N/A'}',
+                    'INR ${property['price'] ?? 'N/A'}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
