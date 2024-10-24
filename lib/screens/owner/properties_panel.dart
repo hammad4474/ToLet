@@ -167,7 +167,7 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
                       ),
                       SizedBox(height: 20),
                       SizedBox(
-                        height: 250,
+                        height: 189,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: properties.length,
@@ -189,7 +189,7 @@ class _PropertiesPanelState extends State<PropertiesPanel> {
                       ),
                       SizedBox(height: 20),
                       SizedBox(
-                        height: 250,
+                        height: 189,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: properties.length,
@@ -220,12 +220,10 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
     bool isVerified, bool onTip) {
   double screenWidth = MediaQuery.of(context).size.width;
 
-  double cardWidth = screenWidth > 450
-      ? screenWidth * 0.9
-      : screenWidth * 0.9; // 80% for larger screens, 90% for smaller
-  double cardHeight = 250; // Fixed height for consistency
-  double imageWidth = 108; // Fixed image width
-  double iconSize = 24.0; // Standard icon size
+  double cardWidth = screenWidth < 450 ? screenWidth * 0.9 : screenWidth * 0.9;
+  double cardHeight = 180;
+  double imageWidth = screenWidth * 0.3;
+  double iconSize = 22.0;// Standard icon size
 
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -265,93 +263,210 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
           ),
-          height: 200,
-          width: 400,
+          height: cardHeight,
+          width: cardWidth,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              property['imageURLs'] != null && property['imageURLs'].isNotEmpty
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15)),
-                      child: Image.network(
-                        property['imageURLs'][0],
-                        fit: BoxFit.cover,
-                        height: 250,
-                        width: 110,
-                      ),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15)),
-                      child: Image.asset(
-                        'assets/icons/wifi.png',
-                        height: 250,
-                      ),
-                    ),
-              SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  Text(
-                    property['propertyTitle'] ?? 'No Title',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(height: 10),
-                  Text(property['location'] ?? 'Unknown Location',
-                      style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(Icons.bed),
-                      SizedBox(width: 5),
-                      Text('${property['bhk']}'),
-                      SizedBox(width: 10),
-                      Icon(Icons.house),
-                      SizedBox(width: 5),
-                      Text('${property['area'] ?? 'Unknown Area'} m²'),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Text('${property['price']}'),
-                      Text(' / month'),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    isVerified ? 'Verified' : 'Not Verified',
-                    style: TextStyle(
-                        color: isVerified ? Colors.green : Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
+              // Property image
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                ),
+                child: property['imageURLs'] != null
+                    ? Image.network(
+                  property['imageURLs'][0],
+                  fit: BoxFit.cover,
+                  height: cardHeight,
+                  width: imageWidth,
+                )
+                    : Image.asset(
+                  'assets/icons/wifi.png',
+                  fit: BoxFit.cover,
+                  height: cardHeight,
+                  width: imageWidth,
+                ),
               ),
-              SizedBox(width: 20),
-              Column(
-                children: [
-                  SizedBox(height: 20),
-                  Icon(
-                    isVerified
-                        ? Icons.verified_user
-                        : Icons.not_interested_sharp,
-                    color: isVerified ? Colors.green : Colors.red,
+              // Property details
+              SizedBox(width: 8),
+              Expanded(
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            property['propertyTitle'] ?? 'No Title',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Icon(
+                            isVerified ? Icons.verified : Icons.not_interested,
+                            color: isVerified ? Colors.green : Colors.red,
+                            size: iconSize,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4),
+                      // Location
+                      Text(
+                        property['location'] ?? 'Unknown Location',
+                        style:
+                        TextStyle(color: Color(0xff7d7f88), fontSize: 14),
+                      ),
+                      SizedBox(height: 4),
+                      // Icons and details row
+                      Row(
+                        children: [
+                          Icon(Icons.bed,
+                              color: Color(0xff7d7f88), size: iconSize),
+                          SizedBox(width: 4),
+                          Text(
+                            '${property['bhk']}',
+                            style: TextStyle(color: Color(0xff7d7f88)),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(Icons.square_foot,
+                              color: Color(0xff7d7f88), size: iconSize),
+                          SizedBox(width: 4),
+                          Text(
+                            '${property['area'] ?? 'Unknown Area'} m²',
+                            style: TextStyle(color: Color(0xff7d7f88)),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '${property['price']} / month',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+
+                      // Price and verification
+
+                      Spacer(),
+                      Text(
+                        isVerified ? 'Verified' : 'Not Verified',
+                        style: TextStyle(
+                          color: isVerified ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ), // Spacing
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),
         ),
       ),
+      // child: Card(
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(15),
+      //   ),
+      //   elevation: 3,
+      //   shadowColor: Colors.black,
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: Colors.white,
+      //       borderRadius: BorderRadius.circular(15),
+      //     ),
+      //     height: 200,
+      //     width: 400,
+      //     child: Row(
+      //       mainAxisAlignment: MainAxisAlignment.start,
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [
+      //         property['imageURLs'] != null && property['imageURLs'].isNotEmpty
+      //             ? ClipRRect(
+      //                 borderRadius: BorderRadius.only(
+      //                     topLeft: Radius.circular(15),
+      //                     bottomLeft: Radius.circular(15)),
+      //                 child: Image.network(
+      //                   property['imageURLs'][0],
+      //                   fit: BoxFit.cover,
+      //                   height: 250,
+      //                   width: 110,
+      //                 ),
+      //               )
+      //             : ClipRRect(
+      //                 borderRadius: BorderRadius.only(
+      //                     topLeft: Radius.circular(15),
+      //                     bottomLeft: Radius.circular(15)),
+      //                 child: Image.asset(
+      //                   'assets/icons/wifi.png',
+      //                   height: 250,
+      //                 ),
+      //               ),
+      //         SizedBox(width: 20),
+      //         Column(
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: [
+      //             SizedBox(height: 20),
+      //             Text(
+      //               property['propertyTitle'] ?? 'No Title',
+      //               style: TextStyle(fontSize: 18),
+      //             ),
+      //             SizedBox(height: 10),
+      //             Text(property['location'] ?? 'Unknown Location',
+      //                 style: TextStyle(color: Color(0xff7d7f88), fontSize: 16)),
+      //             SizedBox(height: 10),
+      //             Row(
+      //               children: [
+      //                 Icon(Icons.bed),
+      //                 SizedBox(width: 5),
+      //                 Text('${property['bhk']}'),
+      //                 SizedBox(width: 10),
+      //                 Icon(Icons.house),
+      //                 SizedBox(width: 5),
+      //                 Text('${property['area'] ?? 'Unknown Area'} m²'),
+      //               ],
+      //             ),
+      //             SizedBox(height: 20),
+      //             Row(
+      //               children: [
+      //                 Text('${property['price']}'),
+      //                 Text(' / month'),
+      //               ],
+      //             ),
+      //             SizedBox(height: 20),
+      //             Text(
+      //               isVerified ? 'Verified' : 'Not Verified',
+      //               style: TextStyle(
+      //                   color: isVerified ? Colors.green : Colors.red,
+      //                   fontWeight: FontWeight.bold,
+      //                   fontSize: 16),
+      //             ),
+      //             SizedBox(
+      //               height: 10,
+      //             ),
+      //           ],
+      //         ),
+      //         SizedBox(width: 20),
+      //         Column(
+      //           children: [
+      //             SizedBox(height: 20),
+      //             Icon(
+      //               isVerified
+      //                   ? Icons.verified_user
+      //                   : Icons.not_interested_sharp,
+      //               color: isVerified ? Colors.green : Colors.red,
+      //             ),
+      //           ],
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     ),
   );
 }
