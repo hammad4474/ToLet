@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/owner/owner_property_detail.dart';
+import 'package:tolet/screens/owner/update_property_screen.dart';
 import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/tenant/listview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -230,6 +231,10 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GestureDetector(
+      onLongPress: () {
+        print('long pressed');
+        _showOptionsDialog(context, property);
+      },
       onTap: () {
         // Passing all relevant property details to the next screen
         Get.to(
@@ -353,5 +358,83 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
         ),
       ),
     ),
+  );
+}
+
+void _showOptionsDialog(BuildContext context, Map<String, dynamic> property) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Choose an option',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            ListTile(
+              leading: Icon(
+                Icons.edit,
+                color: Colors.blue,
+              ),
+              title: Text('Update'),
+              onTap: () {
+                Get.to(() => UpdatePropertyScreen(property: property));
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+              title: Text('Delete'),
+              onTap: () async {
+                // Handle delete property action
+                final confirmation =
+                    await _showDeleteConfirmationDialog(context);
+                if (confirmation == true) {
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection('properties')
+                      .doc(property['id'])
+                      .delete();
+                  Navigator.pop(context); // Close the bottom sheet
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+Future<bool?> _showDeleteConfirmationDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Confirm Delete'),
+        content: Text('Are you sure you want to delete this property?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false); // No
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true); // Yes
+            },
+            child: Text('Delete'),
+          ),
+        ],
+      );
+    },
   );
 }

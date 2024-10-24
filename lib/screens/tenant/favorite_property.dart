@@ -24,8 +24,12 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Favorite Properties'),
-        backgroundColor: Color(0xff1d3254),
+        automaticallyImplyLeading: false,
+        title: const Text(
+          'Favorite Properties',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: user != null
