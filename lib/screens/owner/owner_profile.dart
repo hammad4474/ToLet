@@ -59,12 +59,6 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 70,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context); // Go back to the previous screen
-          },
-        ),
       ),
       backgroundColor: Colors.white, // White background for the screen
       body: SingleChildScrollView(

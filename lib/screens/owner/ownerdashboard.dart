@@ -31,7 +31,20 @@ class _ownerDashboardState extends State<ownerDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+      if (_currentIndex == 0) {
+        // If on the Home screen, allow the app to be closed
+        return true;
+      } else {
+        // Navigate back to the Home screen
+        setState(() {
+          _currentIndex = 0;
+        });
+        return false;
+      }
+    },
+      child: Scaffold(
       body: _screens[_currentIndex], // Display the selected screen
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
@@ -107,6 +120,7 @@ class _ownerDashboardState extends State<ownerDashboard> {
             label: 'Profile',
           ),
         ],
+      ),
       ),
     );
   }
