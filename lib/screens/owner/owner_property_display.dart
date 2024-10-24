@@ -118,10 +118,6 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
   double iconSize = 24.0;
 
   return GestureDetector(
-    onLongPress: () {
-      print('long pressed');
-      _showOptionsDialog(context, property);
-    },
     onTap: () {
       Get.to(
           () => FetchAllProperties(
@@ -222,80 +218,5 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
         ),
       ),
     ),
-  );
-}
-
-void _showOptionsDialog(BuildContext context, Map<String, dynamic> property) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Choose an option',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.edit),
-              title: Text('Update'),
-              onTap: () {
-                // Handle update property action
-                // You may want to navigate to an update screen
-                // Get.to(() => UpdatePropertyScreen(property: property));
-                Navigator.pop(context); // Close the bottom sheet
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.delete),
-              title: Text('Delete'),
-              onTap: () async {
-                // Handle delete property action
-                final confirmation =
-                    await _showDeleteConfirmationDialog(context);
-                if (confirmation == true) {
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .collection('properties')
-                      .doc(property['id'])
-                      .delete();
-                  Navigator.pop(context); // Close the bottom sheet
-                }
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
-Future<bool?> _showDeleteConfirmationDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Confirm Delete'),
-        content: Text('Are you sure you want to delete this property?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false); // No
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true); // Yes
-            },
-            child: Text('Delete'),
-          ),
-        ],
-      );
-    },
   );
 }
