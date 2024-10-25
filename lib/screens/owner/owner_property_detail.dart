@@ -17,7 +17,7 @@ class OwnerPropertyDetailScreen extends StatefulWidget {
   final String area;
   final String bhk;
   final List<String> imageURLs; // List of image URLs for gallery
-  final bool isVerified;
+  //final bool isVerified;
   final String owner;
   final String propertyId;
   final List<String> facilities;
@@ -29,7 +29,7 @@ class OwnerPropertyDetailScreen extends StatefulWidget {
     required this.area,
     required this.bhk,
     required this.imageURLs,
-    required this.isVerified,
+    //required this.isVerified,
     required this.owner,
     required this.propertyId,
     required this.facilities,

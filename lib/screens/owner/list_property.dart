@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +23,7 @@ class ListPropertyScreen extends StatefulWidget {
 
 class _ListPropertyScreenState extends State<ListPropertyScreen> {
   int _selectedIndex = 2;
+  List<String> confirmedImages = []; // To store image paths of confirmed images
 
   String selectedBHK = '';
   bool isChecked = false;
@@ -33,65 +35,105 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   File? _selectedImage;
   List<File> _selectedImages = [];
 
+  void _removeImage(int index) {
+    setState(() {
+      confirmedImages.removeAt(index); // Remove image at specified index
+    });
+  }
+
   Future<void> _pickImages() async {
     final ImagePicker _picker = ImagePicker();
-    final List<XFile>? images =
-        await _picker.pickMultiImage(); // Updated to pick multiple images
+    final List<XFile>? images = await _picker.pickMultiImage();
 
     if (images != null && images.isNotEmpty) {
+      // Convert picked images to File and store them temporarily
+      List<File> tempImages = images.map((image) => File(image.path)).toList();
+
       bool? confirm = await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Confirm Image Selection'),
-            content: SizedBox(
-              height: 200,
-              width: 400,
-              child: Column(
-                children: [
-                  Flexible(
-                    child: ListView.builder(
-                      itemCount: images.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.file(File(images[index].path)),
-                        );
-                      },
-                    ),
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: Text('Confirm Image Selection'),
+                content: SizedBox(
+                  height: 200,
+                  width: 400,
+                  child: Column(
+                    children: [
+                      Flexible(
+                        child: ListView.builder(
+                          itemCount: tempImages.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.file(
+                                    tempImages[index],
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                ),
+                                // Cross icon for removing image
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        tempImages.removeAt(
+                                            index); // Remove image from tempImages list
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text('Confirm'),
                   ),
                 ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text('Confirm'),
-              ),
-            ],
+              );
+            },
           );
         },
       );
 
-      if (confirm == true) {
+      // If confirmed, save selected images to _selectedImages list
+      if (confirm == true && tempImages.isNotEmpty) {
         setState(() {
-          _selectedImages = images.map((image) => File(image.path)).toList();
+          _selectedImages = tempImages;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Images confirmed and selected.')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image selection canceled.')),
+          SnackBar(
+              content: Text('Image selection canceled or no images selected.')),
         );
       }
     }
@@ -230,29 +272,33 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        automaticallyImplyLeading: true,
         title: Text(
           'List new property',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-            size: 35,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     color: Colors.black,
+        //     size: 35,
+        //   ),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.menu, color: Colors.black),
+        //     onPressed: () {},
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -518,9 +564,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
               SizedBox(height: 20),
               // Upload photos
               GestureDetector(
-                onTap: () {
-                  _pickImages();
-                },
+                onTap: _pickImages,
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(16),
@@ -528,33 +572,62 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: isLoading
-                      ? LoadingAnimationWidget.waveDots(
-                          color: Colors.black, size: 20)
-                      : Column(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center, // Align to the left
-                          children: [
-                            // "Photos" label above the camera icon
-                            Text(
-                              'Photos',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Photos',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      _selectedImages.isEmpty
+                          ? Text('Upload Property Pictures')
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 8,
+                                mainAxisSpacing: 8,
+                              ),
+                              itemCount: _selectedImages.length,
+                              itemBuilder: (context, index) {
+                                return Stack(
+                                  children: [
+                                    Image.file(
+                                      _selectedImages[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                    Positioned(
+                                      top: 5,
+                                      right: 5,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedImages.removeAt(index);
+                                          });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              shape: BoxShape.circle),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/icons/upload.png'),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                // "Upload Property Pictures" on the left
-                                Text('Upload Property Pictures'),
-                              ],
-                            ),
-                          ],
-                        ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 20),

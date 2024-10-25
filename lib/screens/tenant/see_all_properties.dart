@@ -58,6 +58,10 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         title: Text(
           'See all properties',
           style: TextStyle(
@@ -67,17 +71,6 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white, // Background is white
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color:
-                Colors.black, // Icon color must be black to stand out on white
-            size: 35,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Container(
         color: Colors.white,
@@ -124,7 +117,8 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
                           itemCount: properties.length,
                           itemBuilder: (context, index) {
                             final property = properties[index];
-                            return buildPropertyCard(context, property, screenWidth);
+                            return buildPropertyCard(
+                                context, property, screenWidth);
                           },
                         );
                       },
@@ -144,9 +138,12 @@ class _SeeAllPropertiesState extends State<SeeAllProperties> {
   }
 }
 
-Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property, double screenWidth) {
+Widget buildPropertyCard(
+    BuildContext context, Map<String, dynamic> property, double screenWidth) {
   double iconSize = 24.0;
-  double fontSizeTitle = screenWidth < 600 ? 14.0 : 18.0;  // Dynamically adjust font size based on screen width
+  double fontSizeTitle = screenWidth < 600
+      ? 14.0
+      : 18.0; // Dynamically adjust font size based on screen width
   double fontSizeSubtitle = screenWidth < 600 ? 12.0 : 16.0;
 
   return GestureDetector(
@@ -225,7 +222,8 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property, do
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                       SizedBox(width: 10),
-                      Icon(Icons.house, color: Color(0xff7d7f88), size: iconSize),
+                      Icon(Icons.house,
+                          color: Color(0xff7d7f88), size: iconSize),
                       SizedBox(width: 5),
                       Flexible(
                         child: Text(
@@ -240,7 +238,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property, do
                   Text(
                     '\INR${property['price']}',
                     style: TextStyle(
-                      fontSize: fontSizeTitle, fontWeight: FontWeight.bold),
+                        fontSize: fontSizeTitle, fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis, // Prevent overflow here
                   ),
                 ],

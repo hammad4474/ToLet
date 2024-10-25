@@ -99,8 +99,8 @@ class _SignupInfofillState extends State<SignupInfofill> {
         User? user = userCredential.user;
         if (user != null) {
           await _firestore.collection('users').doc(user.uid).set({
-            'firstname': _fnameController.text.trim,
-            'lastname': _lnameController.text.trim,
+            'firstname': _fnameController.text.trim(),
+            'lastname': _lnameController.text.trim(),
             'email': user.email,
             'userType': selectedUserType,
           });
@@ -109,10 +109,30 @@ class _SignupInfofillState extends State<SignupInfofill> {
               msg: 'User Signed Up successfully',
               backgroundColor: Colors.green);
         }
+      } on FirebaseAuthException catch (e) {
+        // Handle specific Firebase Authentication error codes
+        String errorMessage;
+        if (e.code == 'email-already-in-use') {
+          errorMessage = 'The account already exists for this email.';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'The email address is not valid.';
+        } else if (e.code == 'weak-password') {
+          errorMessage =
+              'The password is too weak. Please choose a stronger one.';
+        } else if (e.code == 'operation-not-allowed') {
+          errorMessage = 'Email/password accounts are not enabled.';
+        } else {
+          errorMessage = 'An unexpected error occurred. Please try again.';
+        }
+        Fluttertoast.showToast(msg: errorMessage, backgroundColor: Colors.red);
       } catch (e) {
-        Fluttertoast.showToast(msg: 'Failed', backgroundColor: Colors.red);
+        // Catch any other type of error
+        Fluttertoast.showToast(
+            msg: 'An error occurred: $e', backgroundColor: Colors.red);
       } finally {
-        _isLoading = false;
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }

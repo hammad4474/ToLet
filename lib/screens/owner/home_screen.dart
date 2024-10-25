@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:tolet/screens/appbarScreens/home_appbar.dart';
+import 'package:tolet/screens/owner/owner_search_screen.dart';
 import 'package:tolet/screens/owner/ownerdashboard.dart';
 import 'package:tolet/screens/owner/list_property.dart';
 import 'package:tolet/screens/owner/owner_property_display.dart';
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _selectedLocation = 'Hyderabad';
 
   //int selectedRoleIndex = 0; // 0 for Owner, 1 for Tenant
- // int _selectedIndex = 0; // Keep track of the selected index
+  // int _selectedIndex = 0; // Keep track of the selected index
   final List<Map<String, String>> cities = [
     {'name': 'Bangalore', 'image': 'assets/images/bangalore.png'},
     {'name': 'Hyderabad', 'image': 'assets/images/Hyderabad.png'},
@@ -58,201 +59,207 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: HomeAppBar(
-            onSearchBarTapped: () {
-              Get.to(() => SearchPropertyScreen(), transition: Transition.fade);
-            },
-            onTuneIconPressed: () {
-              Get.to(() => HomeOwnerScreen(), transition: Transition.zoom);
-            },
-          ),
-          body: Container(
-            color: Colors.white, // Set your desired background color here
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Location Selector
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                  // Adjust padding as needed
-                  child: Text(
-                    'Your current locations',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Colors
-                          .grey[600], // Optional: color for a subtle appearance
-                    ),
+        appBar: HomeAppBar(
+          onSearchBarTapped: () {
+            Get.to(() => OwnerSearchScreen(), transition: Transition.fade);
+          },
+          onTuneIconPressed: () {
+            Get.to(() => HomeOwnerScreen(), transition: Transition.zoom);
+          },
+        ),
+        body: Container(
+          color: Colors.white, // Set your desired background color here
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Location Selector
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                // Adjust padding as needed
+                child: Text(
+                  'Your current locations',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Colors
+                        .grey[600], // Optional: color for a subtle appearance
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: true,
-                      barrierColor: Colors.black.withOpacity(
-                          0.5), // Transparent background with opacity
-                      builder: (BuildContext context) => Center(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                              maxWidth: 450,
-                              maxHeight: 600), // Limit dialog width
-                          child: CitySelectionDialog(
-                            cities: cities,
-                            onCitySelected:
-                                _setSelectedCity, // Pass the callback function
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    barrierColor: Colors.black.withOpacity(
+                        0.5), // Transparent background with opacity
+                    builder: (BuildContext context) => Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: 450,
+                            maxHeight: 600), // Limit dialog width
+                        child: CitySelectionDialog(
+                          cities: cities,
+                          onCitySelected:
+                              _setSelectedCity, // Pass the callback function
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.location_on, color: Color(0xff192747)),
+                      SizedBox(width: 5),
+                      Text(
+                        _selectedLocation + ', India',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Spacer(),
+                      Icon(Icons.expand_more),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Role Selector (Switchable)
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                // Adjust padding as needed
+                child: Text(
+                  'Welcome to Owner',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color:
+                        Colors.black, // Optional: color for a subtle appearance
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Container(
+                  height: 50, // Height for the outer grey container
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color:
+                        Colors.grey[200], // Background color for the entire row
+                    borderRadius: BorderRadius.circular(
+                        30), // Rounded corners for the entire container
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          //width: 100, // Set width as a percentage of the screen width
+                          //height: 38, // Smaller height for the blue container
+                          margin: const EdgeInsets.all(
+                              7.5), // Center the smaller button vertically
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(35),
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(
+                                    0xff192760), // Correct way to create a Color
+                                Color(
+                                    0xff192747), // Use the actual color value for App_blue_color
+                              ], // Gradient for selected button
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Owner',
+                              style: TextStyle(
+                                color: Colors
+                                    .white, // Text color for highlighted button
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.location_on, color: Color(0xff192747)),
-                        SizedBox(width: 5),
-                        Text(
-                          _selectedLocation + ', India',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Spacer(),
-                        Icon(Icons.expand_more),
-                      ],
-                    ),
+                      // Owner Button (Inactive)
+                      // Expanded(
+                      //   child: Container(
+                      //     // Slightly smaller height for the inactive button
+                      //     margin: const EdgeInsets.all(
+                      //         7.5), // Center the smaller button vertically
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(30),
+                      //       color: Colors
+                      //           .transparent, // Background color for unselected button
+                      //     ),
+                      //     child: Center(
+                      //       child: Text(
+                      //         'Tenant',
+                      //         style: TextStyle(
+                      //           color: Colors
+                      //               .grey, // Text color for unselected button
+                      //           fontWeight: FontWeight.bold,
+                      //           fontSize: 16,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Tenant Button (Active)
+                    ],
                   ),
                 ),
-
-                // Role Selector (Switchable)
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                  // Adjust padding as needed
-                  child: Text(
-                    'Welcome to Owner',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors
-                          .black, // Optional: color for a subtle appearance
+              ),
+              // Property ListView
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.05,
+                      vertical: MediaQuery.of(context).size.height *
+                          0.02), // Added vertical padding to ensure space
+                  children: [
+                    _buildPropertyCard(
+                      onTap: () {
+                        Get.to(() => ListPropertyScreen(),
+                            transition: Transition.fade);
+                      },
+                      context: context,
+                      imageUrl:
+                          'assets/images/home0.png', // Replace with actual image
+                      title: 'Want to host your new place?',
+                      description:
+                          'Post and manage rental listings & generate revenue from both long-term leases and daily rentals.',
+                      buttonText: 'List New Property',
                     ),
-                  ),
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height *
+                            0.02), // Responsive space between cards
+                    _buildPropertyCard(
+                      onTap: () {
+                        Get.to(() => PropertiesPanel(),
+                            transition: Transition.fade);
+                      },
+                      context: context,
+                      imageUrl:
+                          'assets/images/home1.png', // Replace with actual image
+                      title: 'Earn Daily Income',
+                      description:
+                          'Rent out your property for short-term stays and start earning daily. Manage bookings, track earnings, and maximize your revenue.',
+                      buttonText: 'See Your Property',
+                    ),
+                  ],
                 ),
-
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Container(
-                    height: 50, // Height for the outer grey container
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors
-                          .grey[200], // Background color for the entire row
-                      borderRadius: BorderRadius.circular(
-                          30), // Rounded corners for the entire container
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            //width: 100, // Set width as a percentage of the screen width
-                            //height: 38, // Smaller height for the blue container
-                            margin: const EdgeInsets.all(
-                                7.5), // Center the smaller button vertically
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(35),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(
-                                      0xff192760), // Correct way to create a Color
-                                  Color(
-                                      0xff192747), // Use the actual color value for App_blue_color
-                                ], // Gradient for selected button
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Owner',
-                                style: TextStyle(
-                                  color: Colors
-                                      .white, // Text color for highlighted button
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Owner Button (Inactive)
-                        // Expanded(
-                        //   child: Container(
-                        //     // Slightly smaller height for the inactive button
-                        //     margin: const EdgeInsets.all(
-                        //         7.5), // Center the smaller button vertically
-                        //     decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(30),
-                        //       color: Colors
-                        //           .transparent, // Background color for unselected button
-                        //     ),
-                        //     child: Center(
-                        //       child: Text(
-                        //         'Tenant',
-                        //         style: TextStyle(
-                        //           color: Colors
-                        //               .grey, // Text color for unselected button
-                        //           fontWeight: FontWeight.bold,
-                        //           fontSize: 16,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Tenant Button (Active)
-                      ],
-                    ),
-                  ),
-                ),
-                // Property ListView
-               Expanded(
-  child: ListView(
-    padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.05,
-        vertical: MediaQuery.of(context).size.height * 0.02), // Added vertical padding to ensure space
-    children: [
-      _buildPropertyCard(
-        onTap: () {
-          Get.to(() => ListPropertyScreen(), transition: Transition.fade);
-        },
-        context: context,
-        imageUrl: 'assets/images/home0.png', // Replace with actual image
-        title: 'Want to host your new place?',
-        description:
-            'Post and manage rental listings & generate revenue from both long-term leases and daily rentals.',
-        buttonText: 'List New Property',
-      ),
-      SizedBox(height: MediaQuery.of(context).size.height * 0.02), // Responsive space between cards
-      _buildPropertyCard(
-        onTap: () {
-          Get.to(() => PropertiesPanel(), transition: Transition.fade);
-        },
-        context: context,
-        imageUrl: 'assets/images/home1.png', // Replace with actual image
-        title: 'Earn Daily Income',
-        description:
-            'Rent out your property for short-term stays and start earning daily. Manage bookings, track earnings, and maximize your revenue.',
-        buttonText: 'See Your Property',
-      ),
-    ],
-  ),
-),
-
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
         //bottomNavigationBar: CustomBottomNavigationBar(),
-    ),
+      ),
     );
   }
 
@@ -267,10 +274,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-  double cardWidth = screenWidth < 450 ? screenWidth * 0.9 : screenWidth * 0.9;
-  double cardHeight = 180; 
-  double imageWidth = screenWidth * 0.3;
-  double iconSize = 22.0; 
+    double cardWidth =
+        screenWidth < 450 ? screenWidth * 0.9 : screenWidth * 0.9;
+    double cardHeight = 180;
+    double imageWidth = screenWidth * 0.3;
+    double iconSize = 22.0;
 
     return GestureDetector(
       onTap: onTap, // Call the onTap callback here

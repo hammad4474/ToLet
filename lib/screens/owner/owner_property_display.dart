@@ -52,6 +52,9 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         title: Text(
           'Properties',
           style: TextStyle(color: Color(0xff1a2847)),
@@ -87,10 +90,13 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
                     return GridView.builder(
                       padding: const EdgeInsets.all(10),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2, // Adjust based on screen width
+                        crossAxisCount: MediaQuery.of(context).size.width > 600
+                            ? 3
+                            : 2, // Adjust based on screen width
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        childAspectRatio: 0.7, // Adjust aspect ratio for responsiveness
+                        childAspectRatio:
+                            0.7, // Adjust aspect ratio for responsiveness
                       ),
                       itemCount: properties.length,
                       itemBuilder: (context, index) {
@@ -112,8 +118,10 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
 }
 
 Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
-  double cardHeight = MediaQuery.of(context).size.height * 0.3; // Set dynamic height
-  double imageHeight = cardHeight * 0.4; // Set image height based on card height
+  double cardHeight =
+      MediaQuery.of(context).size.height * 0.3; // Set dynamic height
+  double imageHeight =
+      cardHeight * 0.4; // Set image height based on card height
   double iconSize = 24.0;
 
   return GestureDetector(
@@ -125,7 +133,8 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
           price: property['price'] ?? 'Unknown Price',
           area: property['area'] ?? 'Unknown Area',
           bhk: property['bhk'] ?? 'Unknown BHK',
-          imageURLs: (property['imageURLs'] != null && property['imageURLs'].isNotEmpty)
+          imageURLs: (property['imageURLs'] != null &&
+                  property['imageURLs'].isNotEmpty)
               ? (property['imageURLs'] as List<dynamic>).cast<String>()
               : [],
           isVerified: true,
@@ -155,9 +164,11 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: (property['imageURLs'] != null && property['imageURLs'].isNotEmpty)
+              child: (property['imageURLs'] != null &&
+                      property['imageURLs'].isNotEmpty)
                   ? Image.network(
-                      (property['imageURLs'] as List<dynamic>).cast<String>()[0],
+                      (property['imageURLs'] as List<dynamic>)
+                          .cast<String>()[0],
                       fit: BoxFit.cover, // Use cover to fill space
                       height: imageHeight,
                       width: double.infinity,
@@ -193,7 +204,8 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                       SizedBox(width: 10),
-                      Icon(Icons.house, color: Color(0xff7d7f88), size: iconSize),
+                      Icon(Icons.house,
+                          color: Color(0xff7d7f88), size: iconSize),
                       SizedBox(width: 2),
                       Text(
                         '${property['area'] ?? ''} sq.ft.',

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +12,10 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   String? userName;
   int _totalProperties = 0;
 
   // Handle bottom navigation taps
-
 
   void initState() {
     super.initState();
@@ -59,21 +59,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        automaticallyImplyLeading: true,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_back, color: Colors.black),
+            Center(
+              child: Text(
+                'Dashboard',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              ),
             ),
-            Text(
-              'Dashboard',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            IconButton(
-                onPressed: () {}, icon: Icon(Icons.menu, color: Colors.black)),
           ],
         ),
       ),
@@ -147,7 +145,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
 
       // Bottom Navigation Bar
-     // bottomNavigationBar: CustomBottomNavigationBar(),
+      // bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 

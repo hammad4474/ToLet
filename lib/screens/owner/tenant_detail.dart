@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/widgets/constcolor.dart';
-
 
 class TenantDetailsScreen extends StatefulWidget {
   @override
@@ -49,9 +50,9 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                 children: [
                   CircleAvatar(
                     radius: 25,
-                    backgroundImage: AssetImage('assets/images/dp.png'), // Correct path
+                    backgroundImage:
+                        AssetImage('assets/images/dp.png'), // Correct path
                   ),
-
                   SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -65,8 +66,8 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                         SizedBox(height: 4),
                         Text(
                           'TENANT PRO',
-                          style: TextStyle(
-                              color: Colors.grey[600], fontSize: 14),
+                          style:
+                              TextStyle(color: Colors.grey[600], fontSize: 14),
                         ),
                       ],
                     ),
@@ -85,17 +86,17 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                       ],
                     ),
                     child: IconButton(
-                      icon: Icon(Icons.call, color: Colors.grey), // Grey call icon
+                      icon: Icon(Icons.call,
+                          color: Colors.grey), // Grey call icon
                       onPressed: () {
                         // Handle call action
                       },
                     ),
                   ),
-
                 ],
               ),
               SizedBox(height: 20),
-        
+
               // Requirements Section
               Text(
                 'Requirements',
@@ -114,26 +115,30 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center, // Align WiFi to the end
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // Align WiFi to the end
                     children: [
                       Container(
-                        width: 30,  // Set the width of the square
+                        width: 30, // Set the width of the square
                         height: 30, // Set the height of the square
                         decoration: BoxDecoration(
                           color: Colors.grey, // Grey background for the box
-                          borderRadius: BorderRadius.circular(8.0), // Slight rounding for square corners
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Slight rounding for square corners
                         ),
                         child: Center(
-                          child: Icon(Icons.wifi, color: Colors.white), // White WiFi icon
+                          child: Icon(Icons.wifi,
+                              color: Colors.white), // White WiFi icon
                         ),
                       ),
-                      SizedBox(width: 4), // Reduce space between the icon and the text
+                      SizedBox(
+                          width:
+                              4), // Reduce space between the icon and the text
                       Text('Free WiFi'),
                     ],
                   ),
                 ],
               ),
-
 
               SizedBox(height: 8),
               Row(
@@ -144,12 +149,15 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                 ],
               ),
               SizedBox(height: 20),
-        
+
               // Map Section (Use a placeholder image for map)
               Container(
                 height: 200,
                 width: double.infinity,
-                child: Image.asset('assets/images/Location.png',fit: BoxFit.cover,),
+                child: Image.asset(
+                  'assets/images/Location.png',
+                  fit: BoxFit.cover,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey[300],
@@ -157,7 +165,7 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                 ),
               ),
               SizedBox(height: 20),
-        
+
               // Description Section
               Text(
                 'Description',
@@ -169,7 +177,7 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                 style: TextStyle(fontSize: 14, color: Colors.grey[800]),
               ),
               SizedBox(height: 20),
-        
+
               // Contact Button
               Center(
                 child: Container(
@@ -178,21 +186,25 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     gradient: LinearGradient(
-                      colors: [Color(constcolor.App_lightblue_color), Color(constcolor.App_blue_color)], // Light blue to dark blue gradient
+                      colors: [
+                        Color(constcolor.App_lightblue_color),
+                        Color(constcolor.App_blue_color)
+                      ], // Light blue to dark blue gradient
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                   ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent, // Make button background transparent
+                      backgroundColor: Colors
+                          .transparent, // Make button background transparent
                       shadowColor: Colors.transparent, // Remove shadow
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                     ),
                     onPressed: () {
-                      // Handle contact action
+                      Get.to(() => ChatScreen(), transition: Transition.fade);
                     },
                     child: Text(
                       'Contact',
@@ -201,12 +213,10 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
       ),
-
-      );
+    );
   }
 }

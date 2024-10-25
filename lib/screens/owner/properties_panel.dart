@@ -224,7 +224,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
   double cardWidth = screenWidth < 450 ? screenWidth * 0.9 : screenWidth * 0.9;
   double cardHeight = 180;
   double imageWidth = screenWidth * 0.3;
-  double iconSize = 22.0;// Standard icon size
+  double iconSize = 22.0; // Standard icon size
 
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -240,14 +240,14 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
             title: property['propertyTitle'] ?? 'No Title',
             price: property['price'] ?? 'Unknown Price',
             location: property['location'] ?? 'Unknown Location',
-            area: property['area'] ?? 'Unknown Area',
+            area: property['area'] ?? 'Area',
             bhk: property['bhk']?.toString() ?? 'Unknown BHK',
             imageURLs: property['imageURLs'] != null &&
                     property['imageURLs'].isNotEmpty
                 ? List<String>.from(property['imageURLs'])
                 : [], // Pass an empty list if no images are found
             // Only passing the first image URL
-            isVerified: isVerified,
+            //  isVerified: isVerified,
             owner: property['firstname'] ?? 'Unknown Owner',
             propertyId: property['id'] ?? '',
             facilities: property['facilities'] != null
@@ -282,24 +282,24 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                 ),
                 child: property['imageURLs'] != null
                     ? Image.network(
-                  property['imageURLs'][0],
-                  fit: BoxFit.cover,
-                  height: cardHeight,
-                  width: imageWidth,
-                )
+                        property['imageURLs'][0],
+                        fit: BoxFit.cover,
+                        height: cardHeight,
+                        width: imageWidth,
+                      )
                     : Image.asset(
-                  'assets/icons/wifi.png',
-                  fit: BoxFit.cover,
-                  height: cardHeight,
-                  width: imageWidth,
-                ),
+                        'assets/icons/wifi.png',
+                        fit: BoxFit.cover,
+                        height: cardHeight,
+                        width: imageWidth,
+                      ),
               ),
               // Property details
               SizedBox(width: 8),
               Expanded(
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -326,7 +326,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       Text(
                         property['location'] ?? 'Unknown Location',
                         style:
-                        TextStyle(color: Color(0xff7d7f88), fontSize: 14),
+                            TextStyle(color: Color(0xff7d7f88), fontSize: 14),
                       ),
                       SizedBox(height: 4),
                       // Icons and details row
