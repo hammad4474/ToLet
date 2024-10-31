@@ -15,6 +15,7 @@ import 'package:tolet/widgets/customized_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
+
   const LoginScreen({super.key});
 
   @override
@@ -56,9 +57,19 @@ class _LoginScreenState extends State<LoginScreen> {
           await prefs.setString('userType', userType);
 
           if (userType == 'Tenant') {
-            Get.to(() => tenantDashboard(), transition: Transition.fade);
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => tenantDashboard()));
+            //Get.to(() => tenantDashboard(), transition: Transition.fade);
           } else if (userType == 'Landlord') {
-            Get.to(() => ownerDashboard(), transition: Transition.fade);
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ownerDashboard()));
+            //Get.to(() => ownerDashboard(), transition: Transition.fade);
           } else {
             Fluttertoast.showToast(
                 msg: 'Unknown user role', backgroundColor: Colors.red);
