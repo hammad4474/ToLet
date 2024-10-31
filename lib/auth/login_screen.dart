@@ -281,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
               ),
               SizedBox(
-                height: screenHeight * 0.15,
+                height: screenHeight * 0.13,
               ),
               Center(
                 child: Text(
@@ -291,22 +291,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: screenWidth * 0.04),
                 ),
               ),
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    Get.to(() => SignupScreen(), transition: Transition.fade);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => SignupScreen()));
-                  },
-                  child: CustomizedButton(
-                    title: 'Create an Account',
-                    colorButton: Color(constcolor.App_blue_color),
-                    height: screenHeight * 0.07,
-                    widht: screenWidth * 0.7,
-                    colorText: Colors.white,
-                    fontSize: screenWidth * 0.045,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(() => SignupScreen(), transition: Transition.fade);
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => SignupScreen()));
+                    },
+                    child: CustomizedButton(
+                      title: 'Create an Account',
+                      colorButton: Color(constcolor.App_blue_color),
+                      height: screenHeight * 0.07,
+                      widht: screenWidth * 0.7,
+                      colorText: Colors.white,
+                      fontSize: screenWidth * 0.045,
+                    ),
                   ),
                 ),
               )

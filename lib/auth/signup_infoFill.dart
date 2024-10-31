@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tolet/auth/login_screen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 import 'package:tolet/widgets/customized_button.dart';
 
@@ -159,11 +161,14 @@ class _SignupInfofillState extends State<SignupInfofill> {
                       fontSize: screenWidth * 0.06),
                 ),
               ),
-              Center(
-                child: Text(
-                  'on verifying the email belongs to you',
-                  style: TextStyle(
-                      color: Colors.black, fontSize: screenWidth * 0.04),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'on verifying the email belongs to you',
+                    style: TextStyle(
+                        color: Colors.black, fontSize: screenWidth * 0.04),
+                  ),
                 ),
               ),
               SizedBox(height: screenHeight * 0.04),
@@ -382,7 +387,7 @@ class _SignupInfofillState extends State<SignupInfofill> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.to(() => LoginScreen(), transition: Transition.fade);
                   },
                   child: Text(
                     'Back to login',

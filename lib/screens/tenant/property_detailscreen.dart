@@ -77,10 +77,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           .doc(widget.propertyId);
 
       if (isFavorited) {
-        // If it's already favorited, remove from favorites
         await favoritesRef.delete();
       } else {
-        // If it's not favorited, add to favorites
         await favoritesRef.set({
           'propertyId': widget.propertyId,
           'title': widget.title,

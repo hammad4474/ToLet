@@ -25,11 +25,16 @@ class _SignupScreenState extends State<SignupScreen> {
   String? verificationId;
   EmailOTP emailOTP = EmailOTP();
   bool _isVerified = false;
+  bool _isOtpObscured = true; // For toggling OTP visibility
 
-  @override
   void initState() {
     super.initState();
     _emailController.clear();
+
+    // Add a listener to the OTP controller to update the button's state
+    _otpController.addListener(() {
+      setState(() {}); // This will refresh the widget when OTP text changes
+    });
   }
 
   @override
@@ -93,37 +98,15 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  // String? _phoneValidator(String? value) {
-  //   if (value == null || value.isEmpty) {
-  //     return 'Please enter your phone number';
-  //   }
-  //   if (!RegExp(r'^\+\d{1,3}\d{4,14}$').hasMatch(value)) {
-  //     return 'Please enter a valid phone number';
-  //   }
-  //   return null;
-  // }
-
-  // Future<void> _verifyOtp() async {
-  //   if (verificationId != null) {
-  //     PhoneAuthCredential credential = PhoneAuthProvider.credential(
-  //       verificationId: verificationId!,
-  //       smsCode: _otpController.text,
-  //     );
-
-  //     try {
-  //       await FirebaseAuth.instance.signInWithCredential(credential);
-  //       setState(() {
-  //         _isOtpVerified = true;
-  //       });
-  //       Fluttertoast.showToast(msg: 'OTP verified successfully');
-  //     } catch (e) {
-  //       Fluttertoast.showToast(msg: 'Wrong OTP. Please try again.');
-  //       setState(() {
-  //         _isOtpVerified = false;
-  //       });
-  //     }
-  //   }
-  // }
+  String? _phoneValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your phone number';
+    }
+    if (!RegExp(r'^\+\d{1,3}\d{4,14}$').hasMatch(value)) {
+      return 'Please enter a valid phone number';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,13 +148,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
-                    Text(
-                      'VERIFY THROUGH Phone No',
-                      style: TextStyle(
-                        color: Color(0xffc3c3c3),
-                        fontSize: screenWidth * 0.045,
-                      ),
-                    ),
+
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
@@ -229,7 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         SizedBox(
                           width: screenWidth * 0.4,
                           child: TextFormField(
-                            obscureText: true,
+                            obscureText: _isOtpObscured,
                             controller: _otpController,
                             decoration: InputDecoration(
                               hintText: 'OTP',
@@ -246,6 +223,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide.none,
                               ),
+                              suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isOtpObscured
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isOtpObscured = !_isOtpObscured;
+                                    });
+                                  }),
                             ),
                           ),
                         ),
@@ -323,9 +311,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           ? LoadingAnimationWidget.inkDrop(
                               color: Colors.black, size: 50)
                           : InkWell(
-                              onTap: _verifyOtp,
-                              // onTap:
-                              //     _otpController.text.isNotEmpty ? _verifyOtp : null,
+                              onTap: _otpController.text.isNotEmpty
+                                  ? _verifyOtp
+                                  : null,
                               child: CustomizedButton(
                                 title: 'Verify',
                                 colorButton: Color(constcolor.App_blue_color),
@@ -342,25 +330,22 @@ class _SignupScreenState extends State<SignupScreen> {
               SizedBox(
                 height: screenHeight * 0.1,
               ),
-              InkWell(
-                onTap: () {
-                  Get.to(() => SignupInfofill(), transition: Transition.fadeIn);
-                },
-                // onTap: _isOtpVerified
-                //     ? () {
-                //         Get.to(() => SignupInfofill(),
-                //             transition: Transition.fade);
-                //       }
-                //     : null,
-                child: CustomizedButton(
-                  title: 'Next',
-                  colorButton: Color(constcolor.App_blue_color),
-                  height: screenHeight * 0.06,
-                  widht: screenWidth * 0.85,
-                  colorText: Colors.white,
-                  fontSize: screenWidth * 0.045,
-                ),
-              ),
+              // InkWell(
+              //   onTap: _isVerified
+              //       ? () {
+              //           Get.to(() => SignupInfofill(),
+              //               transition: Transition.fade);
+              //         }
+              //       : null,
+              //   child: CustomizedButton(
+              //     title: 'Next',
+              //     colorButton: Color(constcolor.App_blue_color),
+              //     height: screenHeight * 0.06,
+              //     widht: screenWidth * 0.85,
+              //     colorText: Colors.white,
+              //     fontSize: screenWidth * 0.045,
+              //   ),
+              // ),
             ],
           ),
         ),

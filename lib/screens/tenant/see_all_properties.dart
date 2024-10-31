@@ -179,6 +179,17 @@ Widget buildPropertyCard(
               ),
               child: property['imageURLs'] != null
                   ? Image.network(
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Text(
+                            'Image not available',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
                       property['imageURLs'][0],
                       fit: BoxFit.fill,
                       height: 110,

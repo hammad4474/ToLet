@@ -448,6 +448,17 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                 child: property['imageURLs'] != null
                     ? Image.network(
                         property['imageURLs'][0],
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Text(
+                              'Image not available',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          );
+                        },
                         fit: BoxFit.cover,
                         height: cardHeight,
                         width: imageWidth,
@@ -472,12 +483,16 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            property['propertyTitle'] ?? 'No Title',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                          Expanded(
+                            child: Text(
+                              property['propertyTitle'] ?? 'No Title',
+                              style: TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Icon(
                             isVerified ? Icons.verified : Icons.not_interested,
@@ -488,36 +503,46 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       ),
                       SizedBox(height: 4),
                       // Location
-                      Text(
-                        property['location'] ?? 'Unknown Location',
-                        style:
-                            TextStyle(color: Color(0xff7d7f88), fontSize: 14),
+                      Expanded(
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          property['location'] ?? 'Unknown Location',
+                          style:
+                              TextStyle(color: Color(0xff7d7f88), fontSize: 14),
+                        ),
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 3),
                       // Icons and details row
-                      Row(
-                        children: [
-                          Icon(Icons.bed,
-                              color: Color(0xff7d7f88), size: iconSize),
-                          SizedBox(width: 4),
-                          Text(
-                            '${property['bhk']}',
-                            style: TextStyle(color: Color(0xff7d7f88)),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(Icons.square_foot,
-                              color: Color(0xff7d7f88), size: iconSize),
-                          SizedBox(width: 4),
-                          Text(
-                            '${property['area'] ?? 'Unknown Area'} m²',
-                            style: TextStyle(color: Color(0xff7d7f88)),
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(Icons.bed,
+                                color: Color(0xff7d7f88), size: iconSize),
+                            SizedBox(width: 4),
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              '${property['bhk']}',
+                              style: TextStyle(color: Color(0xff7d7f88)),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(Icons.square_foot,
+                                color: Color(0xff7d7f88), size: iconSize),
+                            SizedBox(width: 4),
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              '${property['area'] ?? 'Area'}',
+                              style: TextStyle(color: Color(0xff7d7f88)),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        '${property['price']} / month',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                      Expanded(
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          '${property['price']} / month',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
                       ),
 
                       // Price and verification
@@ -534,7 +559,13 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Property posted by ${property['owner']}'),
+                          Expanded(
+                            child: Text(
+                              overflow: TextOverflow.ellipsis,
+                              'Property posted by ${property['owner']}',
+                              softWrap: true,
+                            ),
+                          ),
                           // GestureDetector(
                           //   onTap: () {
                           //     // Handle the tap event, e.g., toggle the favorite status

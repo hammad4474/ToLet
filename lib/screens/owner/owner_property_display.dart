@@ -169,7 +169,18 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                   ? Image.network(
                       (property['imageURLs'] as List<dynamic>)
                           .cast<String>()[0],
-                      fit: BoxFit.cover, // Use cover to fill space
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Text(
+                            'Image not available',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      }, // Use cover to fill space
                       height: imageHeight,
                       width: double.infinity,
                     )

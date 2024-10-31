@@ -23,7 +23,9 @@ class ListPropertyScreen extends StatefulWidget {
 
 class _ListPropertyScreenState extends State<ListPropertyScreen> {
   int _selectedIndex = 2;
-  List<String> confirmedImages = []; // To store image paths of confirmed images
+  List<String> confirmedImages = [];
+
+  // To store image paths of confirmed images
 
   String selectedBHK = '';
   bool isChecked = false;
@@ -669,8 +671,11 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
                           10.0), // Slightly square edges, adjust value as needed
                     ),
                   ),
-                  child: Text('SUBMIT',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                  child: isLoading
+                      ? LoadingAnimationWidget.inkDrop(
+                          color: Colors.black, size: 50)
+                      : Text('SUBMIT',
+                          style: TextStyle(fontSize: 16, color: Colors.white)),
                 ),
               ),
             ],

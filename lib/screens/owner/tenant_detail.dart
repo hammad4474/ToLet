@@ -29,14 +29,14 @@ class _TenantDetailsScreenState extends State<TenantDetailsScreen> {
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
-            onPressed: () {
-              // Handle menu action
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.menu, color: Colors.black),
+        //     onPressed: () {
+        //       // Handle menu action
+        //     },
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         child: Padding(
