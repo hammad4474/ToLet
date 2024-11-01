@@ -292,34 +292,35 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
                       ),
                       SizedBox(height: 8),
                       Row(
+                        //  mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Row(
-                            children: [
-                              Icon(Icons.location_on, color: Colors.grey),
-                              SizedBox(width: 4),
-                              Expanded(
-                                child: Text(
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Icon(Icons.location_on, color: Colors.grey),
+                                SizedBox(width: 4),
+                                Text(
                                     overflow: TextOverflow.clip,
                                     widget.location),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          SizedBox(width: 80),
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/icons/home.png',
-                                width: 24,
-                                height: 24,
-                              ),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
+                          SizedBox(width: 60),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/home.png',
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
                                     overflow: TextOverflow.clip,
                                     widget.area,
                                     style: TextStyle(fontSize: 16)),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),

@@ -279,12 +279,14 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                             //     size: iconSize,
                             //   ),
                             SizedBox(width: 4),
-                            Text(
-                              widget.property['propertyTitle'] ?? 'No Title',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                            Expanded(
+                              child: Text(
+                                widget.property['propertyTitle'] ?? 'No Title',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ],
                         ),

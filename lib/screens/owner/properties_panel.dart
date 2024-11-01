@@ -238,10 +238,10 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
         Get.to(
           () => OwnerPropertyDetailScreen(
             title: property['propertyTitle'] ?? 'No Title',
-            price: property['price'] ?? 'Unknown Price',
-            location: property['location'] ?? 'Unknown Location',
+            price: property['price'] ?? 'Price',
+            location: property['location'] ?? 'Location',
             area: property['area'] ?? 'Area',
-            bhk: property['bhk']?.toString() ?? 'Unknown BHK',
+            bhk: property['bhk']?.toString() ?? 'BHK',
             imageURLs: property['imageURLs'] != null &&
                     property['imageURLs'].isNotEmpty
                 ? List<String>.from(property['imageURLs'])
@@ -346,7 +346,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       ),
                       SizedBox(height: 3),
                       // Icons and details row
-                      Expanded(
+                      Flexible(
                         child: Row(
                           children: [
                             Icon(Icons.bed,
@@ -362,7 +362,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                             SizedBox(width: 4),
                             Text(
                               overflow: TextOverflow.ellipsis,
-                              '${property['area'] ?? 'Unknown Area'} m²',
+                              '${property['area'] ?? 'Area'} m²',
                               style: TextStyle(color: Color(0xff7d7f88)),
                             ),
                           ],

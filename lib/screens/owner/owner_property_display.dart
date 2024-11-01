@@ -137,16 +137,16 @@ Widget buildPropertyCard(
       Get.to(
         () => FetchAllProperties(
           title: property['propertyTitle'] ?? 'No Title',
-          location: property['location'] ?? 'Unknown Location',
-          price: property['price'] ?? 'Unknown Price',
-          area: property['area'] ?? 'Unknown Area',
-          bhk: property['bhk'] ?? 'Unknown BHK',
+          location: property['location'] ?? 'Location',
+          price: property['price'] ?? 'Price',
+          area: property['area'] ?? 'Area',
+          bhk: property['bhk'] ?? 'BHK',
           imageURLs: (property['imageURLs'] != null &&
                   property['imageURLs'].isNotEmpty)
               ? (property['imageURLs'] as List<dynamic>).cast<String>()
               : [],
           isVerified: true,
-          owner: property['owner'] ?? 'Unknown Owner',
+          owner: property['owner'] ?? 'Owner',
           propertyId: property['id'] ?? 'Unknown id',
           facilities: property['facilities'] != null
               ? (property['facilities'] as List<dynamic>).cast<String>()
