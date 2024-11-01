@@ -351,15 +351,15 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                           children: [
                             Icon(Icons.bed,
                                 color: Color(0xff7d7f88), size: iconSize),
-                            SizedBox(width: 4),
+                            SizedBox(width: 2),
                             Text(
                               '${property['bhk']}',
                               style: TextStyle(color: Color(0xff7d7f88)),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(width: 4),
                             Icon(Icons.square_foot,
                                 color: Color(0xff7d7f88), size: iconSize),
-                            SizedBox(width: 4),
+                            SizedBox(width: 2),
                             Text(
                               overflow: TextOverflow.ellipsis,
                               '${property['area'] ?? 'Unknown Area'} m²',
