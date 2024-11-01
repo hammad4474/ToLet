@@ -56,24 +56,24 @@ class _FetchAllPropertiesState extends State<FetchAllProperties> {
     super.initState();
     checkIfFavorited();
     fetchPropertyDetails();
-    _getCurrentUser();
+    //  _getCurrentUser();
   }
 
-  Future<void> _getCurrentUser() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
+  // Future<void> _getCurrentUser() async {
+  //   User? currentUser = FirebaseAuth.instance.currentUser;
 
-    if (currentUser != null) {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser.uid)
-          .get();
+  //   if (currentUser != null) {
+  //     DocumentSnapshot userDoc = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(currentUser.uid)
+  //         .get();
 
-      setState(() {
-        userName = userDoc.get('firstname');
-        userEmail = currentUser.email ?? 'No Email';
-      });
-    }
-  }
+  //     setState(() {
+  //       userName = userDoc.get('firstname');
+  //       userEmail = currentUser.email ?? 'No Email';
+  //     });
+  //   }
+  // }
 
   Future<void> checkIfFavorited() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -125,6 +125,12 @@ class _FetchAllPropertiesState extends State<FetchAllProperties> {
         } else {
           print('Gallery images data is not a string or list: $galleryData');
         }
+
+        // Fetch the owner's name from the property document
+        setState(() {
+          userName =
+              propertySnapshot.get('owner'); // Store the owner's name directly
+        });
       } else {
         print('Property not found');
       }
@@ -132,6 +138,51 @@ class _FetchAllPropertiesState extends State<FetchAllProperties> {
       print('Error fetching property details: $e');
     }
   }
+
+  // Future<void> fetchPropertyDetails() async {
+  //   try {
+  //     // Fetch the specific property from the 'propertiesAll' collection
+  //     DocumentSnapshot propertySnapshot = await FirebaseFirestore.instance
+  //         .collection('propertiesAll') // Access the 'propertiesAll' collection
+  //         .doc(widget.propertyId) // Get the specific property by its ID
+  //         .get();
+
+  //     final properties =
+  //         await FirebaseFirestore.instance.collection('propertiesAll').get();
+
+  //     if (propertySnapshot.exists) {
+  //       print('Fetched Data: ${propertySnapshot.data()}');
+
+  //       // Get the facilities data (assuming it's stored as a list of strings)
+  //       var facilitiesData = propertySnapshot.get('facilities');
+  //       if (facilitiesData is List) {
+  //         setState(() {
+  //           facilities = List<String>.from(facilitiesData);
+  //         });
+  //       } else {
+  //         print('Facilities data is not a list: $facilitiesData');
+  //       }
+
+  //       // Get the gallery images data (can be a list or a single string)
+  //       var galleryData = propertySnapshot.get('imageURLs');
+  //       if (galleryData is String) {
+  //         setState(() {
+  //           galleryImages = [galleryData];
+  //         });
+  //       } else if (galleryData is List) {
+  //         setState(() {
+  //           galleryImages = List<String>.from(galleryData);
+  //         });
+  //       } else {
+  //         print('Gallery images data is not a string or list: $galleryData');
+  //       }
+  //     } else {
+  //       print('Property not found');
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching property details: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -284,10 +335,11 @@ class _FetchAllPropertiesState extends State<FetchAllProperties> {
                             children: [
                               Icon(Icons.location_on, color: Colors.grey),
                               SizedBox(width: 4),
-                              Text(widget.location),
+                              Text(
+                                  overflow: TextOverflow.clip, widget.location),
                             ],
                           ),
-                          SizedBox(width: 80),
+                          SizedBox(width: 140),
                           Row(
                             children: [
                               Image.asset(

@@ -253,44 +253,27 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                         ),
                       ),
                       SizedBox(height: 16),
-                    Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Text widget with wrapping support
-        Flexible(
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        // Heart icon slightly raised
-        Transform.translate(
-          offset: Offset(0, -10), // Adjust -4 to the desired amount to raise the icon
-          child: IconButton(
-            icon: Icon(
-              isFavorited ? Icons.favorite : Icons.favorite_border,
-              color: isFavorited ? Colors.red : Colors.black,
-            ),
-            onPressed: () {
-              toggleFavorite();
-            },
-          ),
-        ),
-      ],
-    ),
-  ],
-),
-
-
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              isFavorited
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorited ? Colors.red : Colors.black,
+                            ),
+                            onPressed: () {
+                              toggleFavorite();
+                            },
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 8),
                       Row(
                         children: [

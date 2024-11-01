@@ -242,6 +242,17 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                   ),
                   child: widget.property['imageURLs'] != null
                       ? Image.network(
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Text(
+                                'Image not available',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            );
+                          },
                           widget.property['imageURLs'][0],
                           fit: BoxFit.cover,
                           height: cardHeight,

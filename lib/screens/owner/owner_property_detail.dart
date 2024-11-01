@@ -96,6 +96,13 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
     try {
       // Access the current user ID
       String userId = FirebaseAuth.instance.currentUser!.uid;
+      final properties =
+          await FirebaseFirestore.instance.collection('propertiesAll').get();
+      for (var property in properties.docs) {
+        String ownerName = property['owner'];
+        // Use ownerName as needed in your app
+        print('Owner of this property: $ownerName');
+      }
 
       // Fetch the specific property from the 'properties' subcollection
       DocumentSnapshot propertySnapshot = await FirebaseFirestore.instance
@@ -290,7 +297,11 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
                             children: [
                               Icon(Icons.location_on, color: Colors.grey),
                               SizedBox(width: 4),
-                              Text(widget.location),
+                              Expanded(
+                                child: Text(
+                                    overflow: TextOverflow.clip,
+                                    widget.location),
+                              ),
                             ],
                           ),
                           SizedBox(width: 80),
@@ -302,7 +313,12 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
                                 height: 24,
                               ),
                               SizedBox(width: 8),
-                              Text(widget.area, style: TextStyle(fontSize: 16)),
+                              Expanded(
+                                child: Text(
+                                    overflow: TextOverflow.clip,
+                                    widget.area,
+                                    style: TextStyle(fontSize: 16)),
+                              ),
                             ],
                           ),
                         ],

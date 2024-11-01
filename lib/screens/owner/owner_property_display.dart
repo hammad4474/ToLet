@@ -50,10 +50,12 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
+          color: Colors.black,
         ),
         title: Text(
           'Properties',
@@ -87,21 +89,28 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
                   } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     List<Map<String, dynamic>> properties = snapshot.data!;
 
-                    return GridView.builder(
-                      padding: const EdgeInsets.all(10),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: MediaQuery.of(context).size.width > 600
-                            ? 3
-                            : 2, // Adjust based on screen width
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio:
-                            0.7, // Adjust aspect ratio for responsiveness
-                      ),
-                      itemCount: properties.length,
-                      itemBuilder: (context, index) {
-                        final property = properties[index];
-                        return buildPropertyCard(context, property);
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        int crossAxisCount = screenWidth < 600 ? 2 : 3;
+                        double childAspectRatio =
+                            screenWidth < 600 ? 0.75 : 0.8;
+
+                        return GridView.builder(
+                          padding: const EdgeInsets.all(10),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: childAspectRatio,
+                          ),
+                          itemCount: properties.length,
+                          itemBuilder: (context, index) {
+                            final property = properties[index];
+                            return buildPropertyCard(
+                                context, property, screenWidth);
+                          },
+                        );
                       },
                     );
                   } else {
@@ -117,12 +126,11 @@ class _HomeOwnerScreenState extends State<HomeOwnerScreen> {
   }
 }
 
-Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
-  double cardHeight =
-      MediaQuery.of(context).size.height * 0.3; // Set dynamic height
-  double imageHeight =
-      cardHeight * 0.4; // Set image height based on card height
+Widget buildPropertyCard(
+    BuildContext context, Map<String, dynamic> property, double screenWidth) {
   double iconSize = 24.0;
+  double fontSizeTitle = screenWidth < 600 ? 14.0 : 18.0;
+  double fontSizeSubtitle = screenWidth < 600 ? 12.0 : 16.0;
 
   return GestureDetector(
     onTap: () {
@@ -155,8 +163,8 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        height: cardHeight,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
@@ -164,12 +172,13 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
               ),
-              child: (property['imageURLs'] != null &&
-                      property['imageURLs'].isNotEmpty)
+              child: property['imageURLs'] != null &&
+                      property['imageURLs'].isNotEmpty
                   ? Image.network(
-                      (property['imageURLs'] as List<dynamic>)
-                          .cast<String>()[0],
-                      fit: BoxFit.cover,
+                      property['imageURLs'][0],
+                      fit: BoxFit.fill,
+                      height: 110,
+                      width: double.infinity,
                       errorBuilder: (context, error, stackTrace) {
                         return Center(
                           child: Text(
@@ -180,54 +189,64 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property) {
                             ),
                           ),
                         );
-                      }, // Use cover to fill space
-                      height: imageHeight,
-                      width: double.infinity,
+                      },
                     )
                   : Image.asset(
-                      'assets/icons/wifi.png', // Default image if no URLs
-                      height: imageHeight,
+                      'assets/icons/wifi.png',
+                      height: 120,
                       width: double.infinity,
-                      fit: BoxFit.cover, // Use cover to fill space
                     ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     property['propertyTitle'] ?? 'No Title',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: fontSizeTitle),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  SizedBox(height: 4), // Reduced space
+                  SizedBox(height: 4),
                   Text(
                     property['location'] ?? 'Unknown Location',
-                    style: TextStyle(color: Color(0xff7d7f88), fontSize: 16),
+                    style: TextStyle(
+                      color: Color(0xff7d7f88),
+                      fontSize: fontSizeSubtitle,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  SizedBox(height: 4), // Reduced space
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Icon(Icons.bed, color: Color(0xff7d7f88), size: iconSize),
                       SizedBox(width: 5),
                       Text(
-                        '${property['bhk'] ?? 'N/A'}',
+                        '${property['bhk']} BHK',
                         style: TextStyle(color: Color(0xff7d7f88)),
                       ),
                       SizedBox(width: 10),
                       Icon(Icons.house,
                           color: Color(0xff7d7f88), size: iconSize),
-                      SizedBox(width: 2),
-                      Text(
-                        '${property['area'] ?? ''} sq.ft.',
-                        style: TextStyle(color: Color(0xff7d7f88)),
+                      SizedBox(width: 5),
+                      Flexible(
+                        child: Text(
+                          '${property['area']} sq.ft.',
+                          style: TextStyle(color: Color(0xff7d7f88)),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 4), // Reduced space
+                  SizedBox(height: 4),
                   Text(
-                    'INR ${property['price'] ?? 'N/A'}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    '\INR${property['price']}',
+                    style: TextStyle(
+                        fontSize: fontSizeTitle, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
