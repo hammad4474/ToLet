@@ -541,6 +541,17 @@ class _FetchAllPropertiesState extends State<FetchAllProperties> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Text(
+                          'Image not available',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
                     galleryImages[index],
                     fit: BoxFit.cover,
                   ),

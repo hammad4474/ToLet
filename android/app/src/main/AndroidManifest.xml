@@ -2,7 +2,7 @@
     package="com.example.tolet">
 
     <application
-        android:label="tolet"
+        android:label="2LET"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

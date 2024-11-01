@@ -410,14 +410,14 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
         Get.to(
           () => PropertyDetailsScreen(
             title: property['propertyTitle'] ?? 'No Title',
-            location: property['location'] ?? 'Unknown Location',
-            price: property['price'] ?? 'Unknown Price',
+            location: property['location'] ?? 'Location',
+            price: property['price'] ?? 'Price',
             area: property['area'] ?? 'Area',
-            bhk: property['bhk'] ?? 'Unknown BHK',
+            bhk: property['bhk'] ?? 'BHK',
             imageURL: property['imageURLs'][0] ?? 'assets/icons/wifi.png',
             isVerified: isVerified,
             owner: property['owner'],
-            propertyId: property['id'] ?? 'Unknown id',
+            propertyId: property['id'] ?? 'id',
           ),
           transition: Transition.fade,
         );
@@ -506,7 +506,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       Expanded(
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          property['location'] ?? 'Unknown Location',
+                          property['location'] ?? 'Location',
                           style:
                               TextStyle(color: Color(0xff7d7f88), fontSize: 14),
                         ),

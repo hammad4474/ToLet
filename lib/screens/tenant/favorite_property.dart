@@ -84,6 +84,7 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.network(
                                   favorite['imageURLs'],
+                                  
                                   height: 80,
                                   width: 80,
                                   fit: BoxFit.cover,

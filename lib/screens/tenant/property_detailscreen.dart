@@ -256,10 +256,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            widget.title,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: Text(
+                              overflow: TextOverflow.clip,
+                              widget.title,
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
                           ),
                           IconButton(
                             icon: Icon(
@@ -302,24 +305,29 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       SizedBox(height: 8),
                       Row(
                         children: [
-                          Row(
-                            children: [
-                              Icon(Icons.location_on, color: Colors.grey),
-                              SizedBox(width: 4),
-                              Text(widget.location),
-                            ],
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Icon(Icons.location_on, color: Colors.grey),
+                                SizedBox(width: 4),
+                                Text(widget.location),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: 80),
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/icons/home.png',
-                                width: 24,
-                                height: 24,
-                              ),
-                              SizedBox(width: 8),
-                              Text(widget.area, style: TextStyle(fontSize: 16)),
-                            ],
+                          SizedBox(width: 60),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/icons/home.png',
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                SizedBox(width: 8),
+                                Text(widget.area,
+                                    style: TextStyle(fontSize: 16)),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -579,6 +587,17 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Text(
+                          'Image not available',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
                     galleryImages[index],
                     fit: BoxFit.cover,
                   ),

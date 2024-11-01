@@ -147,7 +147,7 @@ Widget buildPropertyCard(
               : [],
           isVerified: true,
           owner: property['owner'] ?? 'Owner',
-          propertyId: property['id'] ?? 'Unknown id',
+          propertyId: property['id'] ?? 'id',
           facilities: property['facilities'] != null
               ? (property['facilities'] as List<dynamic>).cast<String>()
               : [],
@@ -211,7 +211,7 @@ Widget buildPropertyCard(
                   ),
                   SizedBox(height: 4),
                   Text(
-                    property['location'] ?? 'Unknown Location',
+                    property['location'] ?? 'Location',
                     style: TextStyle(
                       color: Color(0xff7d7f88),
                       fontSize: fontSizeSubtitle,

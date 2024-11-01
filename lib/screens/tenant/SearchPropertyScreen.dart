@@ -207,14 +207,14 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
           Get.to(
             () => PropertyDetailsScreen(
               propertyId: widget.property.id,
-              title: widget.property['propertyTitle'] ?? 'Unknown Title',
-              location: 'Unknown Location',
-              price: widget.property['price'] ?? 'Unknown Price',
+              title: widget.property['propertyTitle'] ?? 'Title',
+              location: 'Location',
+              price: widget.property['price'] ?? 'Price',
               imageURL: widget.property['imageURLs'][0] ?? '',
-              area: 'Unknown Area',
-              bhk: widget.property['bhk'] ?? 'Unknown Rooms',
+              area: 'Area',
+              bhk: widget.property['bhk'] ?? 'Rooms',
               isVerified: false,
-              owner: widget.property['owner'] ?? 'Unknown Owner',
+              owner: widget.property['owner'] ?? 'Owner',
             ),
             transition: Transition.leftToRightWithFade,
           );
@@ -300,7 +300,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                         SizedBox(height: 4),
                         // Location
                         Text(
-                          'Unknown City',
+                          'City',
                           style:
                               TextStyle(color: Color(0xff7d7f88), fontSize: 14),
                         ),
@@ -334,7 +334,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                           children: [
                             Text(
                               widget.property['price'] + '/ month' ??
-                                  'Unknown Price' + '/ month',
+                                  'Price' + '/ month',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),

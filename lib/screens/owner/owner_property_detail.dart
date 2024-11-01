@@ -202,7 +202,18 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
                       height: 250,
                       child: PageView(
                         children: [
-                          Image.network(widget.imageURLs[0], fit: BoxFit.cover),
+                          Image.network(
+                              errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Text(
+                                'Image not available',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            );
+                          }, widget.imageURLs[0], fit: BoxFit.cover),
                           Image.network('https://via.placeholder.com/400',
                               fit: BoxFit.cover),
                           Image.network('https://via.placeholder.com/400',
@@ -512,6 +523,17 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Text(
+                          'Image not available',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
                     galleryImages[index],
                     fit: BoxFit.cover,
                   ),

@@ -207,16 +207,16 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
           Get.to(
             () => OwnerPropertyDetailScreen(
               title: widget.property['propertyTitle'] ?? 'No Title',
-              price: widget.property['price'] ?? 'Unknown Price',
-              location: 'Unknown Location',
-              area: 'Unknown Area',
-              bhk: widget.property['bhk']?.toString() ?? 'Unknown BHK',
+              price: widget.property['price'] ?? 'Price',
+              location: 'Location',
+              area: 'Area',
+              bhk: widget.property['bhk']?.toString() ?? 'BHK',
               imageURLs: widget.property['imageURLs'] != null &&
                       widget.property['imageURLs'].isNotEmpty
                   ? List<String>.from(widget.property['imageURLs'])
                   : [],
               //  isVerified: false,
-              owner: 'Unknown Owner',
+              owner: 'Owner',
               propertyId: '',
               facilities: widget.property['facilities'] != null
                   ? List<String>.from(widget.property['facilities'])
@@ -248,6 +248,17 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                   ),
                   child: widget.property['imageURLs'] != null
                       ? Image.network(
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Text(
+                                'Image not available',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            );
+                          },
                           widget.property['imageURLs'][0],
                           fit: BoxFit.cover,
                           height: cardHeight,
@@ -293,7 +304,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                         SizedBox(height: 4),
                         // Location
                         Text(
-                          'Unknown Location',
+                          'Location',
                           style:
                               TextStyle(color: Color(0xff7d7f88), fontSize: 14),
                         ),
@@ -313,7 +324,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                                 color: Color(0xff7d7f88), size: iconSize),
                             SizedBox(width: 4),
                             Text(
-                              'Unknown Area',
+                              'Area',
                               style: TextStyle(color: Color(0xff7d7f88)),
                             ),
                           ],
@@ -324,7 +335,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '${widget.property['price'] ?? 'Unknown Price'}/ month',
+                              '${widget.property['price'] ?? 'Price'}/ month',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),

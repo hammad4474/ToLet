@@ -15,7 +15,6 @@ import 'package:tolet/widgets/customized_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-
   const LoginScreen({super.key});
 
   @override
@@ -58,17 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
           if (userType == 'Tenant') {
             Navigator.pop(context);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => tenantDashboard()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => tenantDashboard()));
             //Get.to(() => tenantDashboard(), transition: Transition.fade);
           } else if (userType == 'Landlord') {
             Navigator.pop(context);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ownerDashboard()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => ownerDashboard()));
             //Get.to(() => ownerDashboard(), transition: Transition.fade);
           } else {
             Fluttertoast.showToast(

@@ -248,7 +248,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                 : [], // Pass an empty list if no images are found
             // Only passing the first image URL
             //  isVerified: isVerified,
-            owner: property['firstname'] ?? 'Unknown Owner',
+            owner: property['firstname'] ?? 'Owner',
             propertyId: property['id'] ?? '',
             facilities: property['facilities'] != null
                 ? List<String>.from(property['facilities'])
@@ -339,7 +339,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
                       Expanded(
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          property['location'] ?? 'Unknown Location',
+                          property['location'] ?? 'Location',
                           style:
                               TextStyle(color: Color(0xff7d7f88), fontSize: 14),
                         ),

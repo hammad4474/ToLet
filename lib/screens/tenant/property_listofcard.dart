@@ -18,11 +18,11 @@ class Property {
   // Factory constructor to create a Property object from a Firestore document
   factory Property.fromMap(Map<String, dynamic> map) {
     return Property(
-      bhk: map['bhk'] ?? 'Unknown BHK', // Default to 'Unknown BHK' if missing
+      bhk: map['bhk'] ?? 'BHK', // Default to 'Unknown BHK' if missing
       price: map['price'] ?? '0', // Default to '0' if price is missing
       imageURL: map['imageURL'] ?? '', // Default to an empty string if missing
       facilities: List<String>.from(map['facilities'] ?? []), // Handle null facilities
-      propertyTitle: map['propertyTitle'] ?? 'Unknown Property', // Default to 'Unknown Property'
+      propertyTitle: map['propertyTitle'] ?? 'Property', // Default to 'Unknown Property'
       isVerified: map['isVerified'] ?? true, // Default to true if not present
     );
   }

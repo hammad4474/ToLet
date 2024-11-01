@@ -2,22 +2,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tolet/auth/login_screen.dart';
+import 'package:tolet/onboarding_screen.dart';
 import 'package:tolet/screens/owner/ownerdashboard.dart';
-import 'package:tolet/screens/owner/home_screen.dart';
-import 'package:tolet/screens/tenant/home_tenant.dart';
 import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
@@ -27,8 +25,6 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
-
-
 
 class _MyAppState extends State<MyApp> {
   Widget _initialScreen = WelcomeScreen();
@@ -45,9 +41,13 @@ class _MyAppState extends State<MyApp> {
     String? userType = prefs.getString('userType');
     bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
 
-
-
-    if (isLoggedIn && userType != null) {
+    if (isFirstTime) {
+      setState(() {
+        _initialScreen = OnBoarding();
+      });
+      prefs.setBool('isFirstTime',
+          false); // Set as not first-time after showing onboarding
+    } else if (isLoggedIn && userType != null) {
       // Navigate based on the stored userType
       if (userType == 'Tenant') {
         setState(() {
@@ -58,16 +58,13 @@ class _MyAppState extends State<MyApp> {
           _initialScreen = ownerDashboard();
         });
       } else {
-        // If userType is unknown, navigate to LoginScreen
         setState(() {
           _initialScreen = LoginScreen();
         });
       }
     } else {
-      // If not logged in, show the WelcomeScreen
-
       setState(() {
-        _initialScreen = isFirstTime ? WelcomeScreen() : LoginScreen();
+        _initialScreen = LoginScreen();
       });
     }
   }

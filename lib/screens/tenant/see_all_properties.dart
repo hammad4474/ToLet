@@ -150,14 +150,14 @@ Widget buildPropertyCard(
     onTap: () {
       Get.to(() => PropertyDetailsScreen(
             title: property['propertyTitle'] ?? 'No Title',
-            location: property['location'] ?? 'Unknown Location',
-            price: property['price'] ?? 'Unknown Price',
-            area: property['area'] ?? 'Unknown Area',
-            bhk: property['bhk'] ?? 'Unknown BHK',
+            location: property['location'] ?? 'Location',
+            price: property['price'] ?? 'Price',
+            area: property['area'] ?? 'Area',
+            bhk: property['bhk'] ?? 'BHK',
             imageURL: property['imageURLs'][0] ?? 'assets/icons/wifi.png',
             isVerified: true, // Assuming properties are verified
             owner: property['owner'],
-            propertyId: property['id'] ?? 'Unknown id',
+            propertyId: property['id'] ?? 'id',
           ));
     },
     child: Card(
@@ -215,7 +215,7 @@ Widget buildPropertyCard(
                   ),
                   SizedBox(height: 4),
                   Text(
-                    property['location'] ?? 'Unknown Location',
+                    property['location'] ?? 'Location',
                     style: TextStyle(
                       color: Color(0xff7d7f88),
                       fontSize: fontSizeSubtitle,
