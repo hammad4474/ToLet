@@ -18,6 +18,7 @@ class _OnBoardingState extends State<OnBoarding> {
 
   void _goToWelcomeScreen() async {
     await _markOnboardingComplete();
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => WelcomeScreen()),

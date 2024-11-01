@@ -23,61 +23,67 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Widget _initialScreen = WelcomeScreen();
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      theme: ThemeData(
+        useMaterial3: false,
+        appBarTheme: const AppBarTheme(color: Colors.white),
+        primaryColor: const Color(0xff1c2746),
+      ),
+      home: const InitialScreen(),
+    );
+  }
+}
+
+class InitialScreen extends StatefulWidget {
+  const InitialScreen({Key? key}) : super(key: key);
+
+  @override
+  _InitialScreenState createState() => _InitialScreenState();
+}
+
+class _InitialScreenState extends State<InitialScreen> {
+  late Widget _initialScreen;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _checkLoginState();
+    _initializeScreen();
   }
 
-  Future<void> _checkLoginState() async {
+  Future<void> _initializeScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     String? userType = prefs.getString('userType');
     bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
 
     if (isFirstTime) {
-      setState(() {
-        _initialScreen = OnBoarding();
-      });
-      prefs.setBool('isFirstTime',
-          false); // Set as not first-time after showing onboarding
+      _initialScreen = OnBoarding();
+      await prefs.setBool('isFirstTime', false);
     } else if (isLoggedIn && userType != null) {
-      // Navigate based on the stored userType
-      if (userType == 'Tenant') {
-        setState(() {
-          _initialScreen = tenantDashboard();
-        });
-      } else if (userType == 'Landlord') {
-        setState(() {
-          _initialScreen = ownerDashboard();
-        });
-      } else {
-        setState(() {
-          _initialScreen = LoginScreen();
-        });
-      }
+      _initialScreen =
+          userType == 'Tenant' ? tenantDashboard() : ownerDashboard();
     } else {
-      setState(() {
-        _initialScreen = LoginScreen();
-      });
+      _initialScreen = LoginScreen();
     }
+
+    // Only set state after all preferences are loaded
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      theme: ThemeData(
-        useMaterial3: false,
-        appBarTheme: AppBarTheme(color: Colors.white),
-        primaryColor: Color(0xff1c2746),
-      ),
-      home: _initialScreen,
-    );
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return _initialScreen;
   }
 }
