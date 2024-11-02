@@ -59,21 +59,24 @@ class _InitialScreenState extends State<InitialScreen> {
 
   Future<void> _initializeScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    bool? isFirstTime = prefs.getBool('isFirstTime');
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     String? userType = prefs.getString('userType');
-    bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
 
-    if (isFirstTime) {
+    if (isFirstTime == null || isFirstTime == true) {
+      // Show onboarding screen for the first launch
       _initialScreen = OnBoarding();
       await prefs.setBool('isFirstTime', false);
     } else if (isLoggedIn && userType != null) {
+      // Direct user to their dashboard if logged in
       _initialScreen =
           userType == 'Tenant' ? tenantDashboard() : ownerDashboard();
     } else {
+      // If not logged in, show the login screen
       _initialScreen = LoginScreen();
     }
 
-    // Only set state after all preferences are loaded
     setState(() {
       _isLoading = false;
     });

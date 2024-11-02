@@ -49,6 +49,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  // Future<void> _logout() async {
+  //   try {
+  //     // Sign out from Firebase
+  //     await FirebaseAuth.instance.signOut();
+
+  //     // Clear shared preferences except for `isFirstTime`
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     await prefs.remove('isLoggedIn');
+  //     await prefs.remove('userType');
+
+  //     // Navigate to the Welcome screen
+  //     Get.offAll(() => WelcomeScreen(), transition: Transition.fadeIn);
+  //   } catch (e) {
+  //     print("Error signing out: $e");
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         print("Error signing out: $e");
                       }
                     },
+                    // _logout,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,

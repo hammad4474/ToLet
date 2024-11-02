@@ -48,9 +48,25 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
   //   setState(() {
   //     _selectedIndex = index;
   //   }
-   //);
-    // Add logic here for navigation or any other action
- // }
+  //);
+  // Add logic here for navigation or any other action
+  // }
+  // Future<void> _logout() async {
+  //   try {
+  //     // Sign out from Firebase
+  //     await FirebaseAuth.instance.signOut();
+
+  //     // Clear shared preferences except for `isFirstTime`
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     await prefs.remove('isLoggedIn');
+  //     await prefs.remove('userType');
+
+  //     // Navigate to the Welcome screen
+  //     Get.offAll(() => WelcomeScreen(), transition: Transition.fadeIn);
+  //   } catch (e) {
+  //     print("Error signing out: $e");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +153,8 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
                         await FirebaseAuth.instance.signOut();
 
                         // Clear all shared preferences
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
                         await prefs.clear();
 
                         Navigator.pushReplacement(
@@ -148,6 +165,8 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
                         print("Error signing out: $e");
                       }
                     },
+                    // _logout,
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
@@ -167,7 +186,7 @@ class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
           ],
         ),
       ),
-       //bottomNavigationBar: CustomBottomNavigationBar(),
+      //bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 

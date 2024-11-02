@@ -13,7 +13,10 @@ class _OnBoardingState extends State<OnBoarding> {
 
   Future<void> _markOnboardingComplete() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isFirstTime', false);
+    // Ensure `isFirstTime` is set to false only once, permanently
+    if (prefs.getBool('isFirstTime') != false) {
+      await prefs.setBool('isFirstTime', false);
+    }
   }
 
   void _goToWelcomeScreen() async {

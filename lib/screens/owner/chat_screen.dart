@@ -109,20 +109,20 @@ class _ChatScreenState extends State<ChatScreen> {
             },
           ),
           SizedBox(height: 20), // Space between the TextField and the button
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Navigates back to the previous screen
-            },
-            child: Text(
-              'Back',
-              style: TextStyle(
-                  fontSize: 15, color: Colors.grey), // Adjust the text size
-            ),
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(
-                  vertical: 10.0, horizontal: 20.0), // Add padding
-            ),
-          ),
+          // TextButton(
+          //   onPressed: () {
+          //     Navigator.pop(context); // Navigates back to the previous screen
+          //   },
+          //   child: Text(
+          //     'Back',
+          //     style: TextStyle(
+          //         fontSize: 15, color: Colors.grey), // Adjust the text size
+          //   ),
+          //   style: TextButton.styleFrom(
+          //     padding: EdgeInsets.symmetric(
+          //         vertical: 10.0, horizontal: 20.0), // Add padding
+          //   ),
+          // ),
         ],
       ),
       //bottomNavigationBar: CustomBottomNavigationBar(),
