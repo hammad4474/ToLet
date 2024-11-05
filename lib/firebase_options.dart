@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAh-0n5N5hPhJZmY7DTN0BSNie2Mqsdy50',
-    appId: '1:381700652858:android:b92a2aa67e04470ec95a03',
+    appId: '1:381700652858:android:8dd87608665e750dc95a03',
     messagingSenderId: '381700652858',
     projectId: 'tolet-b666d',
     storageBucket: 'tolet-b666d.appspot.com',
@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'tolet-b666d.appspot.com',
     measurementId: 'G-9ZXCS13329',
   );
+
 }

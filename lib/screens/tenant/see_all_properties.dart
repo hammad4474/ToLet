@@ -158,6 +158,7 @@ Widget buildPropertyCard(
             isVerified: true, // Assuming properties are verified
             owner: property['owner'],
             propertyId: property['id'] ?? 'id',
+            ownerId: property['ownerId'],
           ));
     },
     child: Card(

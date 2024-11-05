@@ -1,8 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:tolet/screens/tenant/tenantdashboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
 import 'package:tolet/widgets/constcolor.dart';
+import 'package:get/get.dart';
 
-class tenantmessagescreen extends StatelessWidget {
+class TenantMessageScreen extends StatefulWidget {
+  final String chatId; // Chat ID to identify the conversation
+  final String ownerName; // Owner's name
+
+  TenantMessageScreen({required this.chatId, required this.ownerName});
+
+  @override
+  _TenantMessageScreenState createState() => _TenantMessageScreenState();
+}
+
+class _TenantMessageScreenState extends State<TenantMessageScreen> {
+  final TextEditingController _messageController = TextEditingController();
+
+  Future<void> _sendMessage() async {
+    if (_messageController.text.isEmpty) return;
+
+    final tenantId = FirebaseAuth.instance.currentUser?.uid;
+    final messageData = {
+      'text': _messageController.text,
+      'sentBy': tenantId,
+      'isRead': false,
+    };
+
+    _messageController.clear(); //
+    try {
+      // Step 1: Add the message without the timestamp
+      await FirebaseFirestore.instance
+          .collection('chats')
+          .doc(widget.chatId)
+          .update({
+        'msgs': FieldValue.arrayUnion([messageData]),
+      });
+
+      // Step 2: Update the last message to include the timestamp
+      await FirebaseFirestore.instance
+          .collection('chats')
+          .doc(widget.chatId)
+          .update({
+        'msgs': FieldValue.arrayUnion([
+          {
+            ...messageData,
+            'timestamp': FieldValue.serverTimestamp(), // Now add timestamp here
+          }
+        ]),
+      });
+      // await Future.delayed(Duration(milliseconds: 100));
+      // _messageController.clear();
+    } catch (e) {
+      print("Error sending message: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,66 +78,72 @@ class tenantmessagescreen extends StatelessWidget {
             ),
             SizedBox(width: 10),
             Text(
-              'Bhuban KC',
+              widget.ownerName.toUpperCase(), // Display owner's name here
               style: TextStyle(color: Colors.black),
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.menu, color: Colors.black),
+        //     onPressed: () {},
+        //   ),
+        // ],
       ),
-
       body: Column(
         children: [
           Expanded(
-            child: ListView(
-              children: [
-                MessageTile(
-                  message: 'How is the property condition?',
-                  time: '14:22',
-                  isSentByMe: true,
-                  isRead: true,
-                ),
-                MessageTile(
-                  message: 'It’s nice myan for sure.\nYou will love it',
-                  time: '14:24',
-                  isSentByMe: false,
-                ),
-                MessageTile(
-                  message: 'I see, thanks for informing!',
-                  time: '14:28',
-                  isSentByMe: true,
-                  isRead: true,
-                ),
-                MessageTile(
-                  message: 'Thanks for contacting me!',
-                  time: '14:30',
-                  isSentByMe: false,
-                ),
-              ],
+            child: StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('chats')
+                  .doc(widget.chatId)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return Center(child: Text('No messages yet.'));
+                }
+
+                // Extract messages from Firestore data
+                List<MessageTile> messages = [];
+
+                final data = snapshot.data?['msgs'] as List<dynamic>?;
+
+                if (data != null) {
+                  for (var msg in data) {
+                    messages.add(MessageTile(
+                      message: msg['text'],
+                      timestamp:
+                          msg['timestamp'] as Timestamp?, // Pass timestamp
+                      isSentByMe: msg['sentBy'] ==
+                          FirebaseAuth.instance.currentUser?.uid,
+                      isRead: msg['isRead'] ?? false,
+                    ));
+                  }
+                }
+
+                return ListView(
+                  children: messages, // Display fetched messages here
+                );
+              },
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Container(
-                  width: 30, // Width and height of the circle
-                  height: 30,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border:
-                    Border.all(color: Colors.grey, width: 2), // Grey border
-                    color: Colors.white, // White background
-                  ),
-                  child: Icon(Icons.add,
-                      color: Colors.grey,
-                      size: 20), // Plus icon inside the circle
-                ),
+                // Container(
+                //   width: 30, // Width and height of the circle
+                //   height: 30,
+                //   decoration: BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     border:
+                //         Border.all(color: Colors.grey, width: 2), // Grey border
+                //     color: Colors.white, // White background
+                //   ),
+                //   child: Icon(Icons.add,
+                //       color: Colors.grey,
+                //       size: 20), // Plus icon inside the circle
+                // ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Container(
@@ -99,74 +160,69 @@ class tenantmessagescreen extends StatelessWidget {
                               color: Colors.grey), // Message icon to the left
                           SizedBox(
                               width:
-                              8), // Spacing between the icon and text field
+                                  8), // Spacing between the icon and text field
                           Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        hintText: 'Type something',
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                  // Attachment icon
-                                ],
+                            child: TextField(
+                              controller: _messageController,
+                              decoration: InputDecoration(
+                                hintText: 'Type something',
+                                border: InputBorder.none,
                               ),
                             ),
-                          ), // Send icon
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
                 SizedBox(width: 8),
-                Icon(Icons.send, color: Color(constcolor.App_blue_color)),
+                IconButton(
+                  icon:
+                      Icon(Icons.send, color: Color(constcolor.App_blue_color)),
+                  onPressed: () {
+                    _sendMessage(); // Send message when pressed
+                  },
+                ),
               ],
             ),
           ),
         ],
       ),
-      // bottomNavigationBar: CustomtenantBottomNavBar(
-      // currentIndex: 1, // Example currentIndex to highlight 'Requests'
-      // onTap: (index) {
-      // // Handle bottom navigation action
-      // },
-      // )
     );
   }
 }
 
 class MessageTile extends StatelessWidget {
   final String message;
-  final String time;
+  final Timestamp? timestamp; // Change from String to Timestamp
   final bool isSentByMe;
   final bool isRead;
 
   MessageTile({
     required this.message,
-    required this.time,
+    this.timestamp, // Accept Timestamp
     this.isSentByMe = false,
     this.isRead = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    String time = 'Just now'; // Default time
+    if (timestamp != null) {
+      final DateTime dateTime = timestamp!.toDate();
+      final String formattedTime =
+          DateFormat('mm:ss').format(dateTime); // Format to minutes and seconds
+      time = formattedTime; // Update time to formatted time
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: 30.0), // Adds 2 inches of space on both sides
+          horizontal: 30.0), // Adds space on both sides
       child: Align(
         alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
         child: Row(
           mainAxisAlignment:
-          isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+              isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             if (isSentByMe) ...[
               // Double tick above the time for sent messages
@@ -175,7 +231,12 @@ class MessageTile extends StatelessWidget {
                 children: [
                   if (isRead)
                     Icon(Icons.done_all,
-                        color: Color(0xff192747), size: 16), // Double tick
+                        color: Color(0xff192747),
+                        size: 16) // Double tick for read
+                  else
+                    Icon(Icons.done,
+                        color: Color(0xff192747),
+                        size: 16), // Single tick for sent
                   SizedBox(height: 2), // Small space between tick and time
                   Text(
                     time,
@@ -186,20 +247,18 @@ class MessageTile extends StatelessWidget {
               SizedBox(
                   width: 5), // Space between the time/tick and message bubble
             ],
-            // Message bubble (either blue for sent or grey for received) with gradient and shadow
+            // Message bubble with gradient and shadow
             Container(
               margin: EdgeInsets.symmetric(vertical: 5.0),
               padding: EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                // Apply gradient
                 gradient: LinearGradient(
                   colors: isSentByMe
-                      ? [Colors.blue[900]!, Color(0xff192747)]
-                      : [Colors.white!, Colors.grey[300]!],
+                      ? [Color(0xff1a2847)!, Color(0xff192747)]
+                      : [Colors.white!, Colors.white!],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                // Apply shadow for a vintage effect
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black12,
@@ -207,20 +266,19 @@ class MessageTile extends StatelessWidget {
                     offset: Offset(4, 4),
                   ),
                 ],
-                // Border radius for bubble-like shape
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
                   bottomLeft:
-                  isSentByMe ? Radius.circular(20) : Radius.circular(0),
+                      isSentByMe ? Radius.circular(10) : Radius.circular(0),
                   bottomRight:
-                  isSentByMe ? Radius.circular(0) : Radius.circular(20),
+                      isSentByMe ? Radius.circular(0) : Radius.circular(10),
                 ),
               ),
               child: Text(
                 message,
                 style:
-                TextStyle(color: isSentByMe ? Colors.white : Colors.black),
+                    TextStyle(color: isSentByMe ? Colors.white : Colors.black),
               ),
             ),
             if (!isSentByMe) ...[

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tolet">
+    package="com.tolet.app">
 
     <application
         android:label="2LET"

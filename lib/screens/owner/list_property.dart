@@ -33,6 +33,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
   String price = '';
   String? owner = '';
   bool isLoading = false;
+  String ownerId = '';
 
   File? _selectedImage;
   List<File> _selectedImages = [];
@@ -172,6 +173,8 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
       );
       return;
     }
+    User? user = FirebaseAuth.instance.currentUser;
+    ownerId = user!.uid;
 
     if (propertyTitle.isEmpty ||
         price.isEmpty ||
@@ -227,6 +230,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           'imageURLs': downloadURLs, // Saving multiple image URLs
           'createdAt': FieldValue.serverTimestamp(),
           'owner': owner,
+          'ownerId': ownerId,
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -242,6 +246,7 @@ class _ListPropertyScreenState extends State<ListPropertyScreen> {
           'imageURLs': downloadURLs, // Saving multiple image URLs
           'createdAt': FieldValue.serverTimestamp(),
           'owner': owner,
+          'ownerId': ownerId,
         });
 
         setState(() {

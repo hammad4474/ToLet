@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tolet/screens/owner/chat_screen.dart';
 import 'package:tolet/screens/tenant/description.dart';
-import 'package:tolet/screens/tenant/galler_pd.dart';
 import 'package:tolet/screens/tenant/reveiw_pd.dart';
 import 'package:tolet/screens/tenant/tenant_chatscreen.dart';
+import 'package:tolet/screens/tenant/tenant_messageScreen.dart';
+import 'package:uuid/uuid.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
   final String title;
@@ -20,6 +20,7 @@ class PropertyDetailsScreen extends StatefulWidget {
   final bool isVerified;
   final String owner;
   final String propertyId;
+  final String ownerId;
 
   PropertyDetailsScreen({
     required this.title,
@@ -30,7 +31,10 @@ class PropertyDetailsScreen extends StatefulWidget {
     required this.imageURL,
     required this.isVerified,
     required this.owner,
-    required this.propertyId, // Ensure this matches
+    required this.propertyId,
+    required this.ownerId,
+
+    // Ensure this matches
     Key? key,
   }) : super(key: key);
   @override
@@ -131,6 +135,77 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
       }
     } catch (e) {
       print('Error fetching property details: $e');
+    }
+  }
+
+  // chat functionality
+  Future<void> initiateChat() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    var tenantNamee;
+
+    if (currentUser != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+
+      setState(() {
+        tenantNamee = userDoc.get('firstname');
+      });
+    }
+    if (currentUser == null) return;
+
+    final tenantId = currentUser.uid;
+
+    // Get the owner's ID and name from your widget or database
+    String ownerId = widget.ownerId; // Use a consistent ID for each owner
+    String ownerNamee = widget.owner; // Owner's name from your data source
+
+    // Generate a unique chat ID using tenantId and ownerId
+    final chatId = tenantId.compareTo(ownerId) < 0
+        ? '$tenantId$ownerId'
+        : '$ownerId$tenantId';
+
+    // Reference to the specific chat document in the `chats` collection
+    final chatRef = FirebaseFirestore.instance.collection('chats').doc(chatId);
+
+    // Check if the chat already exists
+    final chatSnapshot = await chatRef.get();
+    if (chatSnapshot.exists) {
+      // If chat exists, navigate to the existing chat screen
+      Get.to(
+        () => TenantMessageScreen(
+          chatId: chatId,
+          ownerName: ownerNamee,
+        ),
+        transition: Transition.fade,
+      );
+    } else {
+      // If chat doesn't exist, navigate to message screen and create the chat document
+      Get.to(
+        () => TenantMessageScreen(
+          chatId: chatId,
+          ownerName: ownerNamee,
+        ),
+        transition: Transition.fade,
+      );
+
+      // Create a new chat document in Firestore
+      await chatRef.set({
+        'chatId': chatId,
+        'participants': {
+          'tenant': {
+            'name': tenantNamee ?? 'Tenant',
+            'id': tenantId,
+          },
+          'owner': {
+            'name': ownerNamee,
+            'id': ownerId,
+          },
+        },
+        'msgs': [], // Initialize with an empty list for messages
+        'createdAt': FieldValue.serverTimestamp(),
+      });
     }
   }
 
@@ -424,9 +499,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 ],
               ),
               InkWell(
-                onTap: () {
-                  Get.to(() => tenantChatScreen(), transition: Transition.fade);
-                },
+                onTap: initiateChat,
+                // {
+                //   Get.to(() => tenantChatScreen(), transition: Transition.fade);
+                // },
                 child: Container(
                     height: 40,
                     width: 70,
@@ -446,21 +522,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                         'Contact',
                         style: TextStyle(color: Colors.white),
                       ),
-                    )
-                    // ElevatedButton.icon(
-                    //   onPressed: () {Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => ChatScreen()),
-                    //   );
-                    //     // Call button functionality here
-                    //   },
-                    //   label: Text(
-                    //     'Contact',
-                    //     style: TextStyle(color: Colors.white),
-                    //   ),
-
-                    // ),
-                    ),
+                    )),
               ),
             ],
           ),

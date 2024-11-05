@@ -418,6 +418,7 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
             isVerified: isVerified,
             owner: property['owner'],
             propertyId: property['id'] ?? 'id',
+            ownerId: property['ownerId'],
           ),
           transition: Transition.fade,
         );

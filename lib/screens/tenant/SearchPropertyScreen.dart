@@ -215,6 +215,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
               bhk: widget.property['bhk'] ?? 'Rooms',
               isVerified: false,
               owner: widget.property['owner'] ?? 'Owner',
+              ownerId: widget.property['ownerId'],
             ),
             transition: Transition.leftToRightWithFade,
           );

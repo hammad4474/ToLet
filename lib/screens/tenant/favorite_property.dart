@@ -66,6 +66,7 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
                                   bhk: '',
                                   isVerified: true,
                                   owner: '',
+                                  ownerId: favorite['ownerId'],
                                   // Pass additional fields here as needed
                                 ),
                             transition: Transition.fade);

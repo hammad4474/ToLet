@@ -19,7 +19,7 @@ class _tenantDashboardState extends State<tenantDashboard> {
   final List<Widget> _screens = [
     HometenantScreen(),
     SeeAllProperties(),
-    tenantChatScreen(),
+    TenantChatScreen(),
     FavoriteProperty(),
     ProfileScreen(),
   ];
