@@ -57,21 +57,29 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
     super.initState();
     checkIfFavorited();
     fetchPropertyDetails();
-    _getCurrentUser();
+    fetchOwnerDetails();
   }
 
-  Future<void> _getCurrentUser() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null) {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUser.uid)
+  Future<void> fetchOwnerDetails() async {
+    try {
+      final propertyDoc = await FirebaseFirestore.instance
+          .collection('propertiesAll')
+          .doc(widget.propertyId)
           .get();
 
+      if (propertyDoc.exists) {
+        setState(() {
+          ownerName = propertyDoc.data()?['owner'] ?? 'Unknown Owner';
+        });
+      } else {
+        setState(() {
+          ownerName = 'Unknown Owner';
+        });
+      }
+    } catch (e) {
+      print('Error fetching owner details: $e');
       setState(() {
-        userName = userDoc.get('firstname');
-        userEmail = currentUser.email ?? 'No Email';
+        ownerName = 'Error Fetching Owner';
       });
     }
   }
@@ -348,7 +356,7 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                userName.toUpperCase(),
+                                ownerName.toUpperCase(),
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -393,7 +401,14 @@ class _OwnerPropertyDetailScreenState extends State<OwnerPropertyDetailScreen> {
                       SizedBox(height: 16),
                       if (selectedTabIndex == 0) buildDescriptionContent(),
                       if (selectedTabIndex == 1) buildGalleryContent(),
-                      if (selectedTabIndex == 2) buildReviewContent(),
+                      if (selectedTabIndex == 2)
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height *
+                              0.4, // Provide a height constraint
+                          child: ReviewScreen(
+                            propertyId: widget.propertyId,
+                          ),
+                        ),
                     ],
                   ),
                 ),

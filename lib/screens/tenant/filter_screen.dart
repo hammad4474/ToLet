@@ -1,27 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tolet/widgets/constcolor.dart';
 
 class FilterScreen extends StatefulWidget {
+  final Function(List<QueryDocumentSnapshot>) onFilterApplied;
+  final Function onReset;
+
+  FilterScreen({required this.onFilterApplied, required this.onReset});
+
   @override
   _FilterScreenState createState() => _FilterScreenState();
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  String _selectedPropertyType = 'null'; // Default selected property type
-
   double _minPrice = 10000;
   double _maxPrice = 30000;
-  String _selectedTimePeriod = 'null';
-
   Map<String, bool> facilities = {
-    'Furnished': false,
-    'WiFi': true,
+    'Car Parking': false,
+    'Furnished': true,
+    'Gym Fit': false,
     'Kitchen': false,
-    'Self Check-in': false,
-    'Free parking': false,
-    'Air conditioner': true,
-    'Security': false,
+    'Laundry': false,
+    'WI-fi': true,
+    'Sports': false,
+    'Pet center': false,
   };
+
+  List<QueryDocumentSnapshot> _filteredProperties = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,42 +40,9 @@ class _FilterScreenState extends State<FilterScreen> {
             Navigator.pop(context); // Go back to the previous screen
           },
         ),
-        title: Container(
-          height: 40.0, // Set a suitable height for the search bar
-          decoration: BoxDecoration(
-            color: Colors.grey[200], // Light grey background for the search bar
-            borderRadius: BorderRadius.circular(20.0), // Rounded corners
-          ),
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Image.asset(
-                  'assets/icons/search-normal.png', // Replace with your actual asset path
-                  width: 24,
-                  height: 24,
-                ), // Search icon
-              ),
-              Expanded(
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.center, // Center the text vertically
-                  decoration: InputDecoration(
-                    hintText: 'Hyderabad',
-                    border: InputBorder.none, // Remove the underline
-                    isCollapsed: true, // Reduce the padding around the hint text
-                    contentPadding: EdgeInsets.symmetric(vertical: 12.0), // Add padding for better alignment
-                  ),
-                  style: TextStyle(color: Colors.grey[200]),
-                ),
-              ),
-              // IconButton(
-              //   icon: const Icon(Icons.tune, color: Colors.black), // Filter icon
-              //   onPressed: () {
-              //     // Handle filter button press
-              //   },
-              // ),
-            ],
-          ),
+        title: Text(
+          'Filter Now',
+          style: TextStyle(color: Colors.black),
         ),
       ),
       body: Column(
@@ -82,11 +53,13 @@ class _FilterScreenState extends State<FilterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildPropertyTypeSection(),
+                  _buildPriceRangeText(),
                   const SizedBox(height: 16),
-                  _buildPriceRangeWidget(),
+                  _buildPriceGraph(),
                   const SizedBox(height: 16),
-                  _buildPropertyFacilities(facilities), // Pass facilities map
+                  _buildPriceSlider(),
+                  const SizedBox(height: 16),
+                  _buildPropertyFacilities(facilities),
                 ],
               ),
             ),
@@ -98,91 +71,10 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
         ],
       ),
-
-
     );
   }
 
-  // Property Type Section
-  Widget _buildPropertyTypeSection() {
-    final propertyTypes = ['Any', 'House', 'Hostel', 'Cabin', 'Flats', 'Shops'];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Property type',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        const SizedBox(height: 8),
-        Container(
-          height: 40,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: propertyTypes.length,
-            itemBuilder: (context, index) {
-              return _buildPropertyTypeButton(propertyTypes[index]);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPropertyTypeButton(String type) {
-    final bool isSelected = _selectedPropertyType == type;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedPropertyType = type; // Update the selected property type
-        });
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? const LinearGradient(
-            colors: [
-              Color(0xff192760), // Correct way to create a Color
-              Color(0xff192747), // Use the actual color value for App_blue_color
-            ],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          )
-              : null,
-          color: isSelected ? null : Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: isSelected
-              ? [BoxShadow(color: Colors.blue.withOpacity(0.5), blurRadius: 5)]
-              : [],
-        ),
-        child: Text(
-          type,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.grey[600],
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPriceRangeWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Price range',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        Text('₹${_minPrice.toInt()} - ₹${_maxPrice.toInt()} / month',
-            style: TextStyle(color: Colors.grey)),
-        SizedBox(height: 16),
-        _buildPriceGraph(),
-        _buildPriceSlider(),
-        _buildTimePeriodSelector(),
-      ],
-    );
-  }
-
+  // Price Graph and Range Slider
   Widget _buildPriceGraph() {
     return Container(
       height: 100, // Set appropriate height for the graph
@@ -196,8 +88,8 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget _buildPriceSlider() {
     return RangeSlider(
       values: RangeValues(_minPrice, _maxPrice),
-      min: 0,
-      max: 50000,
+      min: 10000,
+      max: 60000,
       divisions: 10,
       activeColor: Color(0xff192747),
       onChanged: (RangeValues values) {
@@ -209,66 +101,15 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  // Time period buttons
-  Widget _buildTimePeriodSelector() {
-    final propertyweeks = ['Daily', 'Weekly', 'Monthly', 'Annually'];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+  Widget _buildPriceRangeText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Rental Time Period',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        SizedBox(height: 8),
-        Container(
-          height: 40, // Set a fixed height for the ListView
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: propertyweeks.length,
-            itemBuilder: (context, index) {
-              return _buildTimePeriodButton(propertyweeks[index]);
-            },
-          ),
+        Text(
+          'Price range: ₹${_minPrice.toStringAsFixed(0)} - ₹${_maxPrice.toStringAsFixed(0)}',
+          style: TextStyle(fontSize: 16),
         ),
       ],
-    );
-  }
-
-  Widget _buildTimePeriodButton(String label) {
-    bool isSelected = _selectedTimePeriod == label;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedTimePeriod = label;
-        });
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? LinearGradient(
-            colors: [
-              Color(0xff192760), // Correct way to create a Color
-              Color(0xff192747), // Use the actual color value for App_blue_color
-            ],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          )
-              : null,
-          color: isSelected ? null : Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: isSelected
-              ? [BoxShadow(color: Color(0xff192760).withOpacity(0.5), blurRadius: 5)]
-              : [],
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.grey[600],
-          ),
-        ),
-      ),
     );
   }
 
@@ -310,46 +151,108 @@ class _FilterScreenState extends State<FilterScreen> {
           onPressed: () {
             setState(() {
               // Reset all values to default
-              _selectedPropertyType =
-              'null';
-              _selectedTimePeriod = 'null';
-              _minPrice=0;
-              _maxPrice=1000;
+              _minPrice = 10000;
+              _maxPrice = 30000;
               facilities = {
-                'Furnished': false,
-                'WiFi': false,
+                'Car Parking': false,
+                'Furnished': true,
+                'Gym Fit': false,
                 'Kitchen': false,
-                'Self Check-in': false,
-                'Free parking': false,
-                'Air conditioner': false,
-                'Security': false,
+                'Laundry': false,
+                'WI-fi': true,
+                'Sports': false,
+                'Pet center': false,
               };
-              // Reset to default value (or whatever you choose)
-              // Reset other states here if necessary
             });
+            // Call onReset function to notify the parent widget
+            widget.onReset();
           },
           icon: const Icon(Icons.refresh),
           label: const Text('Reset all'),
         ),
         ElevatedButton(
-          onPressed: () {
-            // Handle show results action
+          onPressed: () async {
+            try {
+              // Fetch the filtered properties asynchronously
+              await _fetchFilteredProperties();
+
+              // Pass the filtered properties back to the parent widget (SearchPropertyScreen)
+              widget.onFilterApplied(_filteredProperties);
+
+              // Optionally, you can log or print the filtered properties count to ensure the data is correct
+              print(
+                  "Filtered Properties: ${_filteredProperties.length} results");
+
+              // Close the dialog by popping the dialog context
+              Navigator.pop(
+                  context); // Close the dialog using the correct context
+            } catch (e) {
+              // Handle any errors that might occur during the fetch process
+              print("Error fetching properties: $e");
+            }
           },
           child: const Text('Show results'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20), // Set the border radius to 20
+              borderRadius:
+                  BorderRadius.circular(20), // Set the border radius to 20
             ),
           ),
         ),
-
       ],
     );
   }
-}
 
+  // Fetch the filtered properties from Firestore
+  Future<void> _fetchFilteredProperties() async {
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('propertiesAll')
+        .where('price', isGreaterThanOrEqualTo: _minPrice.toString())
+        .where('price', isLessThanOrEqualTo: _maxPrice.toString())
+        .get();
+
+    print(
+        'Snapshot count: ${snapshot.docs.length}'); // Debugging line to check the number of docs
+
+    List<QueryDocumentSnapshot> filteredProperties = snapshot.docs.where((doc) {
+      // Get the document data as a Map<String, dynamic>
+      Map<String, dynamic> docData = doc.data() as Map<String, dynamic>;
+
+      // Debugging: Print the document's price and facilities fields
+      print(
+          'Checking doc: ${docData['price']} | Facilities: ${docData['facilities']}');
+
+      // Ensure 'price' is a valid field and properly converted to double
+      double propertyPrice =
+          double.tryParse(docData['price'].toString()) ?? 0.0;
+
+      // Ensure 'facilities' is a list of strings, fallback to empty list if not present
+      List<String> propertyFacilities = docData['facilities'] != null
+          ? List<String>.from(docData['facilities'])
+          : [];
+
+      // Filter by price and facilities
+      bool matchesFacilities = facilities.keys.every((facility) {
+        if (facilities[facility]!) {
+          return propertyFacilities.contains(facility);
+        }
+        return true; // If facility is not selected, don't filter by it
+      });
+
+      return propertyPrice >= _minPrice &&
+          propertyPrice <= _maxPrice &&
+          matchesFacilities;
+    }).toList();
+
+    print('Filtered Properties count: ${filteredProperties.length}');
+
+    setState(() {
+      _filteredProperties = filteredProperties;
+    });
+  }
+}
 
 class PriceGraphPainter extends CustomPainter {
   @override
@@ -365,9 +268,12 @@ class PriceGraphPainter extends CustomPainter {
     path.lineTo(0, size.height * 0.8); // Start by moving up
 
     // Adjust the control points to form a more natural curve
-    path.quadraticBezierTo(size.width * 0.15, size.height * 0.4, size.width * 0.3, size.height * 0.6);
-    path.quadraticBezierTo(size.width * 0.45, size.height * 0.8, size.width * 0.6, size.height * 0.5);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.2, size.width, size.height * 0.4);
+    path.quadraticBezierTo(size.width * 0.15, size.height * 0.4,
+        size.width * 0.3, size.height * 0.6);
+    path.quadraticBezierTo(size.width * 0.45, size.height * 0.8,
+        size.width * 0.6, size.height * 0.5);
+    path.quadraticBezierTo(
+        size.width * 0.75, size.height * 0.2, size.width, size.height * 0.4);
 
     path.lineTo(size.width, size.height); // Complete the path at bottom-right
     path.close();
@@ -380,6 +286,7 @@ class PriceGraphPainter extends CustomPainter {
     return false;
   }
 }
+
 class FacilityChip extends StatelessWidget {
   final String label;
   final bool active;
@@ -388,38 +295,10 @@ class FacilityChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicWidth(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10), // Adjust padding as needed
-        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-        decoration: BoxDecoration(
-          gradient: active
-              ? LinearGradient(
-            colors: [
-              Color(0xff192760), // Correct way to create a Color
-              Color(0xff192747), // Use the actual color value for App_blue_color
-            ],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          )
-              : null,
-          color: active ? null : Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: active
-              ? [BoxShadow(color: Color(0xff192747).withOpacity(0.5), blurRadius: 5)]
-              : [],
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: active ? Colors.white : Colors.grey[600],
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
-      ),
+    return Chip(
+      label: Text(label),
+      backgroundColor: active ? Colors.black : Colors.grey[300],
+      labelStyle: TextStyle(color: active ? Colors.white : Colors.black),
     );
   }
 }
-

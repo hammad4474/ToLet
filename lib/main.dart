@@ -8,6 +8,7 @@ import 'package:tolet/screens/tenant/tenantdashboard.dart';
 import 'package:tolet/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 import 'firebase_options.dart';
 
@@ -16,6 +17,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const MyApp());
 }
 
@@ -30,6 +32,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: false,
         appBarTheme: const AppBarTheme(color: Colors.white),

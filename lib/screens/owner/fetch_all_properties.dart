@@ -411,7 +411,14 @@ class _FetchAllPropertiesState extends State<FetchAllProperties> {
                       SizedBox(height: 16),
                       if (selectedTabIndex == 0) buildDescriptionContent(),
                       if (selectedTabIndex == 1) buildGalleryContent(),
-                      if (selectedTabIndex == 2) buildReviewContent(),
+                      if (selectedTabIndex == 2)
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height *
+                              0.4, // Provide a height constraint
+                          child: ReviewScreen(
+                            propertyId: widget.propertyId,
+                          ),
+                        ),
                     ],
                   ),
                 ),

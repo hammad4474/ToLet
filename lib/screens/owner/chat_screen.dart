@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:get/get.dart';
 import 'package:tolet/screens/owner/Message_screen.dart';
+import 'package:random_avatar/random_avatar.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -94,48 +95,49 @@ class _ChatScreenState extends State<ChatScreen> {
                     final tenantName =
                         chatData['participants']['tenant']['name'] ?? 'Unknown';
 
-                    // Get the last message from the msgs array
-                    String lastMessage = 'No messages yet';
+                    // Initialize the last message and time variables
+                    String lastMessage = chatData['lastMessage'] ?? '';
                     String time = '';
 
+                    // Check if msgs field exists and is not empty
                     if (chatData['msgs'] != null &&
-                        chatData['msgs'].isNotEmpty) {
+                        (chatData['msgs'] as List).isNotEmpty) {
                       final lastMsg =
                           chatData['msgs'].last as Map<String, dynamic>;
-                      lastMessage = lastMsg['text'] ?? lastMessage;
-                      time = chatData['createdAt'] != null
-                          ? (chatData['createdAt'] as Timestamp)
-                              .toDate()
-                              .toString() // Format time if needed
-                          : ''; // Make sure 'sentAt' is valid and formatted correctly
+
+                      // Get the last message text if it exists
+                      lastMessage = lastMsg['text'] ?? 'No messages yet';
+
+                      // Get the timestamp if it exists, format it correctly
+                      if (lastMsg['sentAt'] != null) {
+                        time = (lastMsg['sentAt'] as Timestamp)
+                            .toDate()
+                            .toString();
+                      } else if (chatData['createdAt'] != null) {
+                        time = (chatData['createdAt'] as Timestamp)
+                            .toDate()
+                            .toString();
+                      }
                     }
 
                     final avatar = chatData['participants']['tenant']
                             ['avatar'] ??
                         'assets/images/dp.png';
-                    final unreadMessages = chatData['unreadMessages'] ?? 0;
 
                     return ChatTile(
                       name: tenantName,
-                      message: lastMessage,
-                      time:
-                          time, // Update this to the correct time if you have it
-                      unreadMessages: unreadMessages,
+                      message: chatData['lastMessage'] ?? '',
+                      time: time,
                       avatar: avatar,
                       onTap: () {
                         Get.to(
-                            () => DetailedChatScreen(
-                                chatId: chatId, tenantName: tenantName),
-                            transition: Transition.fadeIn);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => DetailedChatScreen(
-                        //       chatId: chatId,
-                        //       tenantName: tenantName,
-                        //     ),
-                        //   ),
-                        // );
+                          () => DetailedChatScreen(
+                            chatId: chatId,
+                            tenantName: tenantName,
+                            avatar: avatar,
+                          ),
+                          transition: Transition.fadeIn,
+                        );
                       },
                     );
                   },
@@ -151,7 +153,7 @@ class _ChatScreenState extends State<ChatScreen> {
 class ChatTile extends StatelessWidget {
   final String name;
   final String message;
-  final String time;
+  final dynamic time;
   final int unreadMessages;
   final String avatar;
   final VoidCallback onTap;
@@ -165,26 +167,45 @@ class ChatTile extends StatelessWidget {
     required this.onTap,
   });
 
-  String formatTime(String timestamp) {
-    // Assuming the timestamp is in a format that DateTime can parse.
-    DateTime dateTime = DateTime.parse(timestamp);
-
-    // Extract minutes and seconds
-    String minutes = dateTime.minute.toString().padLeft(2, '0');
-    String seconds = dateTime.second.toString().padLeft(2, '0');
-
-    return '$minutes:$seconds'; // Format: MM:SS
+  String formatTime(dynamic timestamp) {
+    if (timestamp is Timestamp) {
+      DateTime dateTime = timestamp.toDate();
+      String hours = dateTime.hour.toString().padLeft(2, '0');
+      String minutes = dateTime.minute.toString().padLeft(2, '0');
+      return '$hours:$minutes'; // Format: HH:MM
+    } else if (timestamp is String) {
+      try {
+        DateTime dateTime = DateTime.parse(timestamp);
+        String hours = dateTime.hour.toString().padLeft(2, '0');
+        String minutes = dateTime.minute.toString().padLeft(2, '0');
+        return '$hours:$minutes';
+      } catch (e) {
+        return 'Invalid date';
+      }
+    } else {
+      return 'Invalid date';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Use RandomAvatar if avatar is not provided
+    final avatarWidget = avatar == 'assets/images/dp.png'
+        ? RandomAvatar(
+            name, // Use tenant's name or any other identifier
+            height: 50,
+            width: 50,
+            trBackground: true, // For transparent background
+          )
+        : CircleAvatar(
+            backgroundImage: AssetImage(avatar),
+            radius: 25,
+          );
+
     return InkWell(
       onTap: onTap,
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage: AssetImage(avatar),
-          radius: 25,
-        ),
+        leading: avatarWidget, // Use the generated avatar
         title: Text(
           name.toUpperCase(),
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -195,9 +216,8 @@ class ChatTile extends StatelessWidget {
           children: [
             // Display the time above the unread messages count
             Text(formatTime(time), style: TextStyle(color: Color(0xff192747))),
-
             const SizedBox(
-                height: 4), // Add some space between time and unread messages
+                height: 4), // Add space between time and unread messages
             if (unreadMessages >= 0)
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),

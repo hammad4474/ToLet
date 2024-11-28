@@ -93,7 +93,7 @@ class _HometenantScreenState extends State<HometenantScreen> {
           Get.to(() => SearchPropertyScreen(), transition: Transition.fade);
         },
         onTuneIconPressed: () {
-          Get.to(() => FilterScreen(), transition: Transition.zoom);
+          //  Get.to(() => FilterScreen(onFilterApplied: ,), transition: Transition.zoom);
         },
       ),
       body: Container(
@@ -416,9 +416,9 @@ Widget buildPropertyCard(BuildContext context, Map<String, dynamic> property,
             bhk: property['bhk'] ?? 'BHK',
             imageURL: property['imageURLs'][0] ?? 'assets/icons/wifi.png',
             isVerified: isVerified,
-            owner: property['owner'],
+            owner: property['owner'] ?? '',
             propertyId: property['id'] ?? 'id',
-            ownerId: property['ownerId'],
+            ownerId: property['ownerId'] ?? '',
           ),
           transition: Transition.fade,
         );

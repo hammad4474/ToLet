@@ -1,210 +1,395 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
-// This function builds the review content wrapped in a SingleChildScrollView
-Widget buildReviewContent() {
-  return Container(
-    height: 450,
-    child: SingleChildScrollView(
+class ReviewScreen extends StatefulWidget {
+  final String propertyId;
+
+  ReviewScreen({required this.propertyId});
+
+  @override
+  _ReviewScreenState createState() => _ReviewScreenState();
+}
+
+class _ReviewScreenState extends State<ReviewScreen> {
+  String? currentUserName;
+  String? currentUserId;
+  bool hasReviewed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentUser();
+  }
+
+  Future<void> _fetchCurrentUser() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        currentUserId = user.uid;
+
+        // Fetch user details from Firestore (assuming user data is stored here)
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            currentUserName = userDoc['firstname'] ?? 'Anonymous';
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching user: $e');
+    }
+  }
+
+  void _showAddReviewDialog() {
+    final reviewController = TextEditingController();
+    double rating = 0;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Write a Review'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RatingBar.builder(
+                initialRating: 0,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (value) {
+                  rating = value;
+                },
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: reviewController,
+                decoration: InputDecoration(labelText: 'Write a Review'),
+                maxLines: 3,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (reviewController.text.isNotEmpty && rating > 0) {
+                  final newReview = {
+                    'reviewId':
+                        DateTime.now().millisecondsSinceEpoch.toString(),
+                    'reviewerName': currentUserName ?? 'Anonymous',
+                    'userId': currentUserId,
+                    'reviewText': reviewController.text,
+                    'timestamp': Timestamp.now(),
+                    'rating': rating,
+                    'helpfulCount': 0,
+                    'notHelpfulCount': 0,
+                    'helpfulVoters': [],
+                    'notHelpfulVoters': [],
+                  };
+
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('propertiesAll')
+                        .doc(widget.propertyId)
+                        .update({
+                      'reviews': FieldValue.arrayUnion([newReview])
+                    });
+
+                    setState(() {
+                      hasReviewed = true;
+                    });
+
+                    Navigator.pop(context);
+                  } catch (e) {
+                    print('Error adding review: $e');
+                  }
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _updateVote(String reviewId, bool isHelpful) async {
+    try {
+      final propertyRef = FirebaseFirestore.instance
+          .collection('propertiesAll')
+          .doc(widget.propertyId);
+
+      final propertySnapshot = await propertyRef.get();
+      if (propertySnapshot.exists) {
+        final List<dynamic> reviews = propertySnapshot['reviews'];
+        final reviewIndex =
+            reviews.indexWhere((review) => review['reviewId'] == reviewId);
+
+        if (reviewIndex != -1) {
+          final review = reviews[reviewIndex];
+          final List<String> helpfulVoters =
+              List<String>.from(review['helpfulVoters'] ?? []);
+          final List<String> notHelpfulVoters =
+              List<String>.from(review['notHelpfulVoters'] ?? []);
+
+          if (isHelpful) {
+            if (!helpfulVoters.contains(currentUserId)) {
+              helpfulVoters.add(currentUserId.toString());
+              review['helpfulCount'] += 1;
+
+              // Prevent the user from voting both up and down
+              notHelpfulVoters.remove(currentUserId);
+              review['notHelpfulCount'] = notHelpfulVoters.length;
+            }
+          } else {
+            if (!notHelpfulVoters.contains(currentUserId)) {
+              notHelpfulVoters.add(currentUserId.toString());
+              review['notHelpfulCount'] += 1;
+
+              // Prevent the user from voting both up and down
+              helpfulVoters.remove(currentUserId);
+              review['helpfulCount'] = helpfulVoters.length;
+            }
+          }
+
+          // Update the review in the list
+          reviews[reviewIndex] = {
+            ...review,
+            'helpfulVoters': helpfulVoters,
+            'notHelpfulVoters': notHelpfulVoters,
+          };
+
+          // Update Firestore
+          await propertyRef.update({'reviews': reviews});
+        }
+      }
+    } catch (e) {
+      print('Error updating vote: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('propertiesAll')
+            .doc(widget.propertyId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Center(child: Text('No reviews found.'));
+          }
+
+          final data = snapshot.data!.data() as Map<String, dynamic>;
+          final reviews = (data['reviews'] as List<dynamic>?)
+                  ?.map((e) => Map<String, dynamic>.from(e))
+                  .toList() ??
+              [];
+
+          return Column(
+            children: [
+              Expanded(
+                child: reviews.isEmpty
+                    ? Center(
+                        child: Text(
+                            'No reviews yet. Be the first to write one!\nScroll up to see review button'))
+                    : ListView.builder(
+                        itemCount: reviews.length,
+                        itemBuilder: (context, index) {
+                          final review = reviews[index];
+                          final timestamp = review['timestamp'] as Timestamp;
+                          final formattedTimestamp = DateFormat('yyyy-MM-dd')
+                              .format(timestamp.toDate());
+
+                          return buildReviewTile(
+                            review['reviewId'],
+                            review['reviewerName'] ?? 'Anonymous',
+                            review['reviewText'] ?? 'No review provided.',
+                            formattedTimestamp,
+                            review['rating'] ?? 0.0,
+                            review['helpfulCount'] ?? 0,
+                            review['notHelpfulCount'] ?? 0,
+                            List<String>.from(review['helpfulVoters'] ?? []),
+                            List<String>.from(review['notHelpfulVoters'] ?? []),
+                          );
+                        },
+                      ),
+              ),
+              if (!hasReviewed)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff1c275a),
+                    ),
+                    onPressed: _showAddReviewDialog,
+                    child: Text('Write a Review'),
+                  ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'You have already reviewed this property.',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildReviewTile(
+    String reviewId,
+    String reviewerName,
+    String reviewText,
+    String timestamp,
+    double rating,
+    int helpfulCount,
+    int notHelpfulCount,
+    List<String> helpfulVoters,
+    List<String> notHelpfulVoters,
+  ) {
+    final isHelpfulVoted = helpfulVoters.contains(currentUserId);
+    final isNotHelpfulVoted = notHelpfulVoters.contains(currentUserId);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildReviewTile(
-            'Sandeep S.',
-            'Great view of garden from window and best services from owner. Satisfied!',
-            '2 months ago',
-            5,
-            1,
-            2,
-            [
-              'assets/images/pd.png',
-              'assets/images/pd.png'
-            ], // Images from assets
-          ),
-          buildReviewTile(
-            'John D.',
-            'The cottage was cozy and had everything we needed. Highly recommend!',
-            '1 month ago',
-            4,
-            3,
-            0,
-            ['assets/images/pd.png'], // Example images from assets
-          ),
-          buildReviewTile(
-            'John D.',
-            'The cottage was cozy and had everything we needed. Highly recommend!',
-            '1 month ago',
-            4,
-            3,
-            0,
-            ['assets/images/pd.png'], // Example images from assets
-          ),
-          buildReviewTile(
-            'John D.',
-            'The cottage was cozy and had everything we needed. Highly recommend!',
-            '1 month ago',
-            4,
-            3,
-            0,
-            ['assets/images/pd.png'], // Example images from assets
-          ),
-          // Add more review tiles if necessary
-        ],
-      ),
-    ),
-  );
-}
-
-// Function to build individual review tiles
-Widget buildReviewTile(
-  String reviewerName,
-  String reviewText,
-  String timestamp,
-  int rating,
-  int helpfulCount,
-  int notHelpfulCount,
-  List<String> imagePaths,
-) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      // First row: Avatar + Name in bold + Timestamp on the right
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundImage:
-                AssetImage('assets/images/dp.png'), // Avatar image from assets
-          ),
-          SizedBox(width: 10), // Spacing between avatar and text
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundImage: AssetImage('assets/images/dp.png'),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      reviewerName,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ), // Bold reviewer name
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          reviewerName,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          timestamp,
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
                     ),
+                    SizedBox(height: 4),
                     Text(
-                      timestamp,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ), // Timestamp aligned to right
+                      reviewText,
+                      softWrap: true,
                     ),
                   ],
                 ),
-                SizedBox(height: 4), // Space between name and review text
-
-                // The review text will wrap automatically if it exceeds the width
-                Text(
-                  reviewText,
-                  softWrap:
-                      true, // Ensures text wraps to the next line automatically
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, top: 4.0),
+            child: Row(
+              children: [
+                buildStarRating(rating),
+                SizedBox(width: 25),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        if (!isHelpfulVoted) {
+                          _updateVote(reviewId, true); // Thumbs-up action
+                        }
+                      },
+                      icon: Icon(
+                        isHelpfulVoted
+                            ? Icons.thumb_up
+                            : Icons.thumb_up_alt_outlined,
+                        size: 24,
+                        color: isHelpfulVoted ? Colors.blue : Colors.black,
+                      ),
+                      label: Text(helpfulCount.toString()),
+                    ),
+                    TextButton.icon(
+                      onPressed: () {
+                        if (!isNotHelpfulVoted) {
+                          _updateVote(reviewId, false); // Thumbs-down action
+                        }
+                      },
+                      icon: Icon(
+                        isNotHelpfulVoted
+                            ? Icons.thumb_down
+                            : Icons.thumb_down_alt_outlined,
+                        size: 24,
+                        color: isNotHelpfulVoted ? Colors.red : Colors.black,
+                      ),
+                      label: Text(notHelpfulCount.toString()),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
 
-      // Second row: Star rating + Helpful/Like/Dislike buttons
-      Padding(
-        padding: const EdgeInsets.only(left: 10.0, top: 4.0),
-        // Align stars and feedback
-        child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            buildStarRating(rating),
-            SizedBox(
-              width: 25,
-            ), // Star rating widget
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Helpful?',
-                  style: TextStyle(fontSize: 16),
-                ),
-                TextButton.icon(
-                  onPressed: () {}, // Like button
-                  icon: Icon(Icons.thumb_up_alt_outlined,
-                      size: 24, color: Colors.black),
-                  label: Text(helpfulCount.toString()),
-                ),
-                TextButton.icon(
-                  onPressed: () {}, // Dislike button
-                  icon: Icon(Icons.thumb_down_alt_outlined,
-                      size: 24, color: Colors.black),
-                  label: Text(notHelpfulCount.toString()),
-                ),
-              ],
-            ),
-          ],
+  Widget buildStarRating(double rating) {
+    return Row(
+      children: [
+        ...List.generate(5, (index) {
+          return Icon(
+            index < rating ? Icons.star : Icons.star_border,
+            color: const Color.fromARGB(255, 178, 164, 45),
+            size: 20,
+          );
+        }),
+        SizedBox(width: 4),
+        Text(
+          rating.toStringAsFixed(1),
+          style: TextStyle(fontSize: 13, color: Colors.grey),
         ),
-      ),
-
-      SizedBox(height: 8), // Spacing before image row
-
-      // Third row: Display review images from assets
-      buildImageRow(imagePaths),
-
-      Divider(), // Divider at the bottom of the review
-    ],
-  );
-}
-
-// Function to build a row of images for the review
-Widget buildImageRow(List<String> imagePaths) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    child: Row(
-      children: imagePaths.map((path) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12.0), // Rounded corners
-            child: Image.asset(
-              path,
-              width: 100,
-              height: 100,
-              fit:
-                  BoxFit.cover, // Ensures the image covers the entire container
-            ),
-          ),
-        );
-      }).toList(),
-    ),
-  );
-}
-
-// Function to build star ratings
-Widget buildStarRating(int rating) {
-  // Calculate the average rating as a double
-  double averageRating = rating.toDouble();
-
-  return Row(
-    children: [
-      // Generate stars based on the rating
-      ...List.generate(5, (index) {
-        return Icon(
-          index < rating
-              ? Icons.star
-              : Icons.star_border, // Show stars based on rating
-          color: const Color.fromARGB(255, 178, 164, 45),
-          size: 20,
-        );
-      }),
-      SizedBox(width: 4), // Space between stars and rating text
-      Text(
-        averageRating.toStringAsFixed(1), // Format rating to one decimal place
-        style: TextStyle(
-            fontSize: 13, color: Colors.grey), // Adjust text style as needed
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }

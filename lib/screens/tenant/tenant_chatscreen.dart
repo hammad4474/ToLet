@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:random_avatar/random_avatar.dart';
 import 'package:tolet/screens/tenant/tenant_messageScreen.dart';
 import 'package:tolet/widgets/constcolor.dart';
 
@@ -75,9 +76,8 @@ class _TenantChatScreenState extends State<TenantChatScreen> {
 
                 final filteredChatDocs = chatDocs.where((doc) {
                   final ownerName = doc['participants']['owner']['name'] ?? '';
-                  final lastMessage = (doc['msgs'] as List).isNotEmpty
-                      ? doc['msgs'].last['text']
-                      : '';
+                  final lastMessage = doc['lastMessage'] ?? '';
+
                   return ownerName
                           .toLowerCase()
                           .contains(_searchText.toLowerCase()) ||
@@ -94,9 +94,7 @@ class _TenantChatScreenState extends State<TenantChatScreen> {
 
                     return ChatTile(
                       name: chatData['participants']['owner']['name'] ?? '',
-                      message: (chatData['msgs'] as List).isNotEmpty
-                          ? chatData['msgs'].last['text']
-                          : '',
+                      message: chatData['lastMessage'] ?? '',
                       time: chatData['createdAt'] != null
                           ? (chatData['createdAt'] as Timestamp)
                               .toDate()
@@ -145,23 +143,27 @@ class ChatTile extends StatelessWidget {
   });
 
   String formatTime(String timestamp) {
-    // Assuming the timestamp is in a format that DateTime can parse.
     DateTime dateTime = DateTime.parse(timestamp);
-
-    // Extract minutes and seconds
     String minutes = dateTime.minute.toString().padLeft(2, '0');
     String seconds = dateTime.second.toString().padLeft(2, '0');
-
-    return '$minutes:$seconds'; // Format: MM:SS
+    return '$minutes:$seconds';
   }
 
   @override
   Widget build(BuildContext context) {
+    // You can use the `RandomAvatar` widget to generate avatars based on the owner's name or any unique identifier.
+    // Example: Random avatar based on the owner's name
+    Widget avatarWidget = RandomAvatar(
+      name, // Name used to generate the avatar
+      height: 50,
+      width: 50,
+    );
+
     return InkWell(
       onTap: onTap,
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: AssetImage(avatar),
+          child: avatarWidget,
           radius: 25,
         ),
         title: Text(

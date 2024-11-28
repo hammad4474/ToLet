@@ -56,26 +56,26 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     const Expanded(
                       child: Text(
                         'Search address, city, location',
-                        style: TextStyle(color: Colors.grey), // Placeholder style
+                        style:
+                            TextStyle(color: Colors.grey), // Placeholder style
                       ),
                     ),
                   ],
                 ),
-
               ),
             ),
           ),
 
           // Tune Icon on the right
-          IconButton(
-            icon: Image.asset(
-              'assets/icons/custum_tune_icon.png', // Replace with your actual custom icon asset
-              height: 40,
-              width: 40,
-            ),
+          // IconButton(
+          //   icon: Image.asset(
+          //     'assets/icons/custum_tune_icon.png', // Replace with your actual custom icon asset
+          //     height: 40,
+          //     width: 40,
+          //   ),
 
-            onPressed: onTuneIconPressed, // Use the callback passed from parent
-          ),
+          //   onPressed: onTuneIconPressed, // Use the callback passed from parent
+          // ),
         ],
       ),
     );

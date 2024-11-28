@@ -156,9 +156,9 @@ Widget buildPropertyCard(
             bhk: property['bhk'] ?? 'BHK',
             imageURL: property['imageURLs'][0] ?? 'assets/icons/wifi.png',
             isVerified: true, // Assuming properties are verified
-            owner: property['owner'],
+            owner: property['owner'] ?? '',
             propertyId: property['id'] ?? 'id',
-            ownerId: property['ownerId'],
+            ownerId: property['ownerId'] ?? '',
           ));
     },
     child: Card(

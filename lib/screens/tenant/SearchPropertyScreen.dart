@@ -13,8 +13,33 @@ class SearchPropertyScreen extends StatefulWidget {
 }
 
 class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
+  List<QueryDocumentSnapshot> _filteredProperties = [];
+
+  // This function will receive the filtered properties from the FilterScreen
+  void _onFilterApplied(List<QueryDocumentSnapshot> filteredProperties) {
+    setState(() {
+      _filteredProperties = filteredProperties;
+    });
+  }
+
+  void _resetFilter() {
+    setState(() {
+      _filteredProperties = [];
+    });
+  }
+
   TextEditingController _searchController = TextEditingController();
   String searchQuery = "";
+  List<QueryDocumentSnapshot> filteredProperties = []; // Holds filtered results
+
+  // Filter parameters (can be extended for other filters)
+  double minPrice = 0.0;
+  double maxPrice = 10000.0;
+  Map<String, bool> facilities = {
+    'Wi-Fi': false,
+    'Parking': false,
+    'Swimming Pool': false,
+  };
 
   @override
   void initState() {
@@ -22,7 +47,68 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
     _searchController.clear();
   }
 
-  @override
+  // Reset all filters to default values
+  void resetFilters() {
+    setState(() {
+      searchQuery = "";
+      filteredProperties.clear(); // Clear any filters applied
+      minPrice = 0.0;
+      maxPrice = 10000.0;
+      facilities = {
+        'Wi-Fi': false,
+        'Parking': false,
+        'Swimming Pool': false,
+      };
+    });
+
+    // Now fetch all properties
+    fetchFilteredProperties();
+  }
+
+  // Function to apply filters
+  // Modify this method to accept List<QueryDocumentSnapshot>
+  void applyFilters(List<QueryDocumentSnapshot> newFilteredProperties) {
+    setState(() {
+      _filteredProperties =
+          newFilteredProperties; // Set the filtered properties
+    });
+  }
+
+  // Fetch properties with the applied filters from Firestore
+  fetchFilteredProperties() async {
+    final query = FirebaseFirestore.instance.collection('propertiesAll');
+
+    // Apply filters if necessary
+    QuerySnapshot snapshot;
+    if (_filteredProperties.isEmpty) {
+      snapshot = await query.get(); // No filters applied, fetch all properties
+    } else {
+      snapshot = await query
+          .where('price', isGreaterThanOrEqualTo: minPrice)
+          .where('price', isLessThanOrEqualTo: maxPrice)
+          .get();
+    }
+
+    List<QueryDocumentSnapshot> fetchedProperties = snapshot.docs.where((doc) {
+      double propertyPrice = double.tryParse(doc['price']) ?? 0.0;
+      List<String> propertyFacilities = List<String>.from(doc['facilities']);
+      bool matchesFacilities = facilities.keys.every((facility) {
+        if (facilities[facility]!) {
+          return propertyFacilities.contains(facility);
+        }
+        return true;
+      });
+
+      return propertyPrice >= minPrice &&
+          propertyPrice <= maxPrice &&
+          matchesFacilities;
+    }).toList();
+
+    setState(() {
+      _filteredProperties = fetchedProperties; // Display the fetched properties
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +132,7 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Image.asset(
-                  'assets/icons/search-normal.png', // Replace with your actual asset path
+                  'assets/icons/search-normal.png',
                   width: 24,
                   height: 24,
                 ),
@@ -77,14 +163,25 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
               icon: Image.asset(
-                'assets/icons/tune.png', // Replace with your actual custom icon asset
+                'assets/icons/tune.png',
                 height: 40,
                 width: 40,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FilterScreen()),
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: FilterScreen(
+                        onFilterApplied:
+                            applyFilters, // Pass filter results back to applyFilters
+                        onReset: resetFilters, // Reset filters callback
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -128,9 +225,15 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                     }
 
                     final propertyDocs = snapshot.data!.docs;
-                    int matchCount = propertyDocs.length;
 
-                    if (propertyDocs.isEmpty) {
+                    // Use _filteredProperties if it has any data
+                    final propertiesToDisplay = _filteredProperties.isEmpty
+                        ? propertyDocs
+                        : _filteredProperties;
+
+                    int matchCount = propertiesToDisplay.length;
+
+                    if (propertiesToDisplay.isEmpty) {
                       return Center(
                         child: Text('No properties found for "$searchQuery"'),
                       );
@@ -156,9 +259,9 @@ class _SearchPropertyScreenState extends State<SearchPropertyScreen> {
                         Expanded(
                           child: ListView.builder(
                             controller: scrollController,
-                            itemCount: propertyDocs.length,
+                            itemCount: propertiesToDisplay.length,
                             itemBuilder: (context, index) {
-                              final property = propertyDocs[index];
+                              final property = propertiesToDisplay[index];
                               return SearchPropertyCard(property: property);
                             },
                           ),
@@ -196,9 +299,6 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
     double cardWidth = screenWidth * 1.0; // Adjust for responsiveness
     double imageWidth = screenWidth * 0.3; // Adjust based on screen width
     double iconSize = 22.0;
-    //bool isVerified = widget.property.exists && widget.property['isVerified'] != null ? widget.property['isVerified'] : false;
-
-    // Fetch dynamic verification status
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -215,302 +315,85 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
               bhk: widget.property['bhk'] ?? 'Rooms',
               isVerified: false,
               owner: widget.property['owner'] ?? 'Owner',
-              ownerId: widget.property['ownerId'],
+              ownerId: '',
             ),
-            transition: Transition.leftToRightWithFade,
+            transition: Transition.leftToRight,
           );
         },
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+        child: Container(
+          height: cardHeight,
+          width: cardWidth,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(color: Colors.grey.shade300, blurRadius: 5.0),
+            ],
           ),
-          elevation: 3,
-          shadowColor: Colors.black,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            height: cardHeight,
-            width: cardWidth,
-            child: Row(
-              children: [
-                // Property Image
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    bottomLeft: Radius.circular(15),
+          child: Row(
+            children: [
+              SizedBox(
+                width: imageWidth,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.network(
+                    widget.property['imageURLs'][0] ?? '',
+                    fit: BoxFit.cover,
                   ),
-                  child: widget.property['imageURLs'] != null
-                      ? Image.network(
-                          errorBuilder: (context, error, stackTrace) {
-                            return Center(
-                              child: Text(
-                                'Image not available',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            );
-                          },
-                          widget.property['imageURLs'][0],
-                          fit: BoxFit.cover,
-                          height: cardHeight,
-                          width: imageWidth,
-                        )
-                      : Image.asset(
-                          'assets/icons/wifi.png',
-                          fit: BoxFit.cover,
-                          height: cardHeight,
-                          width: imageWidth,
-                        ),
                 ),
-                // Property Details
-                SizedBox(width: 8),
-                Expanded(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Title and Verification Status
-                        Row(
-                          children: [
-                            Image.asset(
-                              'assets/icons/rating.png',
-                              height: 16,
-                              width: 16,
-                            ),
-                            SizedBox(width: 4),
-                            // Text(
-                            //   '${property['rating'] ?? '0.0'}',
-                            //   style: const TextStyle(color: Colors.grey),
-                            // ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          widget.property['propertyTitle'] ?? 'No Title',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 4),
-                        // Location
-                        Text(
-                          'City',
-                          style:
-                              TextStyle(color: Color(0xff7d7f88), fontSize: 14),
-                        ),
-                        SizedBox(height: 4),
-                        // Icons and Details Row
-                        Row(
-                          children: [
-                            Icon(Icons.bed,
-                                color: Color(0xff7d7f88), size: iconSize),
-                            SizedBox(width: 4),
-                            Text(
-                              '${widget.property['bhk'] ?? '0'}',
-                              style: TextStyle(color: Color(0xff7d7f88)),
-                            ),
-                            SizedBox(width: 8),
-                            Icon(Icons.square_foot,
-                                color: Color(0xff7d7f88), size: iconSize),
-                            SizedBox(width: 4),
-                            Text(
-                              '${'28 m²'}',
-                              style: TextStyle(color: Color(0xff7d7f88)),
-                            ),
-                          ],
-                        ),
-
-                        // Price and Verification Text
-                        // Owner and Favorite Icon Row
-                        Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.property['price'] + '/ month' ??
-                                  'Price' + '/ month',
+              ),
+              SizedBox(width: 12.0),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.property['propertyTitle'] ?? 'Title',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16.0),
+                      ),
+                      SizedBox(height: 8.0),
+                      Row(
+                        children: [
+                          Icon(Icons.location_on, size: iconSize),
+                          SizedBox(width: 5.0),
+                          Expanded(
+                            child: Text(
+                              'Location',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                                fontSize: 13.0,
+                                color: Colors.grey[600],
+                              ),
                             ),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     setState(() {
-                            //       onTip = !onTip; // Toggle the value of onTip
-                            //     });
-                            //   },
-                            //   child: Icon(
-                            //     onTip
-                            //         ? Icons.favorite
-                            //         : Icons
-                            //             .favorite_border, // Show appropriate icon
-                            //     color: onTip
-                            //         ? Colors.red
-                            //         : Colors
-                            //             .grey, // Change color based on status
-                            //     size: iconSize,
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Row(
+                        children: [
+                          Text(
+                            '₹ ${widget.property['price'] ?? 'Price'}',
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          Icon(
+                            onTip ? Icons.favorite : Icons.favorite_border,
+                            color: Colors.red,
+                            size: 24.0,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
-
-    // return GestureDetector(
-    //   onTap: () {
-    //     Get.to(
-    //         () => PropertyDetailsScreen(
-    //               propertyId: property.id,
-    //               title: property['propertyTitle'] ?? 'Unknown Title',
-    //               location: 'Unkown Location',
-    //               price: property['price'] ?? 'Unknown Price',
-    //               imageURL: property['imageURL'] ?? '',
-    //               area: 'Unknown Area',
-    //               bhk: property['bhk'] ?? 'Unknown Rooms',
-    //               isVerified: false,
-    //               owner: property['owner'] ?? 'Unknown Owner',
-    //             ),
-    //         transition: Transition.leftToRightWithFade);
-    //   },
-    //   child: Container(
-    //     margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-    //     decoration: BoxDecoration(
-    //       color: Colors.white,
-    //       borderRadius: BorderRadius.circular(16),
-    //       boxShadow: [
-    //         BoxShadow(
-    //           color: Colors.grey.withOpacity(0.3),
-    //           spreadRadius: 2,
-    //           blurRadius: 5,
-    //         ),
-    //       ],
-    //     ),
-    //     child: Row(
-    //       children: [
-    //         // Left Section: Image
-    //         Container(
-    //           width: screenWidth * 0.3,
-    //           height: 189,
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.only(
-    //                 topLeft: Radius.circular(8),
-    //                 topRight: Radius.zero,
-    //                 bottomLeft: Radius.circular(8),
-    //                 bottomRight: Radius.zero),
-    //             image: DecorationImage(
-    //               image: NetworkImage(property['imageURL'] ?? ''),
-    //               fit: BoxFit.cover,
-    //             ),
-    //           ),
-    //         ),
-    //         const SizedBox(width: 24),
-    //         // Right Section: Details
-    //         Expanded(
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               // Rating
-    //               Row(
-    //                 children: [
-    //                   Image.asset(
-    //                     'assets/icons/rating.png',
-    //                     height: 16,
-    //                     width: 16,
-    //                   ),
-    //                   const SizedBox(width: 4),
-    //                   // Text(
-    //                   //   '${property['rating'] ?? '0.0'}',
-    //                   //   style: const TextStyle(color: Colors.grey),
-    //                   // ),
-    //                 ],
-    //               ),
-    //               const SizedBox(height: 10),
-    //               // Property Title
-    //               Text(
-    //                 property['propertyTitle'] ?? 'Unknown Title',
-    //                 style: const TextStyle(
-    //                   fontSize: 16,
-    //                   fontWeight: FontWeight.bold,
-    //                   color: Colors.black87,
-    //                 ),
-    //               ),
-    //               const SizedBox(height: 10),
-    //               // City
-    //               Text(
-    //                 'Unknown City',
-    //                 style: const TextStyle(
-    //                   fontSize: 14,
-    //                   color: Colors.grey,
-    //                 ),
-    //               ),
-    //               const SizedBox(height: 10),
-    //               // Property Details
-    //               Row(
-    //                 children: [
-    //                   Image.asset(
-    //                     'assets/icons/ic_bed.png',
-    //                     height: 16,
-    //                     width: 16,
-    //                   ),
-    //                   const SizedBox(width: 4),
-    //                   Text(
-    //                     '${property['bhk'] ?? '0'}',
-    //                     style: const TextStyle(color: Colors.grey),
-    //                   ),
-    //                   const SizedBox(width: 8),
-    //                   Image.asset(
-    //                     'assets/icons/ic_area.png',
-    //                     height: 16,
-    //                     width: 16,
-    //                   ),
-    //                   const SizedBox(width: 4),
-    //                   Text(
-    //                     '${'28 m²'}',
-    //                     style: const TextStyle(color: Colors.grey),
-    //                   ),
-    //                 ],
-    //               ),
-    //               const SizedBox(height: 8),
-    //               // Price
-    //               Row(
-    //                 children: [
-    //                   Text(
-    //                     property['price'] ?? 'Unknown Price',
-    //                     style: const TextStyle(
-    //                       fontSize: 16,
-    //                       fontWeight: FontWeight.bold,
-    //                       color: Colors.black87,
-    //                     ),
-    //                   ),
-    //                   const Spacer(),
-    //                   Image.asset(
-    //                     'assets/icons/verified.png',
-    //                     height: 20,
-    //                     width: 20,
-    //                   ),
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
-

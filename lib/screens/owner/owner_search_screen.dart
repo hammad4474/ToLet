@@ -16,6 +16,73 @@ class OwnerSearchScreen extends StatefulWidget {
 class _OwnerSearchScreenState extends State<OwnerSearchScreen> {
   TextEditingController _searchController = TextEditingController();
   String searchQuery = "";
+  List<QueryDocumentSnapshot> filteredProperties = [];
+  List<QueryDocumentSnapshot> _filteredProperties = [];
+  double minPrice = 0.0;
+  double maxPrice = 10000.0;
+  Map<String, bool> facilities = {
+    'Wi-Fi': false,
+    'Parking': false,
+    'Swimming Pool': false,
+  };
+
+  void resetFilters() {
+    setState(() {
+      searchQuery = "";
+      filteredProperties.clear(); // Clear any filters applied
+      minPrice = 0.0;
+      maxPrice = 10000.0;
+      facilities = {
+        'Wi-Fi': false,
+        'Parking': false,
+        'Swimming Pool': false,
+      };
+    });
+
+    // Now fetch all properties
+    fetchFilteredProperties();
+  }
+
+  void applyFilters(List<QueryDocumentSnapshot> newFilteredProperties) {
+    setState(() {
+      _filteredProperties =
+          newFilteredProperties; // Set the filtered properties
+    });
+  }
+
+  fetchFilteredProperties() async {
+    final query = FirebaseFirestore.instance.collection('propertiesAll');
+
+    // Apply filters if necessary
+    QuerySnapshot snapshot;
+    if (_filteredProperties.isEmpty) {
+      snapshot = await query.get(); // No filters applied, fetch all properties
+    } else {
+      snapshot = await query
+          .where('price', isGreaterThanOrEqualTo: minPrice)
+          .where('price', isLessThanOrEqualTo: maxPrice)
+          .get();
+    }
+
+    List<QueryDocumentSnapshot> fetchedProperties = snapshot.docs.where((doc) {
+      double propertyPrice = double.tryParse(doc['price']) ?? 0.0;
+      List<String> propertyFacilities = List<String>.from(doc['facilities']);
+      bool matchesFacilities = facilities.keys.every((facility) {
+        if (facilities[facility]!) {
+          return propertyFacilities.contains(facility);
+        }
+        return true;
+      });
+
+      return propertyPrice >= minPrice &&
+          propertyPrice <= maxPrice &&
+          matchesFacilities;
+    }).toList();
+
+    setState(() {
+      _filteredProperties = fetchedProperties; // Display the fetched properties
+    });
+  }
 
   @override
   void initState() {
@@ -83,9 +150,20 @@ class _OwnerSearchScreenState extends State<OwnerSearchScreen> {
                 width: 40,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FilterScreen()),
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: FilterScreen(
+                        onFilterApplied:
+                            applyFilters, // Pass filter results back to applyFilters
+                        onReset: resetFilters, // Reset filters callback
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -208,16 +286,15 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
             () => OwnerPropertyDetailScreen(
               title: widget.property['propertyTitle'] ?? 'No Title',
               price: widget.property['price'] ?? 'Price',
-              location: 'Location',
-              area: 'Area',
+              location: widget.property['location'] ?? 'Location',
+              area: widget.property['area'] ?? 'Area',
               bhk: widget.property['bhk']?.toString() ?? 'BHK',
               imageURLs: widget.property['imageURLs'] != null &&
                       widget.property['imageURLs'].isNotEmpty
                   ? List<String>.from(widget.property['imageURLs'])
                   : [],
-              //  isVerified: false,
-              owner: 'Owner',
-              propertyId: '',
+              owner: widget.property['owner'] ?? 'Unknown Owner',
+              propertyId: widget.property.id, // Correctly pass the property ID
               facilities: widget.property['facilities'] != null
                   ? List<String>.from(widget.property['facilities'])
                   : [],
@@ -365,147 +442,3 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
     );
   }
 }
-
-
-    // return GestureDetector(
-    //   onTap: () {
-    //     Get.to(
-    //         () => PropertyDetailsScreen(
-    //               propertyId: property.id,
-    //               title: property['propertyTitle'] ?? 'Unknown Title',
-    //               location: 'Unkown Location',
-    //               price: property['price'] ?? 'Unknown Price',
-    //               imageURL: property['imageURL'] ?? '',
-    //               area: 'Unknown Area',
-    //               bhk: property['bhk'] ?? 'Unknown Rooms',
-    //               isVerified: false,
-    //               owner: property['owner'] ?? 'Unknown Owner',
-    //             ),
-    //         transition: Transition.leftToRightWithFade);
-    //   },
-    //   child: Container(
-    //     margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-    //     decoration: BoxDecoration(
-    //       color: Colors.white,
-    //       borderRadius: BorderRadius.circular(16),
-    //       boxShadow: [
-    //         BoxShadow(
-    //           color: Colors.grey.withOpacity(0.3),
-    //           spreadRadius: 2,
-    //           blurRadius: 5,
-    //         ),
-    //       ],
-    //     ),
-    //     child: Row(
-    //       children: [
-    //         // Left Section: Image
-    //         Container(
-    //           width: screenWidth * 0.3,
-    //           height: 189,
-    //           decoration: BoxDecoration(
-    //             borderRadius: BorderRadius.only(
-    //                 topLeft: Radius.circular(8),
-    //                 topRight: Radius.zero,
-    //                 bottomLeft: Radius.circular(8),
-    //                 bottomRight: Radius.zero),
-    //             image: DecorationImage(
-    //               image: NetworkImage(property['imageURL'] ?? ''),
-    //               fit: BoxFit.cover,
-    //             ),
-    //           ),
-    //         ),
-    //         const SizedBox(width: 24),
-    //         // Right Section: Details
-    //         Expanded(
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               // Rating
-    //               Row(
-    //                 children: [
-    //                   Image.asset(
-    //                     'assets/icons/rating.png',
-    //                     height: 16,
-    //                     width: 16,
-    //                   ),
-    //                   const SizedBox(width: 4),
-    //                   // Text(
-    //                   //   '${property['rating'] ?? '0.0'}',
-    //                   //   style: const TextStyle(color: Colors.grey),
-    //                   // ),
-    //                 ],
-    //               ),
-    //               const SizedBox(height: 10),
-    //               // Property Title
-    //               Text(
-    //                 property['propertyTitle'] ?? 'Unknown Title',
-    //                 style: const TextStyle(
-    //                   fontSize: 16,
-    //                   fontWeight: FontWeight.bold,
-    //                   color: Colors.black87,
-    //                 ),
-    //               ),
-    //               const SizedBox(height: 10),
-    //               // City
-    //               Text(
-    //                 'Unknown City',
-    //                 style: const TextStyle(
-    //                   fontSize: 14,
-    //                   color: Colors.grey,
-    //                 ),
-    //               ),
-    //               const SizedBox(height: 10),
-    //               // Property Details
-    //               Row(
-    //                 children: [
-    //                   Image.asset(
-    //                     'assets/icons/ic_bed.png',
-    //                     height: 16,
-    //                     width: 16,
-    //                   ),
-    //                   const SizedBox(width: 4),
-    //                   Text(
-    //                     '${property['bhk'] ?? '0'}',
-    //                     style: const TextStyle(color: Colors.grey),
-    //                   ),
-    //                   const SizedBox(width: 8),
-    //                   Image.asset(
-    //                     'assets/icons/ic_area.png',
-    //                     height: 16,
-    //                     width: 16,
-    //                   ),
-    //                   const SizedBox(width: 4),
-    //                   Text(
-    //                     '${'28 m²'}',
-    //                     style: const TextStyle(color: Colors.grey),
-    //                   ),
-    //                 ],
-    //               ),
-    //               const SizedBox(height: 8),
-    //               // Price
-    //               Row(
-    //                 children: [
-    //                   Text(
-    //                     property['price'] ?? 'Unknown Price',
-    //                     style: const TextStyle(
-    //                       fontSize: 16,
-    //                       fontWeight: FontWeight.bold,
-    //                       color: Colors.black87,
-    //                     ),
-    //                   ),
-    //                   const Spacer(),
-    //                   Image.asset(
-    //                     'assets/icons/verified.png',
-    //                     height: 20,
-    //                     width: 20,
-    //                   ),
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
-
