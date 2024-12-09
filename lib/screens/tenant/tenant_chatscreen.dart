@@ -76,7 +76,7 @@ class _TenantChatScreenState extends State<TenantChatScreen> {
 
                 final filteredChatDocs = chatDocs.where((doc) {
                   final ownerName = doc['participants']['owner']['name'] ?? '';
-                  final lastMessage = doc['lastMessage'] ?? '';
+                  final lastMessage = '';
 
                   return ownerName
                           .toLowerCase()

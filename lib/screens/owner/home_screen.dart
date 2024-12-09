@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -175,12 +176,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           child: Center(
-                            child: Text(
-                              'Owner',
-                              style: TextStyle(
-                                color: Colors
-                                    .white, // Text color for highlighted button
-                                fontSize: 16,
+                            child: InkWell(
+                              onTap: () async {
+                                String? token =
+                                    await FirebaseMessaging.instance.getToken();
+                                print(token);
+                              },
+                              child: Text(
+                                'Owner',
+                                style: TextStyle(
+                                  color: Colors
+                                      .white, // Text color for highlighted button
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),

@@ -458,10 +458,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
-      sha256: e30da58198a6d4b49d5bce4e852f985c32cb10db329ebef9473db2b9f09ce810
+      sha256: b94b217e3ad745e784960603d33d99471621ecca151c99c670869b76e50ad2a6
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.0"
+    version: "5.3.1"
   firebase_core_web:
     dependency: transitive
     description:
@@ -726,10 +726,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "8faba09ba361d4b246dc0a17cb4289b3324c2b9f6db7b3d457ee69106a86bd32"
+      sha256: fa8141602fde3f7e2f81dbf043613eb44dfa325fa0bcf93c0f142c9f7a2c193e
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+17"
+    version: "0.8.12+18"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -1182,10 +1182,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "3b9febd815c9ca29c9e3520d50ec32f49157711e143b7a4ca039eb87e8ade5ab"
+      sha256: "7f172d1b06de5da47b6264c2692ee2ead20bbbc246690427cdb4fc301cd0c549"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.3"
+    version: "2.3.4"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -1475,10 +1475,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "84ba388638ed7a8cb3445a320c8273136ab2631cd5f2c57888335504ddab1bc2"
+      sha256: "8b338d4486ab3fbc0ba0db9f9b4f5239b6697fcee427939a40e720cbb9ee0a69"
       url: "https://pub.dev"
     source: hosted
-    version: "5.8.0"
+    version: "5.9.0"
   win32_registry:
     dependency: transitive
     description:
@@ -1523,10 +1523,10 @@ packages:
     dependency: transitive
     description:
       name: zego_express_engine
-      sha256: "8531cf207f66812453a1cb7cae94e0065de81be74a9d7ff383b12576fe7eebeb"
+      sha256: "0e0a2adafd32c95f32a6deacdd49c29f515e6e65dc2febdbf8d3b0c04eb13982"
       url: "https://pub.dev"
     source: hosted
-    version: "3.17.1"
+    version: "3.18.0"
   zego_plugin_adapter:
     dependency: transitive
     description:
@@ -1547,10 +1547,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_call
-      sha256: "226c72acee82b6d1d20a8ad08e53d36abafa33ba1596e96586a8f8c801578619"
+      sha256: "9da82eac08e497775782c1cf8222deeba3471011da7ff3f1abe89e8b3f005c39"
       url: "https://pub.dev"
     source: hosted
-    version: "4.16.13"
+    version: "4.16.14"
   zego_uikit_signaling_plugin:
     dependency: transitive
     description:

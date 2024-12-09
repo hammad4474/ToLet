@@ -66,7 +66,8 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
                                   bhk: '',
                                   isVerified: true,
                                   owner: '',
-                                  ownerId: favorite['ownerId'],
+                                  ownerId: '',
+                                  //favorite['ownerId'],
                                   // Pass additional fields here as needed
                                 ),
                             transition: Transition.fade);
@@ -85,7 +86,6 @@ class _FavoritePropertyState extends State<FavoriteProperty> {
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.network(
                                   favorite['imageURLs'],
-                                  
                                   height: 80,
                                   width: 80,
                                   fit: BoxFit.cover,

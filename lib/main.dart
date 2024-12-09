@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tolet/auth/login_screen.dart';
@@ -12,12 +13,58 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 import 'firebase_options.dart';
 
+
+
+// Future<void> backgroundHandler(RemoteMessage message) async {
+//   String? title = message.notification!.title;
+//   String? body = message.notification!.body;
+//   AwesomeNotifications().createNotification(
+//     content: NotificationContent(
+//       id: 123,
+//       channelKey: 'call-key',
+//       color: Colors.white,
+//       title: title,
+//       body: body,
+//       category: NotificationCategory.Call,
+//       wakeUpScreen: true,
+//       autoDismissible: false,
+//       fullScreenIntent: true,
+//       backgroundColor: Colors.orange,
+//     ),
+//     actionButtons: [
+//       NotificationActionButton(
+//           key: 'Accept',
+//           label: 'Accept Call',
+//           color: Colors.green,
+//           autoDismissible: true),
+//       NotificationActionButton(
+//           key: 'Reject',
+//           label: 'Reject Call',
+//           color: Colors.red,
+//           autoDismissible: false),
+//     ],
+//   );
+// }
+
 void main() async {
+  // AwesomeNotifications().initialize(null, [
+  //   NotificationChannel(
+  //     channelKey: 'call-key',
+  //     channelName: '',
+  //     channelDescription: '',
+  //     defaultColor: Colors.redAccent,
+  //     importance: NotificationImportance.Max,
+  //     channelShowBadge: true,
+  //     locked: true,
+  //     defaultRingtoneType: DefaultRingtoneType.Ringtone,
+  //   )
+  // ]);
+  // FirebaseMessaging.onBackgroundMessage(
+  //     backgroundHandler as BackgroundMessageHandler);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
@@ -27,6 +74,8 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
+
 
 class _MyAppState extends State<MyApp> {
   @override

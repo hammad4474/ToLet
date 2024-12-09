@@ -7,7 +7,7 @@ import 'package:tolet/screens/tenant/filter_screen.dart';
 import 'package:tolet/screens/tenant/property_detailscreen.dart';
 
 class OwnerSearchScreen extends StatefulWidget {
-  const OwnerSearchScreen({Key? key}) : super(key: key);
+  OwnerSearchScreen({Key? key}) : super(key: key);
 
   @override
   _OwnerSearchScreenState createState() => _OwnerSearchScreenState();
@@ -17,7 +17,6 @@ class _OwnerSearchScreenState extends State<OwnerSearchScreen> {
   TextEditingController _searchController = TextEditingController();
   String searchQuery = "";
   List<QueryDocumentSnapshot> filteredProperties = [];
-  List<QueryDocumentSnapshot> _filteredProperties = [];
   double minPrice = 0.0;
   double maxPrice = 10000.0;
   Map<String, bool> facilities = {
@@ -45,8 +44,7 @@ class _OwnerSearchScreenState extends State<OwnerSearchScreen> {
 
   void applyFilters(List<QueryDocumentSnapshot> newFilteredProperties) {
     setState(() {
-      _filteredProperties =
-          newFilteredProperties; // Set the filtered properties
+      filteredProperties = newFilteredProperties; // Update filtered properties
     });
   }
 
@@ -55,14 +53,10 @@ class _OwnerSearchScreenState extends State<OwnerSearchScreen> {
 
     // Apply filters if necessary
     QuerySnapshot snapshot;
-    if (_filteredProperties.isEmpty) {
-      snapshot = await query.get(); // No filters applied, fetch all properties
-    } else {
-      snapshot = await query
-          .where('price', isGreaterThanOrEqualTo: minPrice)
-          .where('price', isLessThanOrEqualTo: maxPrice)
-          .get();
-    }
+    snapshot = await query
+        .where('price', isGreaterThanOrEqualTo: minPrice)
+        .where('price', isLessThanOrEqualTo: maxPrice)
+        .get();
 
     List<QueryDocumentSnapshot> fetchedProperties = snapshot.docs.where((doc) {
       double propertyPrice = double.tryParse(doc['price']) ?? 0.0;
@@ -80,7 +74,7 @@ class _OwnerSearchScreenState extends State<OwnerSearchScreen> {
     }).toList();
 
     setState(() {
-      _filteredProperties = fetchedProperties; // Display the fetched properties
+      filteredProperties = fetchedProperties; // Set the filtered properties
     });
   }
 
@@ -235,9 +229,13 @@ class _OwnerSearchScreenState extends State<OwnerSearchScreen> {
                         Expanded(
                           child: ListView.builder(
                             controller: scrollController,
-                            itemCount: propertyDocs.length,
+                            itemCount: filteredProperties.isEmpty
+                                ? propertyDocs.length
+                                : filteredProperties.length,
                             itemBuilder: (context, index) {
-                              final property = propertyDocs[index];
+                              final property = filteredProperties.isEmpty
+                                  ? propertyDocs[index]
+                                  : filteredProperties[index];
                               return SearchPropertyCard(property: property);
                             },
                           ),
@@ -286,7 +284,7 @@ class _SearchPropertyCardState extends State<SearchPropertyCard> {
             () => OwnerPropertyDetailScreen(
               title: widget.property['propertyTitle'] ?? 'No Title',
               price: widget.property['price'] ?? 'Price',
-              location: widget.property['location'] ?? 'Location',
+              location: 'Location',
               area: widget.property['area'] ?? 'Area',
               bhk: widget.property['bhk']?.toString() ?? 'BHK',
               imageURLs: widget.property['imageURLs'] != null &&

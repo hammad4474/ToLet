@@ -102,48 +102,80 @@ class _DetailedChatScreenState extends State<DetailedChatScreen> {
   }
 
   void _startAudioCall() async {
-    String callID = widget.chatId;
+    String callID = widget.chatId; // Use chatId as the unique call ID
+    String ownerId = _currentUserId;
 
-    // Send a notification to the tenant
-    await NotificationServices.sendCallNotification(
-      tenantId: widget.chatId, // Tenant ID or token
-      title: "Incoming Call",
-      body: "${widget.tenantName}, you have an incoming audio call",
-      data: {
-        'action': 'audio_call',
-        'chatId': callID,
-        'senderId': _currentUserId,
-        'callType': 'audio',
-      },
-    );
+    try {
+      // Send a message to the chat notifying the other user of the incoming call
+      await _sendCallMessage(callID, ownerId);
 
-    // Listen for tenant's response
-    FirebaseFirestore.instance
-        .collection('callResponses')
-        .doc(callID)
-        .snapshots()
-        .listen((doc) {
-      if (doc.exists) {
-        final response = doc.data()?['response'];
-        if (response == 'accept') {
-          // Navigate to the Zego audio call screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AudioCallScreen(
-                callID: callID,
-                isOwner: true,
-              ),
-            ),
-          );
-        } else if (response == 'reject') {
-          // Show a message or handle rejection
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Call rejected by the tenant")),
-          );
-        }
-      }
-    });
+      // Send a notification to the tenant (the other user)
+      await NotificationServices.sendCallNotification(
+        tenantId: widget.chatId, // Tenant ID or token
+        title: "Incoming Call",
+        body: "${widget.tenantName}, you have an incoming audio call",
+        data: {
+          'action': 'audio_call',
+          'chatId': callID,
+          'senderId': ownerId,
+          'callType': 'audio',
+        },
+      );
+
+      // Immediately navigate to the call screen after sending the message
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AudioCallScreen(
+            callID: callID,
+            isOwner:
+                true, // Indicating that the current user is the call initiator (owner)
+          ),
+        ),
+      );
+    } catch (e) {
+      print("Error starting audio call: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to initiate call")),
+      );
+    }
+  }
+
+// Method to send a message to the Firestore chat about the call
+  Future<void> _sendCallMessage(String chatId, String senderId) async {
+    final uniqueMessageId = FirebaseFirestore.instance
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .doc()
+        .id;
+
+    final callMessageData = {
+      'id': uniqueMessageId,
+      'text': "You have an incoming call, please join.",
+      'sentBy': senderId,
+      'isRead': false,
+      'timestamp': FieldValue.serverTimestamp(), // Add timestamp directly
+    };
+
+    try {
+      // Add the message to the sub-collection "messages"
+      await FirebaseFirestore.instance
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .doc(uniqueMessageId)
+          .set(callMessageData);
+
+      // Optionally, update the main chat document
+      await FirebaseFirestore.instance.collection('chats').doc(chatId).update({
+        'lastMessage': "Incoming call notification",
+        'lastMessageTimestamp': FieldValue.serverTimestamp(),
+        'lastMessageSentBy': senderId,
+      });
+    } catch (e) {
+      print("Error sending call message: $e");
+    }
   }
 
   // void _startAudioCall() {
